@@ -47,8 +47,11 @@ const _findDecls = (name: string, fields: MobilettoOrmFieldDefConfigs, decls: Ty
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
+const onlyUnique = <T>(value: T, index: number, array: T[]) => array.indexOf(value) === index;
+
 const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
-    for (const fieldName of Object.keys(ctx.fields as object)) {
+    const fieldNames: string[] = ctx.fieldNames as string[];
+    for (const fieldName of fieldNames) {
         /* eslint-disable @typescript-eslint/no-explicit-any */
         const field = (ctx.fields as Record<string, any>)[fieldName];
         /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -74,6 +77,7 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
                 errors[field.name] = ["indeterminateArrayValueType"];
                 throw new MobilettoOrmValidationError(errors);
             }
+            field.arrayIndent = "    ";
         }
         if (field.default) {
             field.defaultValue = JSON.stringify(field.default);
@@ -88,8 +92,27 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
             field.isEnum = true;
             field.enumValues = JSON.stringify(field.items.map((i: { value: string }) => i.value));
         }
+        if (field.when) {
+            field.hasWhen = true;
+            field.whenCode = field.when.toString();
+            field.whenFieldNames =
+                field.whenFields ||
+                (Array.from(field.whenCode.matchAll(/v\.([A-Za-z\d_.\s+]+)/g)) as string[][])
+                    .map((matches): string | null => (matches && matches.length > 1 ? matches[1] : null))
+                    .filter((x) => x != null)
+                    .map((f) => f?.replace(/\s+/, ""))
+                    .map((f) => (f?.includes(".") ? f.substring(0, f.indexOf(".")) : f))
+                    .filter(onlyUnique);
+            field.whenFieldNamesQuoted = field.whenFieldNames
+                .filter((f: string) => f !== fieldName)
+                .map((f: string) => JSON.stringify(f));
+        }
         field.Name = capitalize(field.name);
+        field.fullName = (ctx.name !== typeDef.typeName ? ctx.name + "_" : "") + field.name;
     }
+
+    ctx.fieldNamesArray = JSON.stringify(fieldNames);
+    ctx.fieldParamsArray = fieldNames.join(",");
     ctx.typeName = typeDef.typeName;
     ctx.curlyOpen = "{";
     ctx.curlyClose = "}";
@@ -117,6 +140,7 @@ export const generate = (
             name: decl.name,
             Name: capitalize(decl.name),
             fields: decl.fields,
+            fieldNames: Object.keys(decl.fields),
             disclaimer: decls.length > 0 ? null : disclaimer,
             first,
             root: decl.root || false,
