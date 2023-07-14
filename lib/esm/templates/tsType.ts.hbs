@@ -1,4 +1,5 @@
-{{#if disclaimer}}// {{{ disclaimer }}}
+{{#if disclaimer}}// {{{ disclaimer }}}{{#if header}}
+{{{header}}}{{/if}}
 {{/if}}export type {{ Name }}Type = {{#if root}}{
     _meta?: {
         id: string;

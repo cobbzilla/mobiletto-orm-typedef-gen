@@ -24,6 +24,7 @@ export type TypeDeclaration = {
 
 export type GenerateOptions = {
     outfile?: string;
+    header?: string;
     name?: string;
     disclaimer?: string;
     prepareContext?: (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>) => Record<string, unknown>;
@@ -145,6 +146,7 @@ export const generate = (
             fields: decl.fields,
             fieldNames: Object.keys(decl.fields),
             disclaimer: decls.length > 0 ? null : disclaimer,
+            header: decls.length > 0 ? null : opts?.header,
             first,
             root: decl.root || false,
         });
