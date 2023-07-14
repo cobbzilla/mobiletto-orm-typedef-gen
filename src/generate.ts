@@ -1,4 +1,5 @@
 import {
+    MobilettoOrmError,
     MobilettoOrmFieldDefConfigs,
     MobilettoOrmTypeDef,
     MobilettoOrmTypeDefConfig,
@@ -102,6 +103,19 @@ export const generate = (
         const preparedContext = opts?.prepareContext ? opts.prepareContext(typeDef, typeContext) : typeContext;
         first = false;
         typeContext.ctx = typeContext;
+        // sanity, scrub templatePath; we should only every read template files
+        const lastSlash = templatePath.lastIndexOf("/");
+        if (lastSlash === -1 || lastSlash === templatePath.length - 1) {
+            throw new MobilettoOrmError(`invalid template path: ${templatePath}`);
+        }
+        const endPath =
+            templatePath.substring(0, lastSlash).replace(/^[A-Z0-9/_-]/g, "") + templatePath.substring(lastSlash);
+        if (endPath !== templatePath) {
+            throw new MobilettoOrmError(`invalid template path: ${templatePath}`);
+        }
+        if (!templatePath.endsWith(".ts.hbs")) {
+            throw new MobilettoOrmError(`invalid template path: ${templatePath}`);
+        }
         const template = fs.readFileSync(__dirname + "/" + templatePath).toString("utf8");
         const data = Handlebars.compile(template)(preparedContext);
         allData = data + allData;
