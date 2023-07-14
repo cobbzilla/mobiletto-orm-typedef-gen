@@ -56,6 +56,10 @@ describe("yup builder test", async () => {
                         { label: "two", value: 2 },
                         { label: "three", value: 3 },
                     ],
+                    test: {
+                        message: "not-three",
+                        valid: (v) => v.intEnumeratedItems !== 3,
+                    },
                 },
                 nested: {
                     when: (v) => v.primary !== "someDefault",
@@ -150,7 +154,16 @@ describe("yup builder test", async () => {
                 "    intEnumeratedItems: yup.number()\n" +
                 "        .oneOf([1,2,3], 'intEnumeratedItems_enum')\n" +
                 "        .typeError('intEnumeratedItems_invalid')\n" +
-                "        .required('intEnumeratedItems_required'),\n" +
+                "        .required('intEnumeratedItems_required')\n" +
+                "        .test({\n" +
+                '            name: "not-three",\n' +
+                "            message: 'intEnumeratedItems_not-three',\n" +
+                "            skipAbsent: true,\n" +
+                "            test(value, ctx) {\n" +
+                "                const t = (v) => v.intEnumeratedItems !== 3;\n" +
+                '                return typeof value === "undefined" || value == null || t({ ...ctx.parent });\n' +
+                "            }\n" +
+                "        }),\n" +
                 "    nested: ComplexBuilder_nestedSchema\n" +
                 "        .notRequired()\n" +
                 '        .when(["primary"], {\n' +

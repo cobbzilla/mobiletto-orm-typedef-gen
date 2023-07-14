@@ -12,7 +12,16 @@ export const {{Name}}Schema = yup.object({{{curlyOpen}}}{{#each fields}}
         .typeError('{{fullName}}_invalid'){{/if}}{{/if}}{{#if required}}
         .required('{{fullName}}_required'){{else}}
         .notRequired(){{/if}}{{#if default}}
-        .default({{{defaultValue}}}){{/if}}{{#if hasWhen}}
+        .default({{{defaultValue}}}){{/if}}{{#if test}}
+        .test({
+            name: "{{test.message}}",
+            message: '{{fullName}}_{{test.message}}',
+            skipAbsent: true,
+            test(value, ctx) {
+                const t = {{{testCode}}};
+                return typeof value === "undefined" || value == null || t({ ...ctx.parent });
+            }
+        }){{/if}}{{#if hasWhen}}
         .when([{{{whenFieldNamesQuoted}}}], {
             is: ({{whenFieldNames}}) => {
                 const w = {{{whenCode}}};
