@@ -3,7 +3,7 @@ import { generate, GenerateOptions } from "../generate.js";
 
 export const generateTypeScriptType = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
-    opts?: GenerateOptions
+    opts?: GenerateOptions,
 ): string => {
     return generate(typeDef, "templates/tsType.ts.hbs", opts);
 };

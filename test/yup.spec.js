@@ -25,7 +25,7 @@ describe("yup builder test", async () => {
                 "\n    value: yup.number().typeError('invalid')," +
                 "\n    int: yup.number().required('required').max(500, 'maxValue').typeError('invalid')," +
                 "\n    flag: yup.boolean().default(true).typeError('invalid')," +
-                "\n});\n"
+                "\n});\n",
         );
     });
     it("builds a yup validation schema for a complex type", async () => {
@@ -76,7 +76,7 @@ describe("yup builder test", async () => {
                 '    stringEnumeratedItems: yup.string().oneOf(["one","two","three"], \'enum\').typeError(\'invalid\'),\n' +
                 "    intEnumeratedItems: yup.number().required('required').oneOf([1,2,3], 'enum').typeError('invalid'),\n" +
                 "    nested: ComplexBuilder_nestedSchema,\n" +
-                "});\n"
+                "});\n",
         );
     });
 });

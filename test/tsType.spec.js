@@ -32,7 +32,7 @@ describe("type builder test", async () => {
                 "    value?: number;\n" +
                 "    int: number;\n" +
                 "    flag?: boolean;\n" +
-                "};\n"
+                "};\n",
         );
     });
     it("builds a complex type", async () => {
@@ -75,7 +75,7 @@ describe("type builder test", async () => {
                 "    };\n" +
                 "    primary: string;\n" +
                 "    nested?: ComplexBuilder_nestedType;\n" +
-                "};\n"
+                "};\n",
         );
     });
 });

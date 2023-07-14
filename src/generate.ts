@@ -49,7 +49,9 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
     for (const fieldName of Object.keys(ctx.fields as object)) {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         const field = (ctx.fields as Record<string, any>)[fieldName];
+        /* eslint-enable @typescript-eslint/no-explicit-any */
         field.optional = !field.required || field.when;
         field.typeIsBoolean = field.type === "boolean";
         field.typeIsString = field.type === "string";
@@ -97,7 +99,7 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
 export const generate = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     templatePath: string,
-    opts?: GenerateOptions
+    opts?: GenerateOptions,
 ): string => {
     if (!(typeDef instanceof MobilettoOrmTypeDef)) {
         typeDef = new MobilettoOrmTypeDef(typeDef);

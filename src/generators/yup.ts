@@ -3,7 +3,7 @@ import { generate, GenerateOptions } from "../generate.js";
 
 export const generateYup = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
-    opts?: GenerateOptions
+    opts?: GenerateOptions,
 ): string => {
     opts ||= {};
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
