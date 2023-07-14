@@ -169,6 +169,10 @@ export const generate = (
         allData = data + allData;
     }
     if (opts?.outfile) {
+        const outDir = dirname(opts.outfile);
+        if (!fs.existsSync(outDir)) {
+            fs.mkdirSync(outDir, { recursive: true });
+        }
         fs.writeFileSync(opts.outfile, allData);
     }
     return allData;
