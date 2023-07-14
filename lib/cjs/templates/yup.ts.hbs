@@ -1,0 +1,5 @@
+{{#if disclaimer}}// {{{ disclaimer }}}
+import * as yup from "yup";{{/if}}
+export const {{name}}Schema = yup.object({{{curlyOpen}}}{{#each fields}}
+    {{name}}: {{#if typeIsObject}}{{ ../name }}_{{this.name}}Schema{{else}}{{#if typeIsArray}}yup.array(yup.{{valueType}}),{{else}}yup.{{type}}(){{/if}}{{#if required}}.required('required'){{/if}}{{#if minValue}}.min({{minValue}}, 'minValue'){{/if}}{{#if maxValue}}.max({{maxValue}}, 'maxValue'){{/if}}{{#if min}}.min({{min}}, 'min'){{/if}}{{#if max}}.max({{max}}, 'max'){{/if}}{{#if regex}}.matches({{regex}}, 'regex'){{/if}}{{/if}},{{/each}}
+});

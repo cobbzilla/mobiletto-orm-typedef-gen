@@ -73,6 +73,8 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
         }
     }
     ctx.typeName = typeDef.typeName;
+    ctx.curlyOpen = "{";
+    ctx.curlyClose = "}";
     return ctx;
 };
 
