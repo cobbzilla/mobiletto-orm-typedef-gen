@@ -9,8 +9,8 @@ dependencies:
     specifier: ^4.7.7
     version: 4.7.7
   mobiletto-orm-typedef:
-    specifier: ^2.1.17
-    version: 2.1.17
+    specifier: ^2.1.18
+    version: 2.1.18
 
 devDependencies:
   '@types/chai':
@@ -1026,8 +1026,8 @@ packages:
     hasBin: true
     dev: true
 
-  /mobiletto-orm-typedef@2.1.17:
-    resolution: {integrity: sha512-mHPo80gPkwjQMOaTGOkC02biBs7MCjWSmeIivQGXlvsk80P+lmKqv7Wuj4M5y+KFLZ3dUDiqQX8BMP2y36zVjQ==}
+  /mobiletto-orm-typedef@2.1.18:
+    resolution: {integrity: sha512-al9SpJ7eDS7xo5MTAJxRGl1+Ao3srNnUVLfS/qKvXs9OOk89JYnyZd2Qgt4snuO6i+B8c9uQKM85ULKglJWlLg==}
     dependencies:
       shasum: 1.0.2
       uuid: 9.0.0

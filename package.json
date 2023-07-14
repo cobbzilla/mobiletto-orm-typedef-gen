@@ -1,6 +1,6 @@
 {
   "name": "mobiletto-orm-typedef-gen",
-  "version": "2.1.9",
+  "version": "2.1.10",
   "type": "module",
   "description": "generate various files based on mobiletto-orm-typedef definitions",
   "keywords": [
@@ -56,6 +56,6 @@
   },
   "dependencies": {
     "handlebars": "^4.7.7",
-    "mobiletto-orm-typedef": "^2.1.17"
+    "mobiletto-orm-typedef": "^2.1.18"
   }
 }
