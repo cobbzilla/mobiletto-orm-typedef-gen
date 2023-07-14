@@ -1,5 +1,5 @@
 {{#if disclaimer}}// {{{ disclaimer }}}
-{{/if}}export type {{ name }}Type = {{#if root}}{
+{{/if}}export type {{ Name }}Type = {{#if root}}{
     _meta?: {
         id: string;
         version: string;
@@ -8,6 +8,6 @@
         mtime: number;
     };
 {{else}}{
-{{/if}}{{#each fields}}    {{this.name}}{{#if this.optional}}?{{/if}}: {{#if this.typeIsObject}}{{ ../name }}_{{this.name}}Type{{else if this.typeIsArray}}{{this.valueType}}[]{{else}}{{this.type}}{{/if}};
+{{/if}}{{#each fields}}    {{name}}{{#if optional}}?{{/if}}: {{#if typeIsObject}}{{ ../Name }}_{{name}}Type{{else if typeIsArray}}{{valueType}}[]{{else}}{{type}}{{/if}};
 {{/each}}
 };

@@ -22,9 +22,9 @@ describe("yup builder test", async () => {
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
                 '\nimport * as yup from "yup";' +
                 `\nexport const ${typeDef.typeName}Schema = yup.object({` +
-                "\n    value: yup.number()," +
-                "\n    int: yup.number().required('required').max(500, 'maxValue')," +
-                "\n    flag: yup.boolean()," +
+                "\n    value: yup.number().typeError('invalid')," +
+                "\n    int: yup.number().required('required').max(500, 'maxValue').typeError('invalid')," +
+                "\n    flag: yup.boolean().default(true).typeError('invalid')," +
                 "\n});\n"
         );
     });

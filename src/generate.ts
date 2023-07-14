@@ -45,6 +45,8 @@ const _findDecls = (name: string, fields: MobilettoOrmFieldDefConfigs, decls: Ty
     return decls;
 };
 
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
 const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
     for (const fieldName of Object.keys(ctx.fields as object)) {
         const field = (ctx.fields as Record<string, any>)[fieldName];
@@ -84,6 +86,7 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
             field.isEnum = true;
             field.enumValues = JSON.stringify(field.items.map((i: { value: string }) => i.value));
         }
+        field.Name = capitalize(field.name);
     }
     ctx.typeName = typeDef.typeName;
     ctx.curlyOpen = "{";
@@ -110,6 +113,7 @@ export const generate = (
         const typeContext = defaultPrepareContext(typeDef, {
             typeDef,
             name: decl.name,
+            Name: capitalize(decl.name),
             fields: decl.fields,
             disclaimer: decls.length > 0 ? null : disclaimer,
             first,
