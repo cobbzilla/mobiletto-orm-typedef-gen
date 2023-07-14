@@ -1,1 +1,2 @@
-export * from "./builder.js";
+export * from "./generate.js";
+export * from "./generators/tsType.js";

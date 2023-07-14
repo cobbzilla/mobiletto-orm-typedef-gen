@@ -1,6 +1,6 @@
 {
   "name": "mobiletto-orm-typedef-gen",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "module",
   "description": "generate various files based on mobiletto-orm-typedef definitions",
   "keywords": [
@@ -27,7 +27,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "test": "mocha ./test/*.spec.js",
-    "tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "tsc": "tsc --module es2020 -p tsconfig.json && tsc --module es2020 -p tsconfig-cjs.json && copyfiles --flat --error src/templates/*.hbs lib/esm/templates/ && copyfiles --flat --error src/templates/*.hbs lib/cjs/templates/",
     "lint": "npx eslint src test",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier src test --check",
@@ -45,14 +45,14 @@
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "chai": "^4.3.6",
+    "copyfiles": "^2.4.1",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
+    "handlebars": "^4.7.7",
+    "mobiletto-orm-typedef": "^2.1.8",
     "mocha": "^10.2.0",
     "prettier": "^2.8.8",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^5.1.6"
-  },
-  "dependencies": {
-    "mobiletto-orm-typedef": "^2.1.8"
   }
 }

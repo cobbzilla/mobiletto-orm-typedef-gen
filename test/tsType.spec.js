@@ -1,7 +1,7 @@
 import { describe, it } from "mocha";
 import { expect } from "chai";
 import { MobilettoOrmTypeDef, rand } from "mobiletto-orm-typedef";
-import { buildType } from "../lib/esm/index.js";
+import { generateTypeScriptType, STANDARD_AUTOGEN_FILE_DISCLAIMER } from "../lib/esm/index.js";
 
 describe("type builder test", async () => {
     it("builds a simple type", async () => {
@@ -16,9 +16,12 @@ describe("type builder test", async () => {
                 flag: { default: true },
             },
         });
-        const builtType = buildType(typeDef);
+        const builtType = generateTypeScriptType(typeDef);
         expect(builtType).eq(
-            `export type ${typeDef.typeName}Type = {\n` +
+            "// " +
+                STANDARD_AUTOGEN_FILE_DISCLAIMER +
+                "\n" +
+                `export type ${typeDef.typeName}Type = {\n` +
                 "    _meta?: {\n" +
                 "        id: string;\n" +
                 "        version: string;\n" +
@@ -50,17 +53,18 @@ describe("type builder test", async () => {
                 },
             },
         });
-        const builtTypes = buildType(typeDef);
+        const builtTypes = generateTypeScriptType(typeDef);
         expect(builtTypes).eq(
-            "export type ComplexBuilder_nested_nestedType = {\n" +
+            "// " +
+                STANDARD_AUTOGEN_FILE_DISCLAIMER +
+                "\n" +
+                "export type ComplexBuilder_nested_nestedType = {\n" +
                 "    inner?: number;\n" +
                 "};\n" +
-                "\n" +
                 "export type ComplexBuilder_nestedType = {\n" +
                 "    value?: string;\n" +
                 "    nested: ComplexBuilder_nested_nestedType;\n" +
                 "};\n" +
-                "\n" +
                 "export type ComplexBuilderType = {\n" +
                 "    _meta?: {\n" +
                 "        id: string;\n" +
