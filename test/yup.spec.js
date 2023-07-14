@@ -32,14 +32,24 @@ describe("yup builder test", async () => {
         const typeDef = new MobilettoOrmTypeDef({
             typeName: "ComplexBuilder",
             fields: {
-                primary: { primary: true },
+                primary: { primary: true, default: "someDefault", max: 25, min: 2, regex: /[A-Z]{2,}/g },
+                intEnumeratedValues: { values: [1, 2, 3] },
+                stringEnumeratedItems: { items: [{ value: "one" }, { value: "two" }, { value: "three" }] },
+                intEnumeratedItems: {
+                    required: true,
+                    items: [
+                        { label: "one", value: 1 },
+                        { label: "two", value: 2 },
+                        { label: "three", value: 3 },
+                    ],
+                },
                 nested: {
                     fields: {
                         value: { type: "string" },
                         nested: {
                             required: true,
                             fields: {
-                                inner: { default: 0 },
+                                inner: { default: 0, minValue: -1, maxValue: 1 },
                             },
                         },
                     },
@@ -50,19 +60,21 @@ describe("yup builder test", async () => {
         expect(builtTypes).eq(
             "// " +
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
-                "\n" +
-                'import * as yup from "yup";\n' +
+                '\nimport * as yup from "yup";\n' +
                 "export const ComplexBuilder_nested_nestedSchema = yup.object({\n" +
-                "    inner: yup.number(),\n" +
+                "    inner: yup.number().min(-1, 'minValue').max(1, 'maxValue').typeError('invalid'),\n" +
                 "});\n" +
                 "\n" +
                 "export const ComplexBuilder_nestedSchema = yup.object({\n" +
-                "    value: yup.string(),\n" +
+                "    value: yup.string().typeError('invalid'),\n" +
                 "    nested: ComplexBuilder_nested_nestedSchema,\n" +
                 "});\n" +
                 "\n" +
                 "export const ComplexBuilderSchema = yup.object({\n" +
-                "    primary: yup.string().required('required'),\n" +
+                "    primary: yup.string().required('required').min(2, 'min').max(25, 'max').matches(/[A-Z]{2,}/g, 'regex').default(\"someDefault\").typeError('invalid'),\n" +
+                "    intEnumeratedValues: yup.number().oneOf([1,2,3], 'enum').typeError('invalid'),\n" +
+                '    stringEnumeratedItems: yup.string().oneOf(["one","two","three"], \'enum\').typeError(\'invalid\'),\n' +
+                "    intEnumeratedItems: yup.number().required('required').oneOf([1,2,3], 'enum').typeError('invalid'),\n" +
                 "    nested: ComplexBuilder_nestedSchema,\n" +
                 "});\n"
         );

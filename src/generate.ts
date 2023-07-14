@@ -71,6 +71,19 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
                 throw new MobilettoOrmValidationError(errors);
             }
         }
+        if (field.default) {
+            field.defaultValue = JSON.stringify(field.default);
+        }
+        if (field.regex) {
+            field.regexValue = field.regex.toString();
+        }
+        if (field.values && Array.isArray(field.values) && field.values.length > 0) {
+            field.isEnum = true;
+            field.enumValues = JSON.stringify(field.values);
+        } else if (field.items && Array.isArray(field.items) && field.items.length > 0 && field.items[0].value) {
+            field.isEnum = true;
+            field.enumValues = JSON.stringify(field.items.map((i: { value: string }) => i.value));
+        }
     }
     ctx.typeName = typeDef.typeName;
     ctx.curlyOpen = "{";
