@@ -8,6 +8,7 @@ export type TypeDeclaration = {
 export type GenerateOptions = {
     outfile?: string;
     header?: string;
+    typescript?: boolean;
     name?: string;
     disclaimer?: string;
     prepareContext?: (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>) => Record<string, unknown>;

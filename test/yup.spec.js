@@ -81,7 +81,7 @@ describe("yup builder test", async () => {
                 },
             },
         });
-        const builtTypes = generateYup(typeDef);
+        const builtTypes = generateYup(typeDef, { typescript: false });
         expect(builtTypes).eq(
             "// " +
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +

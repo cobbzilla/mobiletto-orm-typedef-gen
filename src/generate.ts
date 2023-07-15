@@ -25,6 +25,7 @@ export type TypeDeclaration = {
 export type GenerateOptions = {
     outfile?: string;
     header?: string;
+    typescript?: boolean;
     name?: string;
     disclaimer?: string;
     prepareContext?: (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>) => Record<string, unknown>;
@@ -107,6 +108,12 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
             field.whenFieldNamesQuoted = field.whenFieldNames
                 .filter((f: string) => f !== fieldName)
                 .map((f: string) => JSON.stringify(f));
+            field.whenFieldSignature = field.whenFieldNames
+                .map((f: string) => {
+                    const fld = (ctx.fields as MobilettoOrmFieldDefConfigs)[f];
+                    return f + (fld.required ? "" : "?") + ": " + fld.type;
+                })
+                .join(", ");
         }
         if (field.test && field.test.message && field.test.valid) {
             field.testCode = field.test.valid.toString();
@@ -131,6 +138,7 @@ export const generate = (
     if (!(typeDef instanceof MobilettoOrmTypeDef)) {
         typeDef = new MobilettoOrmTypeDef(typeDef);
     }
+    const typescript = !opts || opts.typescript !== false;
     const disclaimer = opts?.disclaimer ? opts.disclaimer : STANDARD_AUTOGEN_FILE_DISCLAIMER;
     const name = opts?.name ? opts.name : typeDef.typeName;
     const decls = [...findDecls(name, typeDef.fields), { name, fields: typeDef.fields, root: true }];
@@ -149,6 +157,7 @@ export const generate = (
             header: decls.length > 0 ? null : opts?.header,
             first,
             root: decl.root || false,
+            typescript,
         });
         const preparedContext = opts?.prepareContext ? opts.prepareContext(typeDef, typeContext) : typeContext;
         first = false;

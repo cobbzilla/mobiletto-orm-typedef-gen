@@ -18,15 +18,15 @@ export const {{Name}}Schema = yup.object({{{curlyOpen}}}{{#each fields}}
             name: "{{test.message}}",
             message: '{{fullName}}_{{test.message}}',
             skipAbsent: true,
-            test(value, ctx) {
+            test(value{{#if typescript}}: string | number | boolean | null | undefined{{/if}}, ctx) {
                 const t = {{{testCode}}};
                 return typeof value === "undefined" || value == null || t({ ...ctx.parent });
             }
         }){{/if}}{{#if hasWhen}}
         .when([{{{whenFieldNamesQuoted}}}], {
-            is: ({{whenFieldNames}}) => {
+            is: ({{#if typescript}}{{whenFieldSignature}}{{else}}{{whenFieldNames}}{{/if}}) => {
                 const w = {{{whenCode}}};
-                const v = { {{whenFieldNames}} };
+                const v{{#if typescript}}: Record<string, unknown>{{/if}} = { {{whenFieldNames}} };
                 return w(v);
             },
             then: (schema) => schema.required('{{fullName}}_required'),
