@@ -22,7 +22,7 @@ describe("type builder test", async () => {
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
                 "\n" +
                 'import { MobilettoOrmObject } from "mobiletto-orm-typedef";\n' +
-                `export type ${typeDef.typeName}Type extends MobilettoOrmObject = {\n` +
+                `export type ${typeDef.typeName}Type = MobilettoOrmObject & {\n` +
                 "    value?: number;\n" +
                 "    int: number;\n" +
                 "    flag?: boolean;\n" +
@@ -60,7 +60,7 @@ describe("type builder test", async () => {
                 "    value?: string;\n" +
                 "    nested: ComplexBuilder_nested_nestedType;\n" +
                 "};\n" +
-                "export type ComplexBuilderType extends MobilettoOrmObject = {\n" +
+                "export type ComplexBuilderType = MobilettoOrmObject & {\n" +
                 "    primary: string;\n" +
                 "    nested?: ComplexBuilder_nestedType;\n" +
                 "};\n",
