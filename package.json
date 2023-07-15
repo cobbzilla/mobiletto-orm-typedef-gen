@@ -1,7 +1,11 @@
 {
   "name": "mobiletto-orm-typedef-gen",
-  "version": "2.1.17",
+  "version": "2.1.18",
   "type": "module",
+  "exports": {
+    "import": "./lib/esm/index.js",
+    "require": "./lib/cjs/index.js"
+  },
   "description": "generate various files based on mobiletto-orm-typedef definitions",
   "keywords": [
     "storage",
