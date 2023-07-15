@@ -1,6 +1,6 @@
 {
   "name": "mobiletto-orm-typedef-gen",
-  "version": "2.1.21",
+  "version": "2.1.22",
   "type": "module",
   "exports": "./lib/esm/index.js",
   "description": "generate various files based on mobiletto-orm-typedef definitions",
