@@ -98,7 +98,10 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
             field.hasWhen = true;
             field.whenCode = field.when.toString();
             if (ctx.typescript) {
-                field.whenCode = field.whenCode.replace(/\(([a-z_]+)\)/i, (a: string, b: string) => `(${b}: unknown)`);
+                field.whenCode = field.whenCode.replace(
+                    /\(([a-z_]+)\)/i,
+                    (a: string, b: string) => `(${b}: Record<string, unknown>)`,
+                );
             }
             field.whenFieldNames =
                 field.whenFields ||
