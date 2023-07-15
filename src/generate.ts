@@ -29,6 +29,7 @@ export type GenerateOptions = {
     name?: string;
     disclaimer?: string;
     prepareContext?: (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>) => Record<string, unknown>;
+    mobilettoOrmObjectPackage?: string;
 };
 
 const findDecls = (name: string, fields: MobilettoOrmFieldDefConfigs) => {
@@ -145,6 +146,7 @@ export const generate = (
         typeDef = new MobilettoOrmTypeDef(typeDef);
     }
     const typescript = !opts || opts.typescript !== false;
+    const mobilettoOrmObjectPackage = opts?.mobilettoOrmObjectPackage || "mobiletto-orm-typedef";
     const disclaimer = opts?.disclaimer ? opts.disclaimer : STANDARD_AUTOGEN_FILE_DISCLAIMER;
     const name = opts?.name ? opts.name : typeDef.typeName;
     const decls = [...findDecls(name, typeDef.fields), { name, fields: typeDef.fields, root: true }];
@@ -164,6 +166,7 @@ export const generate = (
             first,
             root: decl.root || false,
             typescript,
+            mobilettoOrmObjectPackage,
         });
         const preparedContext = opts?.prepareContext ? opts.prepareContext(typeDef, typeContext) : typeContext;
         first = false;

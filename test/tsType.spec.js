@@ -21,14 +21,8 @@ describe("type builder test", async () => {
             "// " +
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
                 "\n" +
-                `export type ${typeDef.typeName}Type = {\n` +
-                "    _meta?: {\n" +
-                "        id: string;\n" +
-                "        version: string;\n" +
-                "        removed?: boolean;\n" +
-                "        ctime: number;\n" +
-                "        mtime: number;\n" +
-                "    };\n" +
+                'import { MobilettoOrmObject } from "mobiletto-orm-typedef";\n' +
+                `export type ${typeDef.typeName}Type extends MobilettoOrmObject = {\n` +
                 "    value?: number;\n" +
                 "    int: number;\n" +
                 "    flag?: boolean;\n" +
@@ -58,6 +52,7 @@ describe("type builder test", async () => {
             "// " +
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
                 "\n" +
+                'import { MobilettoOrmObject } from "mobiletto-orm-typedef";\n' +
                 "export type ComplexBuilder_nested_nestedType = {\n" +
                 "    inner?: number;\n" +
                 "};\n" +
@@ -65,14 +60,7 @@ describe("type builder test", async () => {
                 "    value?: string;\n" +
                 "    nested: ComplexBuilder_nested_nestedType;\n" +
                 "};\n" +
-                "export type ComplexBuilderType = {\n" +
-                "    _meta?: {\n" +
-                "        id: string;\n" +
-                "        version: string;\n" +
-                "        removed?: boolean;\n" +
-                "        ctime: number;\n" +
-                "        mtime: number;\n" +
-                "    };\n" +
+                "export type ComplexBuilderType extends MobilettoOrmObject = {\n" +
                 "    primary: string;\n" +
                 "    nested?: ComplexBuilder_nestedType;\n" +
                 "};\n",

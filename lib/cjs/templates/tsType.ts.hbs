@@ -1,14 +1,7 @@
 {{#if disclaimer}}// {{{ disclaimer }}}{{#if header}}
 {{{header}}}{{/if}}
-{{/if}}export type {{ Name }}Type = {{#if root}}{
-    _meta?: {
-        id: string;
-        version: string;
-        removed?: boolean;
-        ctime: number;
-        mtime: number;
-    };
-{{else}}{
-{{/if}}{{#each fields}}    {{name}}{{#if optional}}?{{/if}}: {{#if typeIsObject}}{{ ../Name }}_{{name}}Type{{else if typeIsArray}}{{valueType}}[]{{else}}{{type}}{{/if}};
+import { MobilettoOrmObject } from "{{mobilettoOrmObjectPackage}}";
+{{/if}}export type {{ Name }}Type{{#if root}} extends MobilettoOrmObject{{/if}} = {
+{{#each fields}}    {{name}}{{#if optional}}?{{/if}}: {{#if typeIsObject}}{{ ../Name }}_{{name}}Type{{else if typeIsArray}}{{valueType}}[]{{else}}{{type}}{{/if}};
 {{/each}}
 };
