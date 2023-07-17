@@ -38,8 +38,8 @@ devDependencies:
     specifier: ^8.8.0
     version: 8.8.0(eslint@8.44.0)
   mobiletto-orm-typedef:
-    specifier: ^2.1.21
-    version: 2.1.21
+    specifier: ^2.1.24
+    version: 2.1.24
   mocha:
     specifier: ^10.2.0
     version: 10.2.0
@@ -1027,8 +1027,8 @@ packages:
     hasBin: true
     dev: true
 
-  /mobiletto-orm-typedef@2.1.21:
-    resolution: {integrity: sha512-QFe+QU6uReP6kB9bgvOrE1nr0jf8jHMokAum4C8BQaavXUcc/creloSFdIziY7wrlcEy1B+PFvS26M4JI7P/wA==}
+  /mobiletto-orm-typedef@2.1.24:
+    resolution: {integrity: sha512-bYLEMNcKKBRoTU3d84JoZMoDJgFb4dsajtuA3hTbCCRI8qAs6HYWjBmMyWrRt1H+ThhXXSqOxIAtMIfSVJk0rA==}
     dependencies:
       shasum: 1.0.2
       uuid: 9.0.0
