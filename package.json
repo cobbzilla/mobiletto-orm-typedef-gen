@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cobbzilla/mobiletto-orm-typedef-gen"
+    "url": "https://github.com/cobbzilla/mobiletto-orm-typedef-gen.git"
   },
   "license": "Apache-2.0",
   "scripts": {
