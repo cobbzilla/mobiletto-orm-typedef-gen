@@ -177,7 +177,7 @@ export const generate = (
             throw new MobilettoOrmError(`invalid template path: ${templatePath}`);
         }
         const endPath =
-            templatePath.substring(0, lastSlash).replace(/^[A-Z0-9/_-]/g, "") + templatePath.substring(lastSlash);
+            templatePath.substring(0, lastSlash).replace(/[^A-Z0-9_./-]/gi, "") + templatePath.substring(lastSlash);
         if (endPath !== templatePath) {
             throw new MobilettoOrmError(`invalid template path: ${templatePath}`);
         }
