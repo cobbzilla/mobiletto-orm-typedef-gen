@@ -184,7 +184,18 @@ export const generate = (
         if (!templatePath.endsWith(".ts.hbs")) {
             throw new MobilettoOrmError(`invalid template path: ${templatePath}`);
         }
-        const template = fs.readFileSync(__dirname + "/" + templatePath).toString("utf8");
+
+        const localTemplate = __dirname + "/" + templatePath;
+        let template;
+        try {
+            template = fs.readFileSync(localTemplate).toString("utf8");
+        } catch (e) {
+            try {
+                template = fs.readFileSync(templatePath).toString("utf8");
+            } catch (e2) {
+                throw new MobilettoOrmError(`template path not found: ${templatePath}`);
+            }
+        }
         const data = Handlebars.compile(template)(preparedContext);
         allData = data + allData;
     }
