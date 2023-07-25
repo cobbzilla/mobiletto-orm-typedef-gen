@@ -36,4 +36,4 @@ export const {{Name}}SchemaFields = {{{curlyOpen}}}{{#each fields}}
         }){{/if}},{{/each}}
 };
 
-export const {{Name}}Schema = yup.object({{{curlyOpen}}}{{Name}}SchemaFields});
+export const {{Name}}Schema = yup.object({{Name}}SchemaFields);

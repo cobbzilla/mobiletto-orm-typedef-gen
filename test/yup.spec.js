@@ -34,7 +34,7 @@ describe("yup builder test", async () => {
                 "        .notRequired()\n" +
                 "        .default(true),\n" +
                 "};\n\n" +
-                `export const ${typeDef.typeName}Schema = yup.object({${typeDef.typeName}SchemaFields});\n`,
+                `export const ${typeDef.typeName}Schema = yup.object(${typeDef.typeName}SchemaFields);\n`,
         );
     });
     it("builds a yup validation schema for a complex type", async () => {
@@ -94,7 +94,7 @@ describe("yup builder test", async () => {
                 "        .typeError('ComplexBuilder_nested_nested_inner_invalid')\n" +
                 "        .notRequired(),\n" +
                 "};\n\n" +
-                "export const ComplexBuilder_nested_nestedSchema = yup.object({ComplexBuilder_nested_nestedSchemaFields});\n" +
+                "export const ComplexBuilder_nested_nestedSchema = yup.object(ComplexBuilder_nested_nestedSchemaFields);\n" +
                 "\n\n" +
                 "export const ComplexBuilder_nestedSchemaFields = {\n" +
                 "    value: yup.string().trim().transform(v => v === '' ? undefined : v)\n" +
@@ -118,7 +118,7 @@ describe("yup builder test", async () => {
                 "            otherwise: (schema) => schema.notRequired(),\n" +
                 "        }),\n" +
                 "};\n\n" +
-                "export const ComplexBuilder_nestedSchema = yup.object({ComplexBuilder_nestedSchemaFields});\n\n\n" +
+                "export const ComplexBuilder_nestedSchema = yup.object(ComplexBuilder_nestedSchemaFields);\n\n\n" +
                 "export const ComplexBuilderSchemaFields = {\n" +
                 "    primary: yup.string().trim().transform(v => v === '' ? undefined : v)\n" +
                 "        .min(2, 'primary_min')\n" +
@@ -178,7 +178,7 @@ describe("yup builder test", async () => {
                 "            otherwise: (schema) => schema.notRequired(),\n" +
                 "        }),\n" +
                 "};\n\n" +
-                "export const ComplexBuilderSchema = yup.object({ComplexBuilderSchemaFields});\n",
+                "export const ComplexBuilderSchema = yup.object(ComplexBuilderSchemaFields);\n",
         );
     });
 });
