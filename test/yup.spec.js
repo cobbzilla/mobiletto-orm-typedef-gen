@@ -95,7 +95,7 @@ describe("yup builder test", async () => {
                 "});\n" +
                 "\n" +
                 "export const ComplexBuilder_nestedSchema = yup.object({\n" +
-                "    value: yup.string()\n" +
+                "    value: yup.string().trim().transform(v => v === '' ? undefined : v)\n" +
                 "        .typeError('ComplexBuilder_nested_value_invalid')\n" +
                 "        .notRequired(),\n" +
                 "    nested: ComplexBuilder_nested_nestedSchema\n" +
@@ -118,7 +118,7 @@ describe("yup builder test", async () => {
                 "});\n" +
                 "\n" +
                 "export const ComplexBuilderSchema = yup.object({\n" +
-                "    primary: yup.string()\n" +
+                "    primary: yup.string().trim().transform(v => v === '' ? undefined : v)\n" +
                 "        .min(2, 'primary_min')\n" +
                 "        .max(25, 'primary_max')\n" +
                 "        .matches(/[A-Z]{2,}/g, 'primary_regex')\n" +
@@ -138,7 +138,7 @@ describe("yup builder test", async () => {
                 "            then: (schema) => schema.required('intEnumeratedValues_required'),\n" +
                 "            otherwise: (schema) => schema.notRequired(),\n" +
                 "        }),\n" +
-                "    stringEnumeratedItems: yup.string()\n" +
+                "    stringEnumeratedItems: yup.string().trim().transform(v => v === '' ? undefined : v)\n" +
                 '        .oneOf(["one","two","three"], \'stringEnumeratedItems_enum\')\n' +
                 "        .typeError('stringEnumeratedItems_invalid')\n" +
                 "        .notRequired()\n" +
