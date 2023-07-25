@@ -20,8 +20,8 @@ describe("yup builder test", async () => {
         expect(builtType).eq(
             "// " +
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
-                '\nimport * as yup from "yup";\n' +
-                `export const ${typeDef.typeName}Schema = yup.object({\n` +
+                '\n\nimport * as yup from "yup";\n\n' +
+                `export const ${typeDef.typeName}SchemaFields = {\n` +
                 "    value: yup.number()\n" +
                 "        .typeError('value_invalid')\n" +
                 "        .notRequired(),\n" +
@@ -33,7 +33,8 @@ describe("yup builder test", async () => {
                 "        .typeError('flag_invalid')\n" +
                 "        .notRequired()\n" +
                 "        .default(true),\n" +
-                "});\n",
+                "};\n\n" +
+                `export const ${typeDef.typeName}Schema = yup.object({${typeDef.typeName}SchemaFields});\n`,
         );
     });
     it("builds a yup validation schema for a complex type", async () => {
@@ -85,16 +86,17 @@ describe("yup builder test", async () => {
         expect(builtTypes).eq(
             "// " +
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
-                '\nimport * as yup from "yup";\n' +
-                "export const ComplexBuilder_nested_nestedSchema = yup.object({\n" +
+                '\n\nimport * as yup from "yup";\n\n' +
+                "export const ComplexBuilder_nested_nestedSchemaFields = {\n" +
                 "    inner: yup.number()\n" +
                 "        .min(-1, 'ComplexBuilder_nested_nested_inner_minValue')\n" +
                 "        .max(1, 'ComplexBuilder_nested_nested_inner_maxValue')\n" +
                 "        .typeError('ComplexBuilder_nested_nested_inner_invalid')\n" +
                 "        .notRequired(),\n" +
-                "});\n" +
-                "\n" +
-                "export const ComplexBuilder_nestedSchema = yup.object({\n" +
+                "};\n\n" +
+                "export const ComplexBuilder_nested_nestedSchema = yup.object({ComplexBuilder_nested_nestedSchemaFields});\n" +
+                "\n\n" +
+                "export const ComplexBuilder_nestedSchemaFields = {\n" +
                 "    value: yup.string().trim().transform(v => v === '' ? undefined : v)\n" +
                 "        .typeError('ComplexBuilder_nested_value_invalid')\n" +
                 "        .notRequired(),\n" +
@@ -115,9 +117,9 @@ describe("yup builder test", async () => {
                 "            then: (schema) => schema.required('ComplexBuilder_nested_favoriteLetters_required'),\n" +
                 "            otherwise: (schema) => schema.notRequired(),\n" +
                 "        }),\n" +
-                "});\n" +
-                "\n" +
-                "export const ComplexBuilderSchema = yup.object({\n" +
+                "};\n\n" +
+                "export const ComplexBuilder_nestedSchema = yup.object({ComplexBuilder_nestedSchemaFields});\n\n\n" +
+                "export const ComplexBuilderSchemaFields = {\n" +
                 "    primary: yup.string().trim().transform(v => v === '' ? undefined : v)\n" +
                 "        .min(2, 'primary_min')\n" +
                 "        .max(25, 'primary_max')\n" +
@@ -175,7 +177,8 @@ describe("yup builder test", async () => {
                 "            then: (schema) => schema.required('nested_required'),\n" +
                 "            otherwise: (schema) => schema.notRequired(),\n" +
                 "        }),\n" +
-                "});\n",
+                "};\n\n" +
+                "export const ComplexBuilderSchema = yup.object({ComplexBuilderSchemaFields});\n",
         );
     });
 });

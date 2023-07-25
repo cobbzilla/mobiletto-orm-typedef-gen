@@ -1,7 +1,9 @@
 {{#if disclaimer}}// {{{ disclaimer }}}{{#if header}}
 {{{header}}}{{/if}}
+
 import * as yup from "yup";{{/if}}
-export const {{Name}}Schema = yup.object({{{curlyOpen}}}{{#each fields}}
+
+export const {{Name}}SchemaFields = {{{curlyOpen}}}{{#each fields}}
     {{name}}: {{#if typeIsObject}}{{ ../Name }}_{{name}}Schema{{else}}{{#if typeIsArray}}yup.array().of(yup.{{valueType}}{{else}}yup.{{type}}{{/if}}(){{#if typeIsString}}.trim().transform(v => v === '' ? undefined : v){{/if}}{{#if isEnum}}
         {{arrayIndent}}.oneOf({{{enumValues}}}, '{{fullName}}_enum'){{/if}}{{#if minValue}}
         {{arrayIndent}}.min({{minValue}}, '{{fullName}}_minValue'){{/if}}{{#if maxValue}}
@@ -32,4 +34,6 @@ export const {{Name}}Schema = yup.object({{{curlyOpen}}}{{#each fields}}
             then: (schema) => schema.required('{{fullName}}_required'),
             otherwise: (schema) => schema.notRequired(),
         }){{/if}},{{/each}}
-});
+};
+
+export const {{Name}}Schema = yup.object({{{curlyOpen}}}{{Name}}SchemaFields});
