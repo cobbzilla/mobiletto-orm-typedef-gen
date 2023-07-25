@@ -4,7 +4,7 @@ import {
     MobilettoOrmTypeDef,
     MobilettoOrmTypeDefConfig,
     MobilettoOrmValidationError,
-    ValidationErrors,
+    MobilettoOrmValidationErrors,
 } from "mobiletto-orm-typedef";
 import * as fs from "fs";
 
@@ -76,7 +76,7 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
                     ? typeof field.items[0].value
                     : null;
             if (field.valueType == null) {
-                const errors: ValidationErrors = {};
+                const errors: MobilettoOrmValidationErrors = {};
                 errors[field.name] = ["indeterminateArrayValueType"];
                 throw new MobilettoOrmValidationError(errors);
             }
