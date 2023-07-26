@@ -10,6 +10,7 @@ export type GenerateOptions = {
     header?: string;
     typescript?: boolean;
     name?: string;
+    rootOnly?: boolean;
     disclaimer?: string;
     prepareContext?: (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>) => Record<string, unknown>;
     mobilettoOrmObjectPackage?: string;
