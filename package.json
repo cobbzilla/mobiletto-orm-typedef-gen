@@ -51,7 +51,7 @@
     "copyfiles": "^2.4.1",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
-    "mobiletto-orm-typedef": "^2.1.49",
+    "mobiletto-orm-typedef": "^2.2.0",
     "mocha": "^10.2.0",
     "prettier": "^3.0.0",
     "tslint-config-prettier": "^1.18.0",

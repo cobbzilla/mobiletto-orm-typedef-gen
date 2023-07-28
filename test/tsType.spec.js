@@ -29,6 +29,28 @@ describe("type builder test", async () => {
                 "};\n",
         );
     });
+    it("builds a type with a normalized field", async () => {
+        const typeDef = new MobilettoOrmTypeDef({
+            typeName: `TestType_${rand(10)}`,
+            fields: {
+                value: {
+                    type: "number",
+                    required: true,
+                    normalize: async (v) => Promise.resolve(Math.floor(parseInt(`${v}`))),
+                },
+            },
+        });
+        const builtType = generateTypeScriptType(typeDef);
+        expect(builtType).eq(
+            "// " +
+                STANDARD_AUTOGEN_FILE_DISCLAIMER +
+                "\n" +
+                'import { MobilettoOrmObject } from "mobiletto-orm-typedef";\n' +
+                `export type ${typeDef.typeName}Type = MobilettoOrmObject & {\n` +
+                "    value: number;\n" +
+                "};\n",
+        );
+    });
     it("builds a complex type", async () => {
         const typeDef = new MobilettoOrmTypeDef({
             typeName: "ComplexBuilder",
