@@ -127,7 +127,10 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
             field.testCode = field.test.valid.toString();
         }
         field.Name = capitalize(field.name);
-        field.fullName = (ctx.name !== typeDef.typeName ? ctx.name + "_" : "") + field.name;
+        field.fullName =
+            typeof field.label === "string"
+                ? field.label
+                : (ctx.name !== typeDef.typeName ? ctx.name + "_" : "") + field.name;
     }
 
     ctx.fieldNamesArray = JSON.stringify(fieldNames);
