@@ -75,6 +75,8 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
                       typeof field.items[0] === "object" &&
                       field.items[0].value
                     ? typeof field.items[0].value
+                    : field.ref
+                    ? "string"
                     : null;
             if (field.valueType == null) {
                 const errors: MobilettoOrmValidationErrors = {};
