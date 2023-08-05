@@ -141,6 +141,9 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
     return ctx;
 };
 
+const VALID_TEMPLATE_FILE_EXT = [".ts.hbs", ".vue.hbs"];
+const validTemplateFile = (path: string) => !!VALID_TEMPLATE_FILE_EXT.find((ext) => path.endsWith(ext));
+
 export const generate = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     templatePath: string,
@@ -187,7 +190,7 @@ export const generate = (
         if (endPath !== templatePath) {
             throw new MobilettoOrmError(`invalid template path: ${templatePath}`);
         }
-        if (!templatePath.endsWith(".ts.hbs")) {
+        if (!validTemplateFile(templatePath)) {
             throw new MobilettoOrmError(`invalid template path: ${templatePath}`);
         }
 
