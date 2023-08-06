@@ -1,6 +1,6 @@
 {
   "name": "mobiletto-orm-typedef-gen",
-  "version": "2.2.15",
+  "version": "2.2.16",
   "type": "module",
   "description": "generate various files based on mobiletto-orm-typedef definitions",
   "keywords": [
@@ -52,7 +52,7 @@
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "handlebars": "^4.7.7",
-    "mobiletto-orm-typedef": "^2.3.13",
+    "mobiletto-orm-typedef": "^2.3.14",
     "mocha": "^10.2.0",
     "prettier": "^3.0.0",
     "tslint-config-prettier": "^1.18.0",
