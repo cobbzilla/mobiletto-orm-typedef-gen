@@ -148,6 +148,7 @@ export const generate = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     templatePath: string,
     opts?: GenerateOptions,
+    ctx?: Record<string, object>,
 ): string => {
     if (!(typeDef instanceof MobilettoOrmTypeDef)) {
         typeDef = new MobilettoOrmTypeDef(typeDef);
@@ -176,6 +177,7 @@ export const generate = (
             root: decl.root || false,
             typescript,
             mobilettoOrmObjectPackage,
+            ...ctx,
         });
         const preparedContext = opts?.prepareContext ? opts.prepareContext(typeDef, typeContext) : typeContext;
         first = false;

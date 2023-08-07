@@ -15,4 +15,4 @@ export type GenerateOptions = {
     prepareContext?: (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>) => Record<string, unknown>;
     mobilettoOrmObjectPackage?: string;
 };
-export declare const generate: (typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig, templatePath: string, opts?: GenerateOptions) => string;
+export declare const generate: (typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig, templatePath: string, opts?: GenerateOptions, ctx?: Record<string, object>) => string;
