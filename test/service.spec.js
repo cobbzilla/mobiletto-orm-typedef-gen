@@ -25,7 +25,7 @@ describe("API client service builder test", async () => {
                 'import { Ref } from "vue";\n' +
                 'import { MobilettoOrmObject, MobilettoOrmPurgeResults } from "mobiletto-orm-typedef";\n' +
                 'import { MobilettoOrmValidationErrors } from "mobiletto-orm";\n' +
-                `import { ${typeDef.typeName}Type, ${typeDef.typeName}TypeDef } from "my-morm-model";\n` +
+                `import { ${typeDef.typeName}Type, ${typeDef.typeName}TypeDef } from "mobiletto-orm-typedef-gen";\n` +
                 'import * as a from "~/utils/serviceHelper.js";\n' +
                 "\n" +
                 `export const ${typeDef.typeName}Service = {\n` +
@@ -104,7 +104,7 @@ describe("API client service builder test", async () => {
                 flag: { default: true },
             },
         });
-        const builtServiceHelper = generateServiceHelper();
+        const builtServiceHelper = generateServiceHelper(typeDef);
         expect(builtServiceHelper).eq(
             'import { MobilettoOrmValidationErrors } from "mobiletto-orm";\n' +
                 'import { SESSION_HEADER } from "~/utils/auth";\n' +
