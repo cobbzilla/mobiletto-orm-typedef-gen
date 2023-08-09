@@ -1,0 +1,66 @@
+/* eslint-disable camelcase,@typescript-eslint/no-unused-vars */
+{{#if disclaimer}}// {{{disclaimer}}}{{#if header}}
+{{{header}}}{{/if}}{{/if}}
+
+import { H3Event, H3Error } from "h3";
+import { MobilettoOrmSyncError } from "mobiletto-orm-typedef";{{#if typeDef.apiConfig.delete.hasValidate}}
+import { {{Name}}TypeDef } from "{{typeDefPackage}}";{{/if}}
+
+export default defineEventHandler(async (event: H3Event) => {
+  return await filterErrors(event, "{{name}}.delete", async (event: H3Event) => {{{curlyOpen}}}{{#if typeDef.apiConfig.delete.permission.admin}}
+    return await requireAdminAccountObject(event, "{{name}}.delete", async (event: H3Event, session, account) => {{{curlyOpen}}}{{else}}{{#if typeDef.apiConfig.delete.permission.owner}}
+    return await requireAccountObject(event, "{{name}}.delete", async (event: H3Event, session, account) => {{{curlyOpen}}}{{else}}{{#if typeDef.apiConfig.delete.permission.session}}
+    return await requireAccount(event, "{{name}}.delete", async (event: H3Event, session) => {{{curlyOpen}}}{{/if}}{{/if}}{{/if}}
+      const {{name}}Repo = {{name}}Repository();
+      const id = event?.context?.params?.id;
+      if (!id) throw notFound({{name}}Repo.typeDef.idFieldName());
+      try {
+        const {{name}}_by_id = await {{name}}Repo.safeFindById(id);
+        if ({{name}}_by_id) {
+          {{#if typeDef.apiConfig.delete.permission.owner}}
+          if (!account.admin && {{name}}_by_id.account !== session.account) throw forbidden();
+          {{/if}}{{#if typeDef.apiConfig.delete.hasValidate}}if (typeof {{Name}}TypeDef.apiConfig.delete?.validate === "function") {
+            const validated = await {{Name}}TypeDef.apiConfig.delete.validate(account, {{name}}_by_id);
+            if (validated === true || (typeof validated === "object" && Object.keys(validated).length === 0)) {
+              // successfully validated
+            } else if (typeof validated === "object" && Object.keys(validated).length > 0) {
+              throw validationError(validated);
+            } else {
+              throw validationError({global: ["validation"]});
+            }
+          }{{/if}}
+          return await {{name}}Repo.remove({{name}}_by_id);
+        }
+        {{#each alternateLookupFields}}
+          const {{name}}_by_{{this}} = await {{name}}Repo.safeFindBy("{{this}}", id);
+          if ({{name}}_by_{{this}}) {
+            {{#if typeDef.apiConfig.delete.permission.owner}}
+            if (!account.admin && {{name}}_by_{{this}}.account !== session.account) throw forbidden();
+            {{/if}}{{#if typeDef.apiConfig.delete.hasValidate}}if (typeof {{Name}}TypeDef.apiConfig.delete?.validate === "function") {
+              const validated = await {{Name}}TypeDef.apiConfig.delete.validate(account, {{name}}_by_{{this}});
+              if (validated === true || (typeof validated === "object" && Object.keys(validated).length === 0)) {
+                // successfully validated
+              } else if (typeof validated === "object" && Object.keys(validated).length > 0) {
+                throw validationError(validated);
+              } else {
+                throw validationError({global: ["validation"]});
+              }
+            }{{/if}}
+            return await {{name}}Repo.remove({{name}}_by_{{this}});
+          }
+        {{/each}}
+      } catch (e) {
+        if (e instanceof H3Error) throw e;
+        if (e instanceof MobilettoOrmSyncError) {
+          logger.warn(`{{name}}.delete: sync error: ${e}`);
+          throw conflict();
+        }
+        logger.error(`{{name}}.delete: unexpected error: ${e}`);
+        throw serverError();
+      }
+      throw notFound(id);{{#if typeDef.apiConfig.delete.permission.admin}}
+    });{{else}}{{#if typeDef.apiConfig.delete.permission.owner}}
+    });{{else}}{{#if typeDef.apiConfig.delete.permission.session}}
+    });{{/if}}{{/if}}{{/if}}
+  });
+});

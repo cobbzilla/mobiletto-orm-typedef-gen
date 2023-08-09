@@ -9,5 +9,5 @@ export const generateYup = (
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
     };
-    return generate(typeDef, "templates/yup.ts.hbs", opts);
+    return generate(typeDef, "templates/validation/yup.ts.hbs", opts);
 };

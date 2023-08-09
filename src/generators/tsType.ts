@@ -5,5 +5,5 @@ export const generateTypeScriptType = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     opts?: GenerateOptions,
 ): string => {
-    return generate(typeDef, "templates/tsType.ts.hbs", opts);
+    return generate(typeDef, "templates/type/tsType.ts.hbs", opts);
 };

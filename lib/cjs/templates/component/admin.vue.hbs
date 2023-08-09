@@ -1,0 +1,405 @@
+{{#if disclaimer}}<!-- {{{ disclaimer }}}{{#if header}}
+{{{header}}}{{/if}} -->{{/if}}
+
+<template>
+  <v-container>
+    <v-row>
+      <v-col>
+        <h2>{{{curlyOpen}}}{{{curlyOpen}}} adminTitle() {{{curlyClose}}}{{{curlyClose}}}</h2>
+        <b v-if="messageExists('title_{{name}}_admin_details', messages)">
+          {{{curlyOpen}}}{{{curlyOpen}}} messages.title_{{name}}_admin_details {{{curlyClose}}}{{{curlyClose}}}
+        </b>
+      </v-col>
+    </v-row>
+    <div>
+      <v-row v-if="addingObject">
+        <v-col>
+          <OrmForm
+            v-if="allRefsLoaded() && {{name}}TypeDef"
+            form-name="add_{{name}}_form"
+            :type-def="{{name}}TypeDef"
+            :type-name-message="typeNameMessage"
+            :thing="addObject"
+            :fields="{{name}}TypeDefFields"
+            :create="true"
+            :read-only-object="() => false"
+            :server-errors="create{{Name}}ServerErrors"
+            :label-prefixes="labelPfx"
+            :hint-suffixes="['_description']"{{#if typeDef.singleton}}
+            cancel-button-message=""{{/if}}
+            @submitted="onAddSubmitted"
+            @update="onAddUpdated"{{#unless typeDef.singleton}}
+            @cancel="onAddCancel"{{/unless}}
+          />
+        </v-col>
+      </v-row>
+      <v-row v-else-if="Object.keys(editingObject).length > 0">
+        <v-col>
+          <OrmForm
+            v-if="allRefsLoaded() && {{name}}TypeDef"
+            form-name="edit_{{name}}_form"
+            :type-def="{{name}}TypeDef"
+            type-name-message="typeNameMessage"
+            :thing="editingObject"
+            :fields="{{name}}TypeDefFields"
+            :create="false"
+            :read-only-object="() => false"
+            :server-errors="edit{{Name}}ServerErrors"
+            :label-prefixes="labelPfx"
+            :hint-suffixes="['_description']"
+            @submitted="onEditSubmitted"
+            @update="onEditUpdated"
+            @cancel="onEditCancel"
+          />
+        </v-col>
+      </v-row>{{#unless typeDef.singleton}}
+      <v-row v-else-if="allRefsLoaded() && {{name}}TypeDef">
+        <v-col>
+          <v-container>
+            <v-row v-if="({{name}}List && {{name}}List.length > 0) || searched">
+              <v-col>
+                <div>
+                  <v-form @submit.prevent="searchObjects">
+                    <div class="form-group">
+                      <v-text-field
+                        v-model="searchTerms"
+                        :label="messages.label_search"
+                        :disabled="libraryStore.libraryBusy"
+                        type="text"
+                        name="searchTerms"
+                        class="form-control"
+                        @keyup.enter="searchObjects"
+                      />
+                      <v-btn class="btn btn-primary" :disabled="{{name}}Store.{{name}}Busy" @click.stop="searchObjects">
+                        <Icon name="material-symbols:search" />
+                      </v-btn>
+                    </div>
+                  </v-form>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <table v-if="{{name}}List && {{name}}List.length > 0">
+                  <thead>
+                  <tr>
+                    <th v-for="(tableField, tableFieldIndex) in tableFields" :key="tableFieldIndex">
+                      {{{curlyOpen}}}{{{curlyOpen}}} tableFieldMessages[tableField] {{{curlyClose}}}{{{curlyClose}}}
+                    </th>
+                    <th v-if="Object.keys(actionConfigs).length > 0">
+                      <Icon name="material-symbols:target" />
+                    </th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="(obj, objIndex) in {{name}}List" :key="objIndex">
+                    <td v-for="(fieldName, fieldIndex) in tableFields" :key="fieldIndex">
+                      <OrmFieldDisplay v-if="{{name}}TypeDef.fields[fieldName] || fieldName.startsWith('_meta')" :field="fieldName.startsWith('_meta') ? metaField(fieldName) : {{name}}TypeDef.fields[fieldName]" :value="deepGet(obj, fieldName)" />
+                    </td>
+                    <td v-if="Object.keys(actionConfigs).length > 0">
+                      <div v-for="(action, actionIndex) in Object.keys(actionConfigs)" :key="actionIndex">
+                        <NuxtLink
+                          v-if="actionEnabled(obj, action)"
+                          :to="{ path: `${actionConfig(action).path}/${deepGet(obj, {{name}}TypeDef.idField(obj) as string)}` }"
+                        >
+                          <v-btn>
+                            {{{curlyOpen}}}{{{curlyOpen}}} messages[actionConfig(action).message] {{{curlyClose}}}{{{curlyClose}}}
+                          </v-btn>
+                        </NuxtLink>
+                      </div>
+                    </td>
+                    <td>
+                      <v-btn v-if="canEdit(obj, {{name}}List)" :disabled="{{name}}Store.{{name}}Busy" @click.stop="showEditOrm(obj)">
+                        <Icon name="material-symbols:edit" />
+                      </v-btn>
+                    </td>
+                    <td>
+                      <v-btn v-if="canDelete(obj, {{name}}List)" :disabled="{{name}}Store.{{name}}Busy" @click.stop="delObject(obj)">
+                        <Icon name="material-symbols:delete" />
+                      </v-btn>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-btn class="btn btn-primary" :disabled="{{name}}Store.{{name}}Busy" @click.stop="showAddOrm">
+                  <Icon name="material-symbols:add" />
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-col>
+      </v-row>{{/unless}}
+      <v-row v-else>
+        <v-col>
+          <Icon name="material-symbols:clock-outline" />
+        </v-col>
+      </v-row>
+    </div>
+  </v-container>
+</template>
+
+<script setup lang="ts">
+  import { ref, watch, Ref } from "vue";
+  import { storeToRefs } from "pinia";
+  import {
+    MobilettoOrmFieldDefConfig,
+    MobilettoOrmObject,
+    MobilettoOrmTypeDef,
+    MobilettoOrmValidationErrors,
+    metaField
+  } from "mobiletto-orm-typedef";
+  import { {{Name}}Type, {{Name}}TypeDef } from "{{typeDefPackage}}";
+  import { findMessage, messageExists, parseMessage } from "hokey-runtime";
+  import { useSessionStore } from "{{sessionStoreImport}}";
+  import { use{{Name}}Store } from "~/stores/model/{{name}}Store";{{#if typeDef.refTypes}}{{#each typeDef.refTypes}}
+  import { use{{RefType}}Store } from "~/stores/model/{{refType}}Store";{{/each}}{{/if}}
+  import { deepUpdate{{#unless typeDef.singleton}}, normalizeMsg{{/unless}} } from "{{componentHelperPath}}/componentHelper.js";
+  {{#unless typeDef.singleton}}
+  type ActionConfig = {
+    path: string;
+    message: string;
+    when: (obj: MobilettoOrmObject) => boolean;
+  };{{/unless}}
+  const props = withDefaults(
+    defineProps<{
+      labelPrefixes: string[];
+      typeNameMessage: string,{{#unless typeDef.singleton}}
+      actionConfigs: Record<string, ActionConfig>;
+      canEdit: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
+      canDelete: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
+      deleteConfirmationMessage: string;{{/unless}}
+    }>(),{
+      labelPrefixes: () => ["label_", ""],
+      typeNameMessage: () => "typename_{{name}}",{{#unless typeDef.singleton}}
+      actionConfigs: () => ({}),
+      canEdit: () => true,
+      canDelete: () => true,{{/unless}}
+    },
+  );
+
+  const labelPfx: Ref<string[]> = ref(["admin_label_{{name}}_", "label_", ""]);
+  if (props.labelPrefixes) {
+    props.labelPrefixes.forEach((p: string) => {
+      if (!labelPfx.value.includes(p)) labelPfx.value.unshift(p);
+    });
+  }
+
+  const sessionStore = useSessionStore();
+  const { {{localeMessages}} } = storeToRefs(sessionStore);
+  const messages = {{localeMessages}};
+
+  const adminTitle = () => messageExists("admin_title_{{name}}_administration", messages.value)
+    ? messages.value.admin_title_{{name}}_administration
+    : parseMessage("admin_title_site_administration", messages.value, { title: findMessage(props.typeNameMessage, messages.value, [""])});
+
+  const addingObject = ref(false);
+  const addObject = ref({} as {{Name}}Type);
+  const create{{Name}}ServerErrors = ref({} as MobilettoOrmValidationErrors);
+
+  const editingObject = ref({} as {{Name}}Type);
+  const edit{{Name}}ServerErrors = ref({} as MobilettoOrmValidationErrors);{{#unless typeDef.singleton}}
+  const delete{{Name}}ServerErrors = ref({} as MobilettoOrmValidationErrors);
+
+  const pageNumber = ref(1);
+  const pageSize = ref(20);
+  const searchTerms = ref("");
+  const searched = ref(false);
+  const lastQuery = ref({});
+
+  const tableFields: Ref<string[]> = ref([]);
+
+  const tableFieldMessages: Ref<Record<string, string>> = ref({});
+  const initTableFieldMessages = (tableFields: string[]) => {
+      const defaultTableFieldMessages: Record<string, string> = {};
+      tableFields.forEach((f: string) => {
+        defaultTableFieldMessages[f] = findMessage(normalizeMsg(f), messages.value, props.labelPrefixes);
+      });
+      tableFieldMessages.value = defaultTableFieldMessages;
+  };{{/unless}}
+
+  const {{name}}Store = use{{Name}}Store();
+  {{#if typeDef.singleton}}const { found } = storeToRefs({{name}}Store);
+  {{else}}const { {{name}}List  } = storeToRefs({{name}}Store);{{/if}}
+  const {{name}}TypeDef: Ref<MobilettoOrmTypeDef | null> = ref(null);
+  const {{name}}TypeDefFields: Ref<MobilettoOrmFieldDefConfig[] | undefined> = ref(undefined);
+  {{#if typeDef.singleton}}
+  const findSingleton{{Name}}ServerErrors = ref({} as MobilettoOrmValidationErrors);
+  {{else}}
+  const searchQuery = () => ({ textSearch: searchTerms.value });
+
+  const searchObjects = () => {
+    const query = searchQuery();
+    if (lastQuery.value && JSON.stringify(lastQuery.value) === JSON.stringify(query)) {
+      // not sending duplicate search
+    } else {
+      searched.value = true;
+      lastQuery.value = Object.assign({}, query);
+      {{name}}Store.search(query);
+    }
+  };{{/if}}{{#unless typeDef.singleton}}
+
+  const navigating = ref(false);{{/unless}}
+  {{#if typeDef.refTypes}}
+  const initTypeDef = () => {
+    const typeDef = {{Name}}TypeDef.extend({
+      fields: {
+      {{#each typeDef.refTypes}}{{#each fieldPaths}}
+        {{this}}: { ...ref{{../RefType}}.value },
+      {{/each}}{{/each}}
+      }
+    });
+    {{name}}TypeDefFields.value = typeDef.tabIndexedFields();
+    {{name}}TypeDef.value = typeDef;{{#unless typeDef.singleton}}
+    tableFields.value = {{name}}TypeDef.value.tableFields && Array.isArray({{name}}TypeDef.value.tableFields)
+      ? {{name}}TypeDef.value.tableFields
+      : {{name}}TypeDef.value.primary
+        ? [{{name}}TypeDef.value.primary, "ctime", "mtime"]
+        : ["id", "ctime", "mtime"];
+    initTableFieldMessages(tableFields.value);{{/unless}}
+  }
+
+  const allRefs: Ref<Boolean>[] = [];
+  const allRefsLoaded = () => allRefs.length === {{typeDef.refTypes.length}} && allRefs.filter(r => r.value === true).length === {{typeDef.refTypes.length}};{{#each typeDef.refTypes}}
+  const ref{{RefType}} = ref({} as MobilettoOrmFieldDefConfig);
+  const ref{{RefType}}Loaded = ref(false);
+  allRefs.push(ref{{RefType}}Loaded);
+  const {{refType}}Store = use{{RefType}}Store();
+  const { {{refType}}List } = storeToRefs({{refType}}Store);
+
+  watch({{refType}}List, (newList) => {
+    if (newList && newList.length === 0) {
+      if (navigating.value) return;
+      navigating.value = true;
+      navigateTo("/admin/{{refType}}/setup");
+    } else if (newList && newList.length > 0) {
+      ref{{RefType}}.value.values = newList.map((s) => s.name);
+      ref{{RefType}}.value.labels = newList.map((s) => s.name);
+      ref{{RefType}}.value.items = newList.map((s) => ({
+        label: s.name,
+        value: s.name,
+        title: s.name,
+        rawLabel: true,
+      }));
+    {{#each fieldPaths}}
+      addObject.value.{{this}} = ref{{../RefType}}.value.values as any;
+    {{/each}}
+      ref{{RefType}}Loaded.value = true;
+      if (allRefsLoaded()) {
+        initTypeDef()
+      }
+    }
+  });
+  {{/each}}{{else}}
+  const allRefsLoaded = () => true;
+  {{name}}TypeDef.value = {{Name}}TypeDef;
+  {{name}}TypeDefFields.value = {{Name}}TypeDef.tabIndexedFields();{{#unless typeDef.singleton}}
+  tableFields.value = {{name}}TypeDef.value.tableFields && Array.isArray({{name}}TypeDef.value.tableFields)
+    ? {{name}}TypeDef.value.tableFields
+    : {{name}}TypeDef.value.primary
+      ? [{{name}}TypeDef.value.primary, "ctime", "mtime"]
+      : ["id", "ctime", "mtime"];
+  initTableFieldMessages(tableFields.value);{{/unless}}
+  {{/if}}
+
+  const onAddUpdated = (update: { field: string; value: any }) => {
+    deepUpdate(addObject.value, update.field, update.value);
+  };
+  const onAddSubmitted = async (obj: MobilettoOrmObject) => {
+    await {{name}}Store
+      .create(obj as {{Name}}Type, create{{Name}}ServerErrors);
+    addingObject.value = false;
+    {{#if typeDef.singleton}}
+    return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);
+    {{else}}
+    return await {{name}}Store.search();
+    {{/if}}
+  }
+
+  const showAddOrm = () => {
+    addingObject.value = true;
+  };{{#unless typeDef.singleton}}
+  const onAddCancel = () => {
+    addingObject.value = {{#if typeDef.singleton}}true{{else}}false{{/if}};
+  };{{/unless}}
+
+  const onEditUpdated = (update: { field: string; value: any }) => {
+    if (editingObject.value) {
+      deepUpdate(editingObject.value, update.field, update.value);
+    }
+  };
+
+  const onEditSubmitted = async (obj: MobilettoOrmObject) => {
+    await {{name}}Store
+      .update(obj as {{Name}}Type, edit{{Name}}ServerErrors);
+        editingObject.value = {} as {{Name}}Type;{{#if typeDef.singleton}}
+        return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{else}}
+        return await {{name}}Store.search();{{/if}}
+  };
+
+  const showEditOrm = (obj: MobilettoOrmObject) => {
+    if (Object.keys(editingObject.value).length > 0) {
+      // already editing something else
+      return;
+    }
+    if (obj) {
+      const id = {{Name}}TypeDef.id(obj);
+      if (id && id.length > 0) {
+        editingObject.value = JSON.parse(JSON.stringify(obj)) as {{Name}}Type;
+      }
+    }
+  };
+  const onEditCancel = () => {
+    {{#if typeDef.singleton}}
+    editingObject.value = JSON.parse(JSON.stringify(found)) as {{Name}}Type;
+    {{else}}
+    editingObject.value = {} as {{Name}}Type;
+    {{/if}}
+  };
+  {{#if typeDef.singleton}}
+  watch(found, (newFound: MobilettoOrmObject) => {
+    if (newFound && {{Name}}TypeDef.id(newFound)) {
+      showEditOrm(newFound)
+    } else {
+      showAddOrm();
+    }
+  });
+  watch(findSingleton{{Name}}ServerErrors, (newErrors) => {
+    console.log(`findSingleton errors: ${JSON.stringify(newErrors)}`);
+  });{{else}}
+  const actionConfig = (action: string) => {
+    return props.actionConfigs[action];
+  };
+
+  const actionEnabled = (obj: MobilettoOrmObject, action: string) => {
+    const cfg = props.actionConfigs[action];
+    if (!cfg.when || typeof cfg.when !== "function") {
+      return true;
+    }
+    if (typeof cfg.when === "function") {
+      return cfg.when(obj) === true;
+    }
+    return true;
+  };
+  watch({{name}}List, (newList) => {
+    if (newList && Array.isArray(newList) && newList.length === 0 && searchTerms.value && searchTerms.value.length === 0) {
+      if (navigating.value) return;
+      navigating.value = true;
+      navigateTo("/admin/{{name}}/setup");
+    }
+  });{{/if}}
+  {{#if typeDef.singleton}}
+  {{name}}Store.lookup(findSingleton{{Name}}ServerErrors){{#if typeDef.refTypes}}.then(() => {{{curlyOpen}}}{{#each typeDef.refTypes}}
+    {{refType}}Store.search();{{/each}}
+  }){{/if}};
+  {{else}}
+  {{name}}Store.search(){{#if typeDef.refTypes}}.then(() => {{{curlyOpen}}}{{#each typeDef.refTypes}}
+    {{refType}}Store.search();{{/each}}
+  }){{/if}};
+  {{/if}}
+</script>

@@ -35,6 +35,9 @@ devDependencies:
   handlebars:
     specifier: ^4.7.7
     version: 4.7.7
+  hokey-runtime:
+    specifier: ^1.0.4
+    version: 1.0.4
   mobiletto-orm-typedef:
     specifier: ^2.3.19
     version: 2.3.19
@@ -837,6 +840,10 @@ packages:
   /he@1.2.0:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
+    dev: true
+
+  /hokey-runtime@1.0.4:
+    resolution: {integrity: sha512-1qc1B1lq17cesMvlE1jMnR3i+Wb3R/IvNLT9bsVLerGRc/uV0XbadN7KBjVQ9Miq2tKLbiVurIvR+Q0iiFczpQ==}
     dev: true
 
   /ignore@5.2.4:

@@ -1,1 +1,1 @@
-src/templates/*.hbs
+src/templates/**/*.hbs

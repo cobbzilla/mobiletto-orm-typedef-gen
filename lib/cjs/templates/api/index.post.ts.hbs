@@ -1,0 +1,41 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+{{#if disclaimer}}//
+    {{{disclaimer}}}{{#if header}}
+        {{{header}}}{{/if}}{{/if}}
+
+import { H3Event } from "h3"; import {
+{{Name}}TypeDef } from "{{typeDefPackage}}"; import { MobilettoOrmFindApiOpts } from "~/utils/search"; export default
+defineEventHandler(async (event: H3Event) => { return await filterErrors(event, "{{name}}.search", async (event:
+H3Event) =>
+{{{curlyOpen}}}{{#if typeDef.apiConfig.search.permission.admin}}
+    return await requireAdminAccountObject(event, "{{name}}.search", async (event: H3Event, session, account) =>
+    {{{curlyOpen}}}{{else if typeDef.apiConfig.search.permission.owner}}
+    return await requireAccountObject(event, "{{name}}.search", async (event: H3Event, session, account) =>
+    {{{curlyOpen}}}{{else if typeDef.apiConfig.search.permission.session}}
+    return await requireAccount(event, "{{name}}.search", async (event: H3Event, session) =>
+    {{{curlyOpen}}}{{/if}}
+const opts: MobilettoOrmFindApiOpts =
+{{#if typeDef.singleton}}{}; // {{name}} is a singleton, options make no sense{{else}}(await readBody(event)) || {};{{#if
+        typeDef.apiConfig.search.hasValidate
+    }}{{/if}}
+    if (typeof
+    {{Name}}TypeDef.apiConfig.search?.validate === "function") { const validated = await
+    {{Name}}TypeDef.apiConfig.search.validate(account, null, opts); if (validated === true || (typeof validated ===
+    "object" && Object.keys(validated).length === 0)) { // successfully validated } else if (typeof validated ===
+    "object" && Object.keys(validated).length > 0) { throw validationError(validated); } else { throw
+    validationError({global: ["validation"]}); } }{{/if}}
+const
+{{name}}Repo =
+{{name}}Repository();{{#if typeDef.singleton}}
+    const singleton = await
+    {{name}}Repo.safeFindById("{{typeDef.singleton}}"); return singleton ? [ singleton ] : [];{{else}}
+    if (opts.field && opts.value) { return await
+    {{name}}Repo.safeFindBy(opts.field, opts.value, opts.opts || {}); } else if (opts.textSearch &&
+    {{Name}}TypeDef.textSearchFields.length > 0) { return await
+    {{name}}Repo.find({ predicate: (obj) =>
+    {{Name}}TypeDef.textMatch(obj, opts.textSearch || "") }); } else { return await
+    {{name}}Repo.find(opts.opts || {}); }{{/if}}{{#if typeDef.apiConfig.search.permission.admin}}
+    });{{else if typeDef.apiConfig.search.permission.owner}}
+    });{{else if typeDef.apiConfig.search.permission.session}}
+    });{{/if}}
+}); });

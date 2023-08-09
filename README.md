@@ -40,4 +40,14 @@ See the mobiletto-orm documentation on [Type Definitions](https://github.com/cob
 
 You can also check out the [test suite](./test) for examples.
 
-### Generate TypeScript type for Mobiletto-ORM type
+### Generate TypeScript type
+
+### Generate yup validator
+
+### Generate Nuxt 3 server API
+
+### Generate API client service
+
+### Generate Pinia store
+
+### Generate Vue 3 admin component
