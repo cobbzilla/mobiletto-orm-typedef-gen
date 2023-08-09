@@ -59,11 +59,32 @@ export const generateApi = (
     typeDefPackage: string,
     opts?: GenerateOptions,
 ): Record<string, string> => {
+    opts ||= {};
     return {
-        find: generateApiIdGet(typeDef, typeDefPackage, opts),
-        create: generateApiIdPut(typeDef, typeDefPackage, opts),
-        update: generateApiIdPatch(typeDef, typeDefPackage, opts),
-        delete: generateApiIdDelete(typeDef, typeDefPackage, opts),
-        search: generateApiIndexPost(typeDef, typeDefPackage, opts),
+        find: generateApiIdGet(
+            typeDef,
+            typeDefPackage,
+            opts.outfile ? Object.assign({}, { outfile: `${opts.outfile}/[id].get.ts` }, opts) : opts,
+        ),
+        create: generateApiIdPut(
+            typeDef,
+            typeDefPackage,
+            opts.outfile ? Object.assign({}, { outfile: `${opts.outfile}/[id].put.ts` }, opts) : opts,
+        ),
+        update: generateApiIdPatch(
+            typeDef,
+            typeDefPackage,
+            opts.outfile ? Object.assign({}, { outfile: `${opts.outfile}/[id].patch.ts` }, opts) : opts,
+        ),
+        delete: generateApiIdDelete(
+            typeDef,
+            typeDefPackage,
+            opts.outfile ? Object.assign({}, { outfile: `${opts.outfile}/[id].delete.ts` }, opts) : opts,
+        ),
+        search: generateApiIndexPost(
+            typeDef,
+            typeDefPackage,
+            opts.outfile ? Object.assign({}, { outfile: `${opts.outfile}/index.post.ts` }, opts) : opts,
+        ),
     };
 };

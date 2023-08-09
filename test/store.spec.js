@@ -15,7 +15,7 @@ const typeDef = new MobilettoOrmTypeDef({
     },
 });
 
-describe("API client service builder test", async () => {
+describe("Pinia store builder test", async () => {
     it("builds a simple Pinia store", async () => {
         const builtStore = generateStore(typeDef, "mobiletto-orm-typedef-gen");
         expect(builtStore).eq(

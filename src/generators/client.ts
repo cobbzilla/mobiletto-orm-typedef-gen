@@ -74,12 +74,16 @@ export const generateStoreHelper = (typeDef: MobilettoOrmTypeDef | MobilettoOrmT
 
 export const generateAdmin = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
-    typeDefPackage: string,
-    componentHelperPath: string, // ~/components/model/${typeDef.typeName}/admin
-    sessionStoreImport: string, // ~/stores/session
-    localeMessages: string, // localeMessages
+    typeDefPackage?: string,
+    componentHelperPath?: string,
+    sessionStoreImport?: string,
+    localeMessages?: string,
     opts?: GenerateOptions,
 ): string => {
+    typeDefPackage ||= findTypeDefPackage();
+    componentHelperPath ||= `~/utils/model`;
+    sessionStoreImport ||= `~/stores/session`;
+    localeMessages ||= "localeMessages";
     opts ||= {};
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
