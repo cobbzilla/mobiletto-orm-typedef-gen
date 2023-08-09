@@ -1,6 +1,8 @@
 import { MobilettoOrmTypeDef, MobilettoOrmTypeDefConfig } from "mobiletto-orm-typedef";
 import { generate, GenerateOptions } from "../generate.js";
 
+const DUMMY_TYPEDEF = new MobilettoOrmTypeDef({ typeName: "dummy", fields: {} });
+
 export const generateService = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     typeDefPackage: string,
@@ -12,6 +14,7 @@ export const generateService = (
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
     };
+    opts.rootOnly = true;
     return generate(typeDef, `templates/service/${typeDef.singleton ? "singletonS" : "s"}ervice.ts.hbs`, opts, {
         typeDefPackage,
         utilsPath,
@@ -19,7 +22,6 @@ export const generateService = (
 };
 
 export const generateServiceHelper = (
-    typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     opts?: GenerateOptions,
     sessionHeader?: string,
     sessionHeaderImport?: string,
@@ -34,7 +36,8 @@ export const generateServiceHelper = (
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
     };
-    return generate(typeDef, "templates/service/serviceHelper.ts.hbs", opts, {
+    opts.rootOnly = true;
+    return generate(DUMMY_TYPEDEF, "templates/service/serviceHelper.ts.hbs", opts, {
         sessionHeader,
         sessionHeaderImport,
         sessionCookie,
@@ -55,6 +58,7 @@ export const generateStore = (
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
     };
+    opts.rootOnly = true;
     return generate(typeDef, `templates/store/${typeDef.singleton ? "singletonS" : "s"}tore.ts.hbs`, opts, {
         typeDefPackage,
         servicesImportPath,
@@ -62,15 +66,13 @@ export const generateStore = (
     });
 };
 
-export const generateStoreHelper = (
-    typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
-    opts?: GenerateOptions,
-): string => {
+export const generateStoreHelper = (opts?: GenerateOptions): string => {
     opts ||= {};
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
     };
-    return generate(typeDef, `templates/store/storeHelper.ts.hbs`, opts);
+    opts.rootOnly = true;
+    return generate(DUMMY_TYPEDEF, `templates/store/storeHelper.ts.hbs`, opts);
 };
 
 export const generateAdmin = (
@@ -96,13 +98,10 @@ export const generateAdmin = (
     });
 };
 
-export const generateAdminHelper = (
-    typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
-    opts?: GenerateOptions,
-): string => {
+export const generateAdminHelper = (opts?: GenerateOptions): string => {
     opts ||= {};
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
     };
-    return generate(typeDef, `templates/component/adminHelper.ts.hbs`, opts);
+    return generate(DUMMY_TYPEDEF, `templates/component/adminHelper.ts.hbs`, opts);
 };
