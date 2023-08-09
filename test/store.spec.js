@@ -117,7 +117,7 @@ describe("Pinia store builder test", async () => {
         );
     });
     it("builds a Pinia store helper", async () => {
-        const builtStoreHelper = generateStoreHelper(typeDef, "mobiletto-orm-typedef-gen");
+        const builtStoreHelper = generateStoreHelper(typeDef);
         expect(builtStoreHelper).eq(
             "// " +
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +

@@ -144,13 +144,6 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
 const VALID_TEMPLATE_FILE_EXT = [".ts.hbs", ".vue.hbs"];
 const validTemplateFile = (path: string) => !!VALID_TEMPLATE_FILE_EXT.find((ext) => path.endsWith(ext));
 
-export const findTypeDefPackage = () => {
-    if (process && process.env && process.env.npm_package_name) return process.env.npm_package_name;
-    throw new Error(
-        "Error determining typeDef package path. typeDefPackage param was not passed, and process.env.npm_package_name env var was not defined.",
-    );
-};
-
 export const generate = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     templatePath: string,

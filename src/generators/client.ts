@@ -1,13 +1,12 @@
 import { MobilettoOrmTypeDef, MobilettoOrmTypeDefConfig } from "mobiletto-orm-typedef";
-import { generate, GenerateOptions, findTypeDefPackage } from "../generate.js";
+import { generate, GenerateOptions } from "../generate.js";
 
 export const generateService = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
-    typeDefPackage?: string,
-    utilsPath?: string,
+    typeDefPackage: string,
     opts?: GenerateOptions,
+    utilsPath?: string,
 ): string => {
-    typeDefPackage ||= findTypeDefPackage();
     utilsPath ||= `~/utils/model`;
     opts ||= {};
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
@@ -21,11 +20,11 @@ export const generateService = (
 
 export const generateServiceHelper = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
+    opts?: GenerateOptions,
     sessionHeader?: string,
     sessionHeaderImport?: string,
     sessionCookie?: string,
     sessionCookieImport?: string,
-    opts?: GenerateOptions,
 ): string => {
     sessionHeader ||= "SESSION_HEADER";
     sessionHeaderImport ||= "~/utils/auth";
@@ -46,11 +45,10 @@ export const generateServiceHelper = (
 export const generateStore = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     typeDefPackage: string,
-    servicesImportPath: string,
-    utilsImportPath: string,
     opts?: GenerateOptions,
+    servicesImportPath?: string,
+    utilsImportPath?: string,
 ): string => {
-    typeDefPackage ||= findTypeDefPackage();
     servicesImportPath ||= "~/utils/services/model";
     utilsImportPath ||= "~/utils/model";
     opts ||= {};
@@ -64,8 +62,11 @@ export const generateStore = (
     });
 };
 
-export const generateStoreHelper = (typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig): string => {
-    const opts: GenerateOptions = {};
+export const generateStoreHelper = (
+    typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
+    opts?: GenerateOptions,
+): string => {
+    opts ||= {};
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
     };
@@ -74,13 +75,12 @@ export const generateStoreHelper = (typeDef: MobilettoOrmTypeDef | MobilettoOrmT
 
 export const generateAdmin = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
-    typeDefPackage?: string,
+    typeDefPackage: string,
+    opts?: GenerateOptions,
     componentHelperPath?: string,
     sessionStoreImport?: string,
     localeMessages?: string,
-    opts?: GenerateOptions,
 ): string => {
-    typeDefPackage ||= findTypeDefPackage();
     componentHelperPath ||= `~/utils/model`;
     sessionStoreImport ||= `~/stores/session`;
     localeMessages ||= "localeMessages";
@@ -96,8 +96,11 @@ export const generateAdmin = (
     });
 };
 
-export const generateAdminHelper = (typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig): string => {
-    const opts: GenerateOptions = {};
+export const generateAdminHelper = (
+    typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
+    opts?: GenerateOptions,
+): string => {
+    opts ||= {};
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
     };
