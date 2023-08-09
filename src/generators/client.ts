@@ -8,7 +8,7 @@ export const generateService = (
     opts?: GenerateOptions,
 ): string => {
     typeDefPackage ||= findTypeDefPackage();
-    utilsPath ||= `~/utils`;
+    utilsPath ||= `~/utils/model`;
     opts ||= {};
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
@@ -47,26 +47,29 @@ export const generateStore = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     typeDefPackage: string,
     servicesImportPath: string,
-    storeImportPath: string,
-    sessionHeader: string,
-    sessionHeaderImport: string,
-    sessionCookie: string,
-    sessionCookieImport: string,
+    utilsImportPath: string,
     opts?: GenerateOptions,
 ): string => {
+    typeDefPackage ||= findTypeDefPackage();
+    servicesImportPath ||= "~/utils/services/model";
+    utilsImportPath ||= "~/utils/model";
     opts ||= {};
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
     };
-    return generate(typeDef, `templates/service/${typeDef.singleton ? "singletonS" : "s"}ervice.ts.hbs`, opts, {
+    return generate(typeDef, `templates/store/${typeDef.singleton ? "singletonS" : "s"}tore.ts.hbs`, opts, {
         typeDefPackage,
         servicesImportPath,
-        storeImportPath,
-        sessionHeader,
-        sessionHeaderImport,
-        sessionCookie,
-        sessionCookieImport,
+        utilsImportPath,
     });
+};
+
+export const generateStoreHelper = (typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig): string => {
+    const opts: GenerateOptions = {};
+    opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
+        return ctx;
+    };
+    return generate(typeDef, `templates/store/storeHelper.ts.hbs`, opts);
 };
 
 export const generateAdmin = (
@@ -87,4 +90,12 @@ export const generateAdmin = (
         sessionStoreImport,
         localeMessages,
     });
+};
+
+export const generateAdminHelper = (typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig): string => {
+    const opts: GenerateOptions = {};
+    opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
+        return ctx;
+    };
+    return generate(typeDef, `templates/component/adminHelper.ts.hbs`, opts);
 };

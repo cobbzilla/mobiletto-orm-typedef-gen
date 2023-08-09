@@ -5,8 +5,8 @@ import { Ref } from "vue";
 import { defineStore } from "pinia";
 import { MobilettoOrmValidationErrors } from "mobiletto-orm";
 import { {{Name}}Type, {{Name}}TypeDef } from "{{typeDefPackage}}";
-import { {{name}}Service } from "{{serviceImportPath}}/{{name}}Service";
-import { MobilettoOrmFindApiOpts, updateOrmList } from "{{storeImportPath}}/storeHelper.js";
+import { {{name}}Service } from "{{servicesImportPath}}/{{name}}Service";
+import { MobilettoOrmFindApiOpts, updateOrmList } from "{{utilsImportPath}}/storeHelper.js";
 
 const updateList = (list: {{Name}}Type[] | null, id: string, opts?: { object?: {{Name}}Type; remove?: boolean }) => {
   return updateOrmList<{{Name}}Type>({{Name}}TypeDef, list, id, opts);

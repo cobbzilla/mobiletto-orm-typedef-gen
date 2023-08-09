@@ -3,20 +3,21 @@ import { expect } from "chai";
 import { MobilettoOrmTypeDef, rand } from "mobiletto-orm-typedef";
 import { generateService, generateServiceHelper, STANDARD_AUTOGEN_FILE_DISCLAIMER } from "../lib/esm/index.js";
 
+const typeDef = new MobilettoOrmTypeDef({
+    typeName: `TestType_${rand(10)}`,
+    fields: {
+        value: { type: "number" },
+        int: {
+            maxValue: 500,
+            primary: true,
+        },
+        flag: { default: true },
+    },
+});
+
 describe("API client service builder test", async () => {
     it("builds a simple API client service", async () => {
-        const typeDef = new MobilettoOrmTypeDef({
-            typeName: `TestType_${rand(10)}`,
-            fields: {
-                value: { type: "number" },
-                int: {
-                    maxValue: 500,
-                    primary: true,
-                },
-                flag: { default: true },
-            },
-        });
-        const builtService = generateService(typeDef);
+        const builtService = generateService(typeDef, "mobiletto-orm-typedef-gen");
         expect(builtService).eq(
             "// " +
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
@@ -26,7 +27,7 @@ describe("API client service builder test", async () => {
                 'import { MobilettoOrmObject, MobilettoOrmPurgeResults } from "mobiletto-orm-typedef";\n' +
                 'import { MobilettoOrmValidationErrors } from "mobiletto-orm";\n' +
                 `import { ${typeDef.typeName}Type, ${typeDef.typeName}TypeDef } from "mobiletto-orm-typedef-gen";\n` +
-                'import * as a from "~/utils/serviceHelper.js";\n' +
+                'import * as a from "~/utils/model/serviceHelper.js";\n' +
                 "\n" +
                 `export const ${typeDef.typeName}Service = {\n` +
                 `  search${typeDef.typeName},\n` +
@@ -93,20 +94,13 @@ describe("API client service builder test", async () => {
         );
     });
     it("build the service helper", async () => {
-        const typeDef = new MobilettoOrmTypeDef({
-            typeName: `TestType_${rand(10)}`,
-            fields: {
-                value: { type: "number" },
-                int: {
-                    maxValue: 500,
-                    primary: true,
-                },
-                flag: { default: true },
-            },
-        });
         const builtServiceHelper = generateServiceHelper(typeDef);
         expect(builtServiceHelper).eq(
-            'import { MobilettoOrmValidationErrors } from "mobiletto-orm";\n' +
+            "// " +
+                STANDARD_AUTOGEN_FILE_DISCLAIMER +
+                "\n" +
+                "\n" +
+                'import { MobilettoOrmValidationErrors } from "mobiletto-orm";\n' +
                 'import { SESSION_HEADER } from "~/utils/auth";\n' +
                 'import { sessionCookie } from "~/utils/auth";\n' +
                 "\n" +
