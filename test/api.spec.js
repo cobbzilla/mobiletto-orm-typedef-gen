@@ -44,7 +44,7 @@ describe("Nuxt server API builder test", async () => {
         const singletonApi = generateApiIdGet(
             new MobilettoOrmTypeDef({
                 typeName: `TestSingletonType_${rand(10)}`,
-                singleton: true,
+                singleton: "singlet",
                 fields: {
                     value: { type: "string" },
                 },
