@@ -342,7 +342,7 @@
       .create(obj as {{Name}}Type, create{{Name}}ServerErrors);
     addingObject.value = false;{{#if typeDef.singleton}}
     successSnackbar.value = parseMessage(props.msgAddSuccess, messages.value, {
-        type: messages.value["typename_{{typeDef.typeName}}"],
+        type: messages.value.typename_{{typeDef.typeName}},
         id: {{Name}}TypeDef.id(obj),
     });
     emit("added", obj);
@@ -352,7 +352,7 @@
   watch(create{{Name}}ServerErrors, () => {
     if (Object.keys(create{{Name}}ServerErrors).length > 0) {
       errorSnackbar.value = parseMessage(props.msgAddError, messages.value, {
-        type: messages.value["typename_{{typeDef.typeName}}"],
+        type: messages.value.typename_{{typeDef.typeName}},
         error: JSON.stringify(create{{Name}}ServerErrors),
       });
     }
@@ -360,7 +360,7 @@
   watch(findSingleton{{Name}}ServerErrors, () => {
     if (Object.keys(findSingleton{{Name}}ServerErrors).length > 0) {
       errorSnackbar.value = parseMessage(props.msgFindSingletonError, messages.value, {
-        type: messages.value["typename_{{typeDef.typeName}}"],
+        type: messages.value.typename_{{typeDef.typeName}},
         error: JSON.stringify(findSingleton{{Name}}ServerErrors),
       });
     }
@@ -384,7 +384,7 @@
       .update(obj as {{Name}}Type, edit{{Name}}ServerErrors);
     editingObject.value = {} as {{Name}}Type;{{#if typeDef.singleton}}
     successSnackbar.value = parseMessage(props.msgEditSuccess, messages.value, {
-      type: messages.value["typename_{{typeDef.typeName}}"],
+      type: messages.value.typename_{{typeDef.typeName}},
       id: {{Name}}TypeDef.id(obj),
     });
     emit("edited", obj);
@@ -394,7 +394,7 @@
   watch(edit{{Name}}ServerErrors, () => {
     if (Object.keys(edit{{Name}}ServerErrors).length > 0) {
       errorSnackbar.value = parseMessage(props.msgEditError, messages.value, {
-        type: messages.value["typename_{{typeDef.typeName}}"],
+        type: messages.value.typename_{{typeDef.typeName}},
         id: {{Name}}TypeDef.id(obj),
         error: JSON.stringify(edit{{Name}}ServerErrors),
       });
@@ -451,7 +451,7 @@
       {{name}}Store.delete(id, delete{{Name}}ServerErrors)
           .then(() => {
               successSnackbar.value = parseMessage(props.msgDeleteSuccess, messages.value, {
-                  type: messages.value["typename_{{typeDef.typeName}}"],
+                  type: messages.value.typename_{{typeDef.typeName}},
                   id: {{Name}}TypeDef.id(obj),
               });
               emit("deleted", obj);
@@ -461,7 +461,7 @@
   watch(delete{{Name}}ServerErrors, () => {
     if (Object.keys(delete{{Name}}ServerErrors).length > 0) {
         errorSnackbar.value = parseMessage(props.msgDeleteError, messages.value, {
-            type: messages.value["typename_{{typeDef.typeName}}"],
+            type: messages.value.typename_{{typeDef.typeName}},
             id: {{Name}}TypeDef.id(obj),
             error: JSON.stringify(delete{{Name}}ServerErrors),
         });
