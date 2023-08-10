@@ -3,7 +3,8 @@
 {{{header}}}{{/if}}{{/if}}
 
 import { H3Event } from "h3";{{#if typeDef.apiConfig.lookup.hasValidate}}
-import { {{Name}}TypeDef } from "{{typeDefPackage}}";{{/if}}
+import { {{Name}}TypeDef } from "{{typeDefPackage}}";{{/if}}{{#if singletonDefaultImport}}
+import { {{singletonDefault}} } from "{{singletonDefaultImport}}";{{/if}}
 
 export default defineEventHandler(async (event: H3Event) => {
   return await filterErrors(event, "{{name}}.lookup", async (event: H3Event) => {{{curlyOpen}}}{{#if typeDef.apiConfig.lookup.permission.admin}}
@@ -29,7 +30,7 @@ export default defineEventHandler(async (event: H3Event) => {
       const {{../name}}_by_{{this}} = await {{../name}}Repo.safeFindFirstBy("{{this}}", id);
       if ({{../name}}_by_{{this}}) return {{../name}}_by_{{this}};
       {{/each}}
-      throw notFound(id);{{#if typeDef.apiConfig.lookup.permission.admin}}
+      {{#if singletonDefault}}return {{singletonDefault}}{{else}}throw notFound(id){{/if}};{{#if typeDef.apiConfig.lookup.permission.admin}}
     });{{else}}{{#if typeDef.apiConfig.lookup.permission.owner}}
     });{{else}}{{#if typeDef.apiConfig.lookup.permission.session}}
     });{{/if}}{{/if}}{{/if}}

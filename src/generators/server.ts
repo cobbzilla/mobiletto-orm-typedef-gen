@@ -21,8 +21,12 @@ export const generateApiIdGet = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     typeDefPackage: string,
     opts?: GenerateOptions,
+    singletonDefault?: string,
+    singletonDefaultImport?: string,
 ): string => {
-    return genApiEndpoint("id.get", typeDef, typeDefPackage, opts);
+    const ctx: Record<string, string> =
+        singletonDefault && singletonDefaultImport ? { singletonDefault, singletonDefaultImport } : {};
+    return genApiEndpoint("id.get", typeDef, typeDefPackage, opts, ctx);
 };
 
 export const generateApiIdPut = (
@@ -71,6 +75,8 @@ export const generateApi = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     typeDefPackage: string,
     opts?: GenerateOptions,
+    singletonDefault?: string,
+    singletonDefaultImport?: string,
     utilsImportPath?: string,
 ): Record<string, string> => {
     opts ||= {};
@@ -83,7 +89,13 @@ export const generateApi = (
         }
     }
     return {
-        find: generateApiIdGet(typeDef, typeDefPackage, apiOutfile(opts, "[id].get.ts")),
+        find: generateApiIdGet(
+            typeDef,
+            typeDefPackage,
+            apiOutfile(opts, "[id].get.ts"),
+            singletonDefault,
+            singletonDefaultImport,
+        ),
         create: generateApiIdPut(typeDef, typeDefPackage, apiOutfile(opts, "[id].put.ts")),
         update: generateApiIdPatch(typeDef, typeDefPackage, apiOutfile(opts, "[id].patch.ts")),
         delete: generateApiIdDelete(typeDef, typeDefPackage, apiOutfile(opts, "[id].delete.ts")),

@@ -1,7 +1,7 @@
 import { describe, it } from "mocha";
 import { expect } from "chai";
 import { MobilettoOrmTypeDef, rand } from "mobiletto-orm-typedef";
-import { generateApi, STANDARD_AUTOGEN_FILE_DISCLAIMER } from "../lib/esm/index.js";
+import { generateApi, generateApiIdGet, STANDARD_AUTOGEN_FILE_DISCLAIMER } from "../lib/esm/index.js";
 
 const typeDef = new MobilettoOrmTypeDef({
     typeName: `TestType_${rand(10)}`,
@@ -39,5 +39,22 @@ describe("Nuxt server API builder test", async () => {
                 "  });\n" +
                 "});\n",
         );
+    });
+    it("build a Nuxt GET API endpoint for a singleton type", async () => {
+        const singletonApi = generateApiIdGet(
+            new MobilettoOrmTypeDef({
+                typeName: `TestSingletonType_${rand(10)}`,
+                singleton: true,
+                fields: {
+                    value: { type: "string" },
+                },
+            }),
+            "mobiletto-orm-typedef-gen",
+            {},
+            "SINGLETON_DEFAULT",
+            "~/server/utils/defaults",
+        );
+        expect(singletonApi.includes('import { SINGLETON_DEFAULT } from "~/server/utils/defaults";')).is.true;
+        expect(singletonApi.includes("return SINGLETON_DEFAULT;")).is.true;
     });
 });
