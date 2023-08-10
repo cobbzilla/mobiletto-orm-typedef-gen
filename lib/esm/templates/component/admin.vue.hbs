@@ -340,12 +340,12 @@
   const onAddSubmitted = async (obj: MobilettoOrmObject) => {
     await {{name}}Store
       .create(obj as {{Name}}Type, create{{Name}}ServerErrors);
-    addingObject.value = false;{{#if typeDef.singleton}}
+    addingObject.value = false;
     successSnackbar.value = parseMessage(props.msgAddSuccess, messages.value, {
         type: messages.value.typename_{{typeDef.typeName}},
         id: {{Name}}TypeDef.id(obj),
     });
-    emit("added", obj);
+    emit("added", obj);{{#if typeDef.singleton}}
     return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{else}}
     return await {{name}}Store.search();{{/if}}
   }
@@ -375,12 +375,12 @@
   const onEditSubmitted = async (obj: MobilettoOrmObject) => {
     await {{name}}Store
       .update(obj as {{Name}}Type, edit{{Name}}ServerErrors);
-    editingObject.value = {} as {{Name}}Type;{{#if typeDef.singleton}}
+    {{#unless typeDef.singleton}}editingObject.value = {} as {{Name}}Type;{{/unless}}
     successSnackbar.value = parseMessage(props.msgEditSuccess, messages.value, {
       type: messages.value.typename_{{typeDef.typeName}},
       id: {{Name}}TypeDef.id(obj),
     });
-    emit("edited", obj);
+    emit("edited", obj);{{#if typeDef.singleton}}
     return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{else}}
     return await {{name}}Store.search();{{/if}}
   };
