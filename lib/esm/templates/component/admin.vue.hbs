@@ -228,10 +228,8 @@
   {{else}}const { {{name}}List  } = storeToRefs({{name}}Store);{{/if}}
   const {{name}}TypeDef: Ref<MobilettoOrmTypeDef | null> = ref(null);
   const {{name}}TypeDefFields: Ref<MobilettoOrmFieldDefConfig[] | undefined> = ref(undefined);
-  {{#if typeDef.singleton}}
-  const findSingleton{{Name}}ServerErrors = ref({} as MobilettoOrmValidationErrors);
-  {{else}}
-  const searchQuery = () => ({ textSearch: searchTerms.value });
+  {{#if typeDef.singleton}}const findSingleton{{Name}}ServerErrors = ref({} as MobilettoOrmValidationErrors);
+  {{else}}const searchQuery = () => ({ textSearch: searchTerms.value });
 
   const searchObjects = () => {
     const query = searchQuery();
@@ -265,8 +263,9 @@
   }
 
   const allRefs: Ref<Boolean>[] = [];
-  const allRefsLoaded = () => allRefs.length === {{typeDef.refTypes.length}} && allRefs.filter(r => r.value === true).length === {{typeDef.refTypes.length}};{{#each typeDef.refTypes}}
-  const ref{{RefType}} = ref({} as MobilettoOrmFieldDefConfig);
+  const allRefsLoaded = () => allRefs.length === {{typeDef.refTypes.length}} && allRefs.filter(r => r.value === true).length === {{typeDef.refTypes.length}};
+
+  {{#each typeDef.refTypes}}const ref{{RefType}} = ref({} as MobilettoOrmFieldDefConfig);
   const ref{{RefType}}Loaded = ref(false);
   allRefs.push(ref{{RefType}}Loaded);
   const {{refType}}Store = use{{RefType}}Store();
@@ -294,8 +293,7 @@
         initTypeDef()
       }
     }
-  });
-  {{/each}}{{else}}
+  });{{/each}}{{else}}
   const allRefsLoaded = () => true;
   {{name}}TypeDef.value = {{Name}}TypeDef;
   {{name}}TypeDefFields.value = {{Name}}TypeDef.tabIndexedFields();{{#unless typeDef.singleton}}
@@ -314,11 +312,8 @@
     await {{name}}Store
       .create(obj as {{Name}}Type, create{{Name}}ServerErrors);
     addingObject.value = false;
-    {{#if typeDef.singleton}}
-    return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);
-    {{else}}
-    return await {{name}}Store.search();
-    {{/if}}
+    {{#if typeDef.singleton}}return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);
+    {{else}}return await {{name}}Store.search();{{/if}}
   }
 
   const showAddOrm = () => {
@@ -398,13 +393,20 @@
       navigateTo("/admin/{{name}}/setup");
     }
   });{{/if}}
-  {{#if typeDef.singleton}}
-  {{name}}Store.lookup(findSingleton{{Name}}ServerErrors){{#if typeDef.refTypes}}.then(() => {{{curlyOpen}}}{{#each typeDef.refTypes}}
-    {{refType}}Store.search();{{/each}}
-  }){{/if}};
+
+  const initRefs = async () => {
+    {{#if typeDef.refTypes}}const refSearches: Promise<{{RefType}}[]>[] = [];{{#each typeDef.refTypes}}
+    refSearches.push({{refType}}Store.search());{{/each}}
+    await Promise.all(refSearches);
+    {{/if}}{{#if typeDef.singleton}}return {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{/if}}
+  };{{#if typeDef.singleton}}
+  initRefs()
+      .then(obj => showEditOrm(obj))
+      .catch(e => showAddOrm());
   {{else}}
-  {{name}}Store.search(){{#if typeDef.refTypes}}.then(() => {{{curlyOpen}}}{{#each typeDef.refTypes}}
-    {{refType}}Store.search();{{/each}}
+
+  {{name}}Store.search(){{#if typeDef.refTypes}}.then(() => {
+    initRefs();
   }){{/if}};
   {{/if}}
 </script>
