@@ -3,6 +3,12 @@
 
 <template>
   <v-container>
+    <v-row v-if="successSnackbar && successSnackbar.length > 0">
+      <KitSnackbarSuccess :text="successSnackbar" />
+    </v-row>
+    <v-row v-else-if="errorSnackbar && errorSnackbar.length > 0">
+      <KitSnackbarError :text="errorSnackbar" />
+    </v-row>
     <v-row>
       <v-col>
         <h2>{{{curlyOpen}}}{{{curlyOpen}}} adminTitle() {{{curlyClose}}}{{{curlyClose}}}</h2>
@@ -160,6 +166,8 @@
   import { use{{Name}}Store } from "~/stores/model/{{name}}Store";{{#if typeDef.refTypes}}{{#each typeDef.refTypes}}
   import { use{{RefType}}Store } from "~/stores/model/{{refType}}Store";{{/each}}{{/if}}
   import { deepUpdate } from "{{adminHelperPath}}";
+  const successSnackbar = ref("");
+  const errorSnackbar = ref("");
   {{#unless typeDef.singleton}}
   type ActionConfig = {
     path: string;
@@ -171,6 +179,13 @@
       labelPrefixes: string[];
       typeNameMessage: string,{{#unless typeDef.singleton}}
       actionConfigs: Record<string, ActionConfig>;
+      msgAddSuccess: string;
+      msgAddError: string;
+      msgEditSuccess: string;
+      msgEditError: string;
+      msgDeleteSuccess: string;
+      msgDeleteError: string;
+      msgFindSingletonError: string;
       canEdit: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
       canDelete: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
       deleteConfirmationMessage: string;{{/unless}}
@@ -178,10 +193,25 @@
       labelPrefixes: () => ["label_", ""],
       typeNameMessage: () => "typename_{{name}}",{{#unless typeDef.singleton}}
       actionConfigs: () => ({}),
+      msgAddSuccess: () => "admin_info_added",
+      msgAddError: () => "admin_info_add_error",
+      msgEditSuccess: () => "admin_info_edited",
+      msgEditError: () => "admin_info_edit_error",
+      msgDeleteSuccess: () => "admin_info_deleted",
+      msgDeleteError: () => "admin_info_delete_error",
+      msgFindSingletonError: () => "admin_info_findSingleton_error",
       canEdit: () => true,
       canDelete: () => true,{{/unless}}
     },
   );
+
+  const emit = defineEmits<{
+      added: [obj: {{Name}}Type];
+      addCanceled: [];
+      edited: [obj: {{Name}}Type];
+      editCanceled: [obj: {{Name}}Type];
+      deleted: [obj: {{Name}}Type];
+  }>();
 
   const labelPfx: Ref<string[]> = ref(["admin_label_{{name}}_", "label_", ""]);
   if (props.labelPrefixes) {
@@ -311,16 +341,38 @@
   const onAddSubmitted = async (obj: MobilettoOrmObject) => {
     await {{name}}Store
       .create(obj as {{Name}}Type, create{{Name}}ServerErrors);
-    addingObject.value = false;
-    {{#if typeDef.singleton}}return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);
-    {{else}}return await {{name}}Store.search();{{/if}}
+    addingObject.value = false;{{#if typeDef.singleton}}
+    successSnackbar.value = parseMessage(props.msgAddSuccess, messages.value, {
+        type: messages.value["typename_{{typeDef.typeName}}"],
+        id: {{Name}}TypeDef.id(obj),
+    });
+    emit("added", obj);
+    return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{else}}
+    return await {{name}}Store.search();{{/if}}
   }
-
+  watch(create{{Name}}ServerErrors, () => {
+    if (Object.keys(create{{Name}}ServerErrors).length > 0) {
+      errorSnackbar.value = parseMessage(props.msgAddError, messages.value, {
+        type: messages.value["typename_{{typeDef.typeName}}"],
+        id: {{Name}}TypeDef.id(obj),
+        error: JSON.stringify(create{{Name}}ServerErrors),
+      });
+    }
+  });{{#if typeDef.singleton}}
+  watch(findSingleton{{Name}}ServerErrors, () => {
+    if (Object.keys(findSingleton{{Name}}ServerErrors).length > 0) {
+      errorSnackbar.value = parseMessage(props.msgFindSingletonError, messages.value, {
+        type: messages.value["typename_{{typeDef.typeName}}"],
+        error: JSON.stringify(findSingleton{{Name}}ServerErrors),
+      });
+    }
+  });{{/if}}
   const showAddOrm = () => {
     addingObject.value = true;
   };{{#unless typeDef.singleton}}
   const onAddCancel = () => {
     addingObject.value = {{#if typeDef.singleton}}true{{else}}false{{/if}};
+    emit("addCanceled");
   };{{/unless}}
 
   const onEditUpdated = (update: { field: string; value: any }) => {
@@ -333,9 +385,23 @@
     await {{name}}Store
       .update(obj as {{Name}}Type, edit{{Name}}ServerErrors);
     editingObject.value = {} as {{Name}}Type;{{#if typeDef.singleton}}
+    successSnackbar.value = parseMessage(props.msgEditSuccess, messages.value, {
+      type: messages.value["typename_{{typeDef.typeName}}"],
+      id: {{Name}}TypeDef.id(obj),
+    });
+    emit("edited", obj);
     return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{else}}
     return await {{name}}Store.search();{{/if}}
   };
+  watch(edit{{Name}}ServerErrors, () => {
+    if (Object.keys(edit{{Name}}ServerErrors).length > 0) {
+      errorSnackbar.value = parseMessage(props.msgDeleteError, messages.value, {
+        type: messages.value["typename_{{typeDef.typeName}}"],
+        id: {{Name}}TypeDef.id(obj),
+        error: JSON.stringify(edit{{Name}}ServerErrors),
+      });
+    }
+  });
 
   const showEditOrm = (obj: MobilettoOrmObject) => {
     if (Object.keys(editingObject.value).length > 0) {
@@ -350,16 +416,17 @@
     }
   };
   const onEditCancel = () => {
+    emit("editCanceled", editingObject.value);
     {{#if typeDef.singleton}}
-    editingObject.value = JSON.parse(JSON.stringify(found)) as {{Name}}Type;
+    editingObject.value = JSON.parse(JSON.stringify(found.value)) as {{Name}}Type;
     {{else}}
     editingObject.value = {} as {{Name}}Type;
     {{/if}}
   };
   {{#if typeDef.singleton}}
-  watch(found, (newFound: MobilettoOrmObject) => {
-    if (newFound && {{Name}}TypeDef.id(newFound)) {
-      showEditOrm(newFound)
+  watch(found, () => {
+    if (found.value && {{Name}}TypeDef.id(found.value)) {
+      showEditOrm(JSON.parse(JSON.stringify(found.value)));
     } else {
       showAddOrm();
     }
@@ -384,8 +451,23 @@
   const delObject = (obj: MobilettoOrmObject) => {
       const id = {{Name}}TypeDef.id(obj);
       {{name}}Store.delete(id, delete{{Name}}ServerErrors)
-          .then(() => {{name}}Store.search());
+          .then(() => {
+              successSnackbar.value = parseMessage(props.msgDeleteSuccess, messages.value, {
+                  type: messages.value["typename_{{typeDef.typeName}}"],
+                  id: {{Name}}TypeDef.id(obj),
+              });
+              return {{name}}Store.search();
+          });
   };
+  watch(delete{{Name}}ServerErrors, () => {
+    if (Object.keys(delete{{Name}}ServerErrors).length > 0) {
+        errorSnackbar.value = parseMessage(props.msgDeleteError, messages.value, {
+            type: messages.value["typename_{{typeDef.typeName}}"],
+            id: {{Name}}TypeDef.id(obj),
+            error: JSON.stringify(delete{{Name}}ServerErrors),
+        });
+    }
+  });
   watch({{name}}List, (newList) => {
     if (newList && Array.isArray(newList) && newList.length === 0 && searchTerms.value && searchTerms.value.length === 0) {
       if (navigating.value) return;
