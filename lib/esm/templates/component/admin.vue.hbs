@@ -386,9 +386,10 @@
     }
     return true;
   };
-  const delObject = async (obj: MobilettoOrmObject) => {
+  const delObject = (obj: MobilettoOrmObject) => {
       const id = {{Name}}TypeDef.id(obj);
-      return await {{name}}Store.delete(id, delete{{Name}}ServerErrors);
+      {{name}}Store.delete(id, delete{{Name}}ServerErrors)
+          .then(() => {{name}}Store.search());
   };
   watch({{name}}List, (newList) => {
     if (newList && Array.isArray(newList) && newList.length === 0 && searchTerms.value && searchTerms.value.length === 0) {
