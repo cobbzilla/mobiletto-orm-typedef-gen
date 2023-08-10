@@ -395,7 +395,7 @@
     if (Object.keys(edit{{Name}}ServerErrors).length > 0) {
       errorSnackbar.value = parseMessage(props.msgEditError, messages.value, {
         type: messages.value.typename_{{typeDef.typeName}},
-        id: {{Name}}TypeDef.id(obj),
+        id: {{Name}}TypeDef.id(editingObject.value),
         error: JSON.stringify(edit{{Name}}ServerErrors),
       });
     }
@@ -429,8 +429,13 @@
       showAddOrm();
     }
   });
-  watch(findSingleton{{Name}}ServerErrors, (newErrors) => {
-    console.log(`findSingleton errors: ${JSON.stringify(newErrors)}`);
+  watch(findSingleton{{Name}}ServerErrors, () => {
+    if (Object.keys(findSingleton{{Name}}ServerErrors).length > 0) {
+      errorSnackbar.value = parseMessage(props.msgFindSingletonError, messages.value, {
+        type: messages.value.typename_{{typeDef.typeName}},
+        error: JSON.stringify(findSingleton{{Name}}ServerErrors),
+      });
+    }
   });{{else}}
   const actionConfig = (action: string) => {
     return props.actionConfigs[action];
