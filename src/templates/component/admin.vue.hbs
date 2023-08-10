@@ -177,40 +177,40 @@
   const props = withDefaults(
     defineProps<{
       labelPrefixes: string[];
-      typeNameMessage: string,{{#unless typeDef.singleton}}
-      actionConfigs: Record<string, ActionConfig>;
+      typeNameMessage: string;
       msgAddSuccess: string;
       msgAddError: string;
       msgEditSuccess: string;
-      msgEditError: string;
+      msgEditError: string;{{#if typeDef.singleton}}
+      msgFindSingletonError: string;{{else}}
       msgDeleteSuccess: string;
       msgDeleteError: string;
-      msgFindSingletonError: string;
+      actionConfigs: Record<string, ActionConfig>;
       canEdit: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
       canDelete: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
-      deleteConfirmationMessage: string;{{/unless}}
+      deleteConfirmationMessage: string;{{/if}}
     }>(),{
       labelPrefixes: () => ["label_", ""],
-      typeNameMessage: () => "typename_{{name}}",{{#unless typeDef.singleton}}
-      actionConfigs: () => ({}),
+      typeNameMessage: () => "typename_{{name}}",
       msgAddSuccess: () => "admin_info_added",
       msgAddError: () => "admin_info_add_error",
       msgEditSuccess: () => "admin_info_edited",
-      msgEditError: () => "admin_info_edit_error",
+      msgEditError: () => "admin_info_edit_error",{{#if typeDef.singleton}}
+      msgFindSingletonError: () => "admin_info_findSingleton_error",{{else}}
       msgDeleteSuccess: () => "admin_info_deleted",
       msgDeleteError: () => "admin_info_delete_error",
-      msgFindSingletonError: () => "admin_info_findSingleton_error",
+      actionConfigs: () => ({}),
       canEdit: () => true,
-      canDelete: () => true,{{/unless}}
+      canDelete: () => true,{{/if}}
     },
   );
 
   const emit = defineEmits<{
-      added: [obj: {{Name}}Type];
-      addCanceled: [];
-      edited: [obj: {{Name}}Type];
-      editCanceled: [obj: {{Name}}Type];
-      deleted: [obj: {{Name}}Type];
+    added: [obj: {{Name}}Type];
+    addCanceled: [];
+    edited: [obj: {{Name}}Type];
+    editCanceled: [obj: {{Name}}Type];{{#unless typeDef.singleton}}
+    deleted: [obj: {{Name}}Type];{{/unless}}
   }>();
 
   const labelPfx: Ref<string[]> = ref(["admin_label_{{name}}_", "label_", ""]);
@@ -354,7 +354,6 @@
     if (Object.keys(create{{Name}}ServerErrors).length > 0) {
       errorSnackbar.value = parseMessage(props.msgAddError, messages.value, {
         type: messages.value["typename_{{typeDef.typeName}}"],
-        id: {{Name}}TypeDef.id(obj),
         error: JSON.stringify(create{{Name}}ServerErrors),
       });
     }
@@ -395,7 +394,7 @@
   };
   watch(edit{{Name}}ServerErrors, () => {
     if (Object.keys(edit{{Name}}ServerErrors).length > 0) {
-      errorSnackbar.value = parseMessage(props.msgDeleteError, messages.value, {
+      errorSnackbar.value = parseMessage(props.msgEditError, messages.value, {
         type: messages.value["typename_{{typeDef.typeName}}"],
         id: {{Name}}TypeDef.id(obj),
         error: JSON.stringify(edit{{Name}}ServerErrors),
@@ -456,6 +455,7 @@
                   type: messages.value["typename_{{typeDef.typeName}}"],
                   id: {{Name}}TypeDef.id(obj),
               });
+              emit("deleted", obj);
               return {{name}}Store.search();
           });
   };
