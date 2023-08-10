@@ -350,21 +350,14 @@
     return await {{name}}Store.search();{{/if}}
   }
   watch(create{{Name}}ServerErrors, () => {
-    if (Object.keys(create{{Name}}ServerErrors).length > 0) {
+    if (create{{Name}}ServerErrors.value && Object.keys(create{{Name}}ServerErrors.value).length > 0) {
       errorSnackbar.value = parseMessage(props.msgAddError, messages.value, {
         type: messages.value.typename_{{typeDef.typeName}},
         error: JSON.stringify(create{{Name}}ServerErrors),
       });
     }
-  });{{#if typeDef.singleton}}
-  watch(findSingleton{{Name}}ServerErrors, () => {
-    if (Object.keys(findSingleton{{Name}}ServerErrors).length > 0) {
-      errorSnackbar.value = parseMessage(props.msgFindSingletonError, messages.value, {
-        type: messages.value.typename_{{typeDef.typeName}},
-        error: JSON.stringify(findSingleton{{Name}}ServerErrors),
-      });
-    }
-  });{{/if}}
+  });
+
   const showAddOrm = () => {
     addingObject.value = true;
   };
@@ -392,7 +385,7 @@
     return await {{name}}Store.search();{{/if}}
   };
   watch(edit{{Name}}ServerErrors, () => {
-    if (Object.keys(edit{{Name}}ServerErrors).length > 0) {
+    if (edit{{Name}}ServerErrors.value && Object.keys(edit{{Name}}ServerErrors.value).length > 0) {
       errorSnackbar.value = parseMessage(props.msgEditError, messages.value, {
         type: messages.value.typename_{{typeDef.typeName}},
         id: {{Name}}TypeDef.id(editingObject.value),
@@ -430,7 +423,7 @@
     }
   });
   watch(findSingleton{{Name}}ServerErrors, () => {
-    if (Object.keys(findSingleton{{Name}}ServerErrors).length > 0) {
+    if (findSingleton{{Name}}ServerErrors.value && Object.keys(findSingleton{{Name}}ServerErrors.value).length > 0) {
       errorSnackbar.value = parseMessage(props.msgFindSingletonError, messages.value, {
         type: messages.value.typename_{{typeDef.typeName}},
         error: JSON.stringify(findSingleton{{Name}}ServerErrors),
@@ -464,7 +457,7 @@
           });
   };
   watch(delete{{Name}}ServerErrors, () => {
-    if (Object.keys(delete{{Name}}ServerErrors).length > 0) {
+    if (delete{{Name}}ServerErrors.value && Object.keys(delete{{Name}}ServerErrors.value).length > 0) {
         errorSnackbar.value = parseMessage(props.msgDeleteError, messages.value, {
             type: messages.value.typename_{{typeDef.typeName}},
             id: {{Name}}TypeDef.id(obj),
