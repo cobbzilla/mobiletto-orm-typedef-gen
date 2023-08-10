@@ -31,11 +31,10 @@
             :read-only-object="() => false"
             :server-errors="create{{Name}}ServerErrors"
             :label-prefixes="labelPfx"
-            :hint-suffixes="['_description']"{{#if typeDef.singleton}}
-            cancel-button-message=""{{/if}}
+            :hint-suffixes="['_description']"
             @submitted="onAddSubmitted"
-            @update="onAddUpdated"{{#unless typeDef.singleton}}
-            @cancel="onAddCancel"{{/unless}}
+            @update="onAddUpdated"
+            @cancel="onAddCancel"
           />
         </v-col>
       </v-row>
