@@ -77,20 +77,21 @@ export const generateAdmin = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     typeDefPackage: string,
     opts?: GenerateOptions,
-    componentHelperPath?: string,
+    adminHelperPath?: string,
     sessionStoreImport?: string,
     localeMessages?: string,
 ): string => {
-    componentHelperPath ||= `~/utils/model`;
-    sessionStoreImport ||= `~/stores/session`;
+    adminHelperPath ||= `~/utils/model/adminHelper`;
+    sessionStoreImport ||= `~/stores/sessionStore`;
     localeMessages ||= "localeMessages";
     opts ||= {};
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
     };
+    opts.rootOnly = true;
     return generate(typeDef, `templates/component/admin.vue.hbs`, opts, {
         typeDefPackage,
-        componentHelperPath,
+        adminHelperPath,
         sessionStoreImport,
         localeMessages,
     });
