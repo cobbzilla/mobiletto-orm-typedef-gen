@@ -3,7 +3,7 @@
 {{{header}}}{{/if}}{{/if}}
 
 import { H3Event } from "h3";
-import { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
+import { MobilettoOrmNotFoundError, MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
 import { {{Name}}Type, {{Name}}TypeDef } from "{{typeDefPackage}}";
 
 export default defineEventHandler(async (event: H3Event) => {
@@ -35,7 +35,14 @@ export default defineEventHandler(async (event: H3Event) => {
             throw validationError({global: ["validation"]});
           }
         }{{/if}}
-        return await {{name}}Repo.update(obj);
+        {{#if typeDef.singleton}}try {
+          return await {{name}}Repo.update(obj);
+        } catch (e) {
+          if (e instanceof MobilettoOrmNotFoundError) {
+            return await {{name}}Repo.create(obj);
+          }
+          throw e;
+        }{{else}}return await {{name}}Repo.update(obj);{{/if}}
       }{{#if typeDef.apiConfig.update.permission.admin}}
     });{{else}}{{#if typeDef.apiConfig.update.permission.owner}}
     });{{else}}{{#if typeDef.apiConfig.update.permission.session}}

@@ -398,11 +398,11 @@
     {{#if typeDef.refTypes}}const refSearches: Promise<{{RefType}}[]>[] = [];{{#each typeDef.refTypes}}
     refSearches.push({{refType}}Store.search());{{/each}}
     await Promise.all(refSearches);
-    {{/if}}{{#if typeDef.singleton}}return {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{/if}}
+    {{/if}}{{#if typeDef.singleton}}return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{/if}}
   };{{#if typeDef.singleton}}
   initRefs()
       .then(obj => showEditOrm(obj))
-      .catch(e => showAddOrm());
+      .catch(_e => showAddOrm());
   {{else}}
 
   {{name}}Store.search(){{#if typeDef.refTypes}}.then(() => {
