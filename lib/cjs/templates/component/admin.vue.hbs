@@ -368,11 +368,11 @@
   });{{/if}}
   const showAddOrm = () => {
     addingObject.value = true;
-  };{{#unless typeDef.singleton}}
+  };
   const onAddCancel = () => {
-    addingObject.value = {{#if typeDef.singleton}}true{{else}}false{{/if}};
+    addingObject.value = false;
     emit("addCanceled");
-  };{{/unless}}
+  };
 
   const onEditUpdated = (update: { field: string; value: any }) => {
     if (editingObject.value) {
