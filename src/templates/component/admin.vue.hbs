@@ -64,7 +64,7 @@
                       <v-text-field
                         v-model="searchTerms"
                         :label="messages.label_search"
-                        :disabled="libraryStore.libraryBusy"
+                        :disabled="{{name}}Store.{{name}}Busy"
                         type="text"
                         name="searchTerms"
                         class="form-control"
@@ -155,11 +155,11 @@
     metaField
   } from "mobiletto-orm-typedef";
   import { {{Name}}Type, {{Name}}TypeDef } from "{{typeDefPackage}}";
-  import { findMessage, messageExists, parseMessage } from "hokey-runtime";
+  import { findMessage, messageExists, parseMessage{{#unless typeDef.singleton}}, normalizeMsg{{/unless}} } from "hokey-runtime";
   import { useSessionStore } from "{{sessionStoreImport}}";
   import { use{{Name}}Store } from "~/stores/model/{{name}}Store";{{#if typeDef.refTypes}}{{#each typeDef.refTypes}}
   import { use{{RefType}}Store } from "~/stores/model/{{refType}}Store";{{/each}}{{/if}}
-  import { deepUpdate{{#unless typeDef.singleton}}, normalizeMsg{{/unless}} } from "{{adminHelperPath}}";
+  import { deepUpdate } from "{{adminHelperPath}}";
   {{#unless typeDef.singleton}}
   type ActionConfig = {
     path: string;
