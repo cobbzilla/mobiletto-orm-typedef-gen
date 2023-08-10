@@ -1,0 +1,55 @@
+{{#if disclaimer}}// {{{disclaimer}}}{{#if header}}
+{{{header}}}{{/if}}{{/if}}
+
+import { H3Event, deleteCookie } from "h3";
+import { {{AccountType}}, {{SessionType}} } from "{{typeDefPackage}}";
+import { {{SESSION_HEADER}} } from "{{sessionHeaderImport}}";
+import { {{SESSION_COOKIE_NAME}} } from "{{sessionCookieNameImport}}";
+import { {{cookieOptions}} } from "{{cookieOptionsImport}}";
+import { forbidden } from "{{errorFilterImport}}";
+import { {{sessionRepository}} } from "{{sessionRepositoryImport}}";
+import { {{accountRepository}} } from "{{accountRepositoryImport}}";
+
+export const requireAccount = async (
+    event: H3Event,
+    _logPrefix: string,
+    fn: (event: H3Event, session: {{SessionType}}) => Promise<unknown>,
+) => {
+    if (!event?.node?.req?.headers[{{SESSION_HEADER}}]) {
+        deleteCookie(event, {{SESSION_COOKIE_NAME}}, await {{cookieOptions}}());
+        throw forbidden();
+    }
+    const token = event?.node?.req?.headers[{{SESSION_HEADER}}];
+    const session: {{SessionType}} | null = await {{sessionRepository}}().safeFindById(token);
+    if (!session) {
+        deleteCookie(event, {{SESSION_COOKIE_NAME}}, await {{cookieOptions}}());
+        throw forbidden();
+    }
+    return await fn(event, session);
+};
+
+export const requireAccountObject = async (
+    event: H3Event,
+    logPrefix: string,
+    fn: (event: H3Event, session: {{SessionType}}, account: {{AccountType}}) => Promise<unknown>,
+) => {
+    return await requireAccount(event, logPrefix, async (event, session) => {
+        const account: {{AccountType}} | null = await {{accountRepository}}().safeFindById(session.account);
+        if (!account) throw forbidden();
+        return await fn(event, session, account);
+    });
+};
+
+export const requireAdminAccountObject = async (
+    event: H3Event,
+    logPrefix: string,
+    fn: (event: H3Event, session: {{SessionType}}, account: {{AccountType}}) => Promise<unknown>,
+) => {
+    return await requireAccountObject(event, logPrefix, async (event, session: {{SessionType}}, account: {{AccountType}}) => {
+        if (account.admin === true) {
+            return await fn(event, session, account);
+        } else {
+            throw forbidden();
+        }
+    });
+};

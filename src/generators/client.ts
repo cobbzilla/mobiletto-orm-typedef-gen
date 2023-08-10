@@ -1,7 +1,5 @@
 import { MobilettoOrmTypeDef, MobilettoOrmTypeDefConfig } from "mobiletto-orm-typedef";
-import { generate, GenerateOptions } from "../generate.js";
-
-const DUMMY_TYPEDEF = new MobilettoOrmTypeDef({ typeName: "dummy", fields: {} });
+import { DUMMY_TYPEDEF, generate, GenerateOptions } from "../generate.js";
 
 export const generateService = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,

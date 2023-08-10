@@ -1,18 +1,20 @@
 import { MobilettoOrmTypeDef, MobilettoOrmTypeDefConfig } from "mobiletto-orm-typedef";
-import { generate, GenerateOptions } from "../generate.js";
+import { DUMMY_TYPEDEF, generate, GenerateOptions } from "../generate.js";
 import * as fs from "fs";
 
-export const _generate = (
+export const genApiEndpoint = (
     apiTemplate: string,
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     typeDefPackage: string,
     opts?: GenerateOptions,
+    ctx?: Record<string, string>,
 ): string => {
     opts ||= {};
     opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
         return ctx;
     };
-    return generate(typeDef, `templates/api/${apiTemplate}.ts.hbs`, opts, { typeDefPackage });
+    const cx = ctx ? Object.assign({}, ctx, { typeDefPackage }) : { typeDefPackage };
+    return generate(typeDef, `templates/api/${apiTemplate}.ts.hbs`, opts, cx);
 };
 
 export const generateApiIdGet = (
@@ -20,7 +22,7 @@ export const generateApiIdGet = (
     typeDefPackage: string,
     opts?: GenerateOptions,
 ): string => {
-    return _generate("id.get", typeDef, typeDefPackage, opts);
+    return genApiEndpoint("id.get", typeDef, typeDefPackage, opts);
 };
 
 export const generateApiIdPut = (
@@ -28,7 +30,7 @@ export const generateApiIdPut = (
     typeDefPackage: string,
     opts?: GenerateOptions,
 ): string => {
-    return _generate("id.put", typeDef, typeDefPackage, opts);
+    return genApiEndpoint("id.put", typeDef, typeDefPackage, opts);
 };
 
 export const generateApiIdPatch = (
@@ -36,7 +38,7 @@ export const generateApiIdPatch = (
     typeDefPackage: string,
     opts?: GenerateOptions,
 ): string => {
-    return _generate("id.patch", typeDef, typeDefPackage, opts);
+    return genApiEndpoint("id.patch", typeDef, typeDefPackage, opts);
 };
 
 export const generateApiIdDelete = (
@@ -44,15 +46,22 @@ export const generateApiIdDelete = (
     typeDefPackage: string,
     opts?: GenerateOptions,
 ): string => {
-    return _generate("id.delete", typeDef, typeDefPackage, opts);
+    return genApiEndpoint("id.delete", typeDef, typeDefPackage, opts);
 };
 
 export const generateApiIndexPost = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     typeDefPackage: string,
     opts?: GenerateOptions,
+    utilsImportPath?: string,
 ): string => {
-    return _generate("index.post", typeDef, typeDefPackage, opts);
+    return genApiEndpoint(
+        "index.post",
+        typeDef,
+        typeDefPackage,
+        opts,
+        utilsImportPath ? { utilsImportPath } : undefined,
+    );
 };
 
 const apiOutfile = (opts: GenerateOptions, tsFile: string) =>
@@ -62,6 +71,7 @@ export const generateApi = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     typeDefPackage: string,
     opts?: GenerateOptions,
+    utilsImportPath?: string,
 ): Record<string, string> => {
     opts ||= {};
     if (opts.outfile) {
@@ -77,6 +87,77 @@ export const generateApi = (
         create: generateApiIdPut(typeDef, typeDefPackage, apiOutfile(opts, "[id].put.ts")),
         update: generateApiIdPatch(typeDef, typeDefPackage, apiOutfile(opts, "[id].patch.ts")),
         delete: generateApiIdDelete(typeDef, typeDefPackage, apiOutfile(opts, "[id].delete.ts")),
-        search: generateApiIndexPost(typeDef, typeDefPackage, apiOutfile(opts, "index.post.ts")),
+        search: generateApiIndexPost(typeDef, typeDefPackage, apiOutfile(opts, "index.post.ts"), utilsImportPath),
     };
+};
+
+export const generateErrorFilter = (
+    typeDefPackage: string,
+    opts?: GenerateOptions,
+    logger?: string,
+    loggerImport?: string,
+): string => {
+    logger ||= "logger";
+    loggerImport ||= "~/server/utils/logger";
+    opts ||= {};
+    opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
+        return ctx;
+    };
+    return generate(DUMMY_TYPEDEF, `templates/filter/errorFilter.ts.hbs`, opts, {
+        typeDefPackage,
+        logger,
+        loggerImport,
+    });
+};
+
+export const generateSessionFilter = (
+    typeDefPackage: string,
+    opts?: GenerateOptions,
+    AccountType?: string,
+    SessionType?: string,
+    SESSION_HEADER?: string,
+    sessionHeaderImport?: string,
+    SESSION_COOKIE_NAME?: string,
+    sessionCookieNameImport?: string,
+    cookieOptions?: string,
+    cookieOptionsImport?: string,
+    errorFilterImport?: string,
+    sessionRepository?: string,
+    sessionRepositoryImport?: string,
+    accountRepository?: string,
+    accountRepositoryImport?: string,
+): string => {
+    AccountType ||= "AccountType";
+    SessionType ||= "SessionType";
+    SESSION_HEADER ||= "SESSION_HEADER";
+    sessionHeaderImport ||= "~/utils/auth";
+    SESSION_COOKIE_NAME ||= "SESSION_COOKIE_NAME";
+    sessionCookieNameImport ||= "~/utils/auth";
+    cookieOptions ||= "cookieOptions";
+    cookieOptionsImport ||= "~/utils/auth";
+    errorFilterImport ||= "~/server/utils/filter/errorFilter";
+    sessionRepository ||= "sessionRepository";
+    sessionRepositoryImport ||= "~/server/utils/repo/sessionRepo";
+    accountRepository ||= "accountRepository";
+    accountRepositoryImport ||= "~/server/utils/repo/accountRepo";
+    opts ||= {};
+    opts.prepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string, unknown>): Record<string, unknown> => {
+        return ctx;
+    };
+    return generate(DUMMY_TYPEDEF, `templates/filter/sessionFilter.ts.hbs`, opts, {
+        typeDefPackage,
+        AccountType,
+        SessionType,
+        SESSION_HEADER,
+        sessionHeaderImport,
+        SESSION_COOKIE_NAME,
+        sessionCookieNameImport,
+        cookieOptions,
+        cookieOptionsImport,
+        errorFilterImport,
+        sessionRepository,
+        sessionRepositoryImport,
+        accountRepository,
+        accountRepositoryImport,
+    });
 };

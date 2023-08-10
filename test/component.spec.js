@@ -18,10 +18,12 @@ const typeDef = new MobilettoOrmTypeDef({
 describe("Vue 3 admin component builder test", async () => {
     it("builds a simple Vue 3 admin component", async () => {
         const builtAdmin = generateAdmin(typeDef, "mobiletto-orm-typedef-gen");
+        // todo: more thorough validation that the output is correct
         expect(builtAdmin.startsWith(`<!-- ${STANDARD_AUTOGEN_FILE_DISCLAIMER} -->\n\n<template>`)).is.true;
     });
     it("builds a Vue 3 admin helper", async () => {
         const builtAdmin = generateAdminHelper(typeDef);
+        // todo: more thorough validation that the output is correct
         expect(builtAdmin.startsWith(`// ${STANDARD_AUTOGEN_FILE_DISCLAIMER}\n\nimport `)).is.true;
     });
 });

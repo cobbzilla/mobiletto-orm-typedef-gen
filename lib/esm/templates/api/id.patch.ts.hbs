@@ -1,37 +1,44 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-{{#if disclaimer}}//
-    {{{disclaimer}}}{{#if header}}
-        {{{header}}}{{/if}}{{/if}}
+{{#if disclaimer}}// {{{disclaimer}}}{{#if header}}
+{{{header}}}{{/if}}{{/if}}
 
-import { H3Event } from "h3"; import { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef"; import {
-{{Name}}Type,
-{{Name}}TypeDef } from "{{typeDefPackage}}"; export default defineEventHandler(async (event: H3Event) => { return await
-filterErrors(event, "{{name}}.update", async (event: H3Event) =>
-{{{curlyOpen}}}{{#if typeDef.apiConfig.update.permission.admin}}
-    return await requireAdminAccountObject(event, "{{name}}.update", async (event: H3Event, session, account) =>
-    {{{curlyOpen}}}{{else if typeDef.apiConfig.update.permission.owner}}
-    return await requireAccountObject(event, "{{name}}.update", async (event: H3Event, session, account) =>
-    {{{curlyOpen}}}{{else if typeDef.apiConfig.update.permission.session}}
-    return await requireAccount(event, "{{name}}.update", async (event: H3Event, session) =>
-    {{{curlyOpen}}}{{/if}}
-const
-{{name}}Repo =
-{{name}}Repository(); const id = event?.context?.params?.id; if (!id) throw notFound({{name}}Repo.typeDef.idFieldName());
-const obj:
-{{Name}}Type = await readBody(event); if (!obj) { throw badRequest(); } if ({{Name}}TypeDef.id(obj) !== id) { const
-errs: MobilettoOrmValidationErrors = {}; errs[{{name}}Repo.typeDef.idFieldName()] = ["mismatch"]; throw
-validationError(errs); } else {
-{{#if typeDef.apiConfig.update.permission.owner}}
-    if (!account.admin && obj.account && obj.account !== session.account) throw forbidden();
-{{/if}}{{#if typeDef.apiConfig.update.hasValidate}}if (typeof
-    {{Name}}TypeDef.apiConfig.update?.validate === "function") { const validated = await
-    {{Name}}TypeDef.apiConfig.update.validate(account, obj); if (validated === true || (typeof validated === "object" &&
-    Object.keys(validated).length === 0)) { // successfully validated } else if (typeof validated === "object" &&
-    Object.keys(validated).length > 0) { throw validationError(validated); } else { throw validationError({global:
-    ["validation"]}); } }{{/if}}
-return await
-{{name}}Repo.update(obj); }{{#if typeDef.apiConfig.update.permission.admin}}
-    });{{else if typeDef.apiConfig.update.permission.owner}}
-    });{{else if typeDef.apiConfig.update.permission.session}}
-    });{{/if}}
-}); });
+import { H3Event } from "h3";
+import { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
+import { {{Name}}Type, {{Name}}TypeDef } from "{{typeDefPackage}}";
+
+export default defineEventHandler(async (event: H3Event) => {
+  return await filterErrors(event, "{{name}}.update", async (event: H3Event) => {{{curlyOpen}}}{{#if typeDef.apiConfig.update.permission.admin}}
+    return await requireAdminAccountObject(event, "{{name}}.update", async (event: H3Event, session, account) => {{{curlyOpen}}}{{else}}{{#if typeDef.apiConfig.update.permission.owner}}
+    return await requireAccountObject(event, "{{name}}.update", async (event: H3Event, session, account) => {{{curlyOpen}}}{{else}}{{#if typeDef.apiConfig.update.permission.session}}
+    return await requireAccount(event, "{{name}}.update", async (event: H3Event, session) => {{{curlyOpen}}}{{/if}}{{/if}}{{/if}}
+      const {{name}}Repo = {{name}}Repository();
+      const id = event?.context?.params?.id;
+      if (!id) throw notFound({{name}}Repo.typeDef.idFieldName());
+      const obj: {{Name}}Type = await readBody(event);
+      if (!obj) {
+        throw badRequest();
+      }
+      if ({{Name}}TypeDef.id(obj) !== id) {
+        const errs: MobilettoOrmValidationErrors = {};
+        errs[{{name}}Repo.typeDef.idFieldName()] = ["mismatch"];
+        throw validationError(errs);
+      } else {
+        {{#if typeDef.apiConfig.update.permission.owner}}
+        if (!account.admin && obj.account && obj.account !== session.account) throw forbidden();
+        {{/if}}{{#if typeDef.apiConfig.update.hasValidate}}if (typeof {{Name}}TypeDef.apiConfig.update?.validate === "function") {
+          const validated = await {{Name}}TypeDef.apiConfig.update.validate(account, obj);
+          if (validated === true || (typeof validated === "object" && Object.keys(validated).length === 0)) {
+            // successfully validated
+          } else if (typeof validated === "object" && Object.keys(validated).length > 0) {
+            throw validationError(validated);
+          } else {
+            throw validationError({global: ["validation"]});
+          }
+        }{{/if}}
+        return await {{name}}Repo.update(obj);
+      }{{#if typeDef.apiConfig.update.permission.admin}}
+    });{{else}}{{#if typeDef.apiConfig.update.permission.owner}}
+    });{{else}}{{#if typeDef.apiConfig.update.permission.session}}
+    });{{/if}}{{/if}}{{/if}}
+  });
+});
