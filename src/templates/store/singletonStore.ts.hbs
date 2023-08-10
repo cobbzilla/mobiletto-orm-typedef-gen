@@ -26,7 +26,8 @@ export const use{{Name}}Store = defineStore("{{name}}", {
       this.found = null;
       this.finding = true;
       try {
-        return await {{name}}Service.find{{Name}}(serverErrors);
+        this.found = await {{name}}Service.find{{Name}}(serverErrors);
+        return this.found
       } finally {
         this.finding = false;
       }

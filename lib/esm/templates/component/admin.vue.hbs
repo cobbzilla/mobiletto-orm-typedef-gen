@@ -332,9 +332,9 @@
   const onEditSubmitted = async (obj: MobilettoOrmObject) => {
     await {{name}}Store
       .update(obj as {{Name}}Type, edit{{Name}}ServerErrors);
-        editingObject.value = {} as {{Name}}Type;{{#if typeDef.singleton}}
-        return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{else}}
-        return await {{name}}Store.search();{{/if}}
+    editingObject.value = {} as {{Name}}Type;{{#if typeDef.singleton}}
+    return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{else}}
+    return await {{name}}Store.search();{{/if}}
   };
 
   const showEditOrm = (obj: MobilettoOrmObject) => {
