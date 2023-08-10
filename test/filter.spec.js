@@ -11,6 +11,10 @@ describe("Nuxt server filter builder test", async () => {
     it("builds a session filter", async () => {
         const sessionFilter = generateSessionFilter("mobiletto-orm-typedef-gen");
         // todo: more thorough validation that the output is correct
-        expect(sessionFilter.startsWith("// " + STANDARD_AUTOGEN_FILE_DISCLAIMER + "\n\nimport")).is.true;
+        expect(
+            sessionFilter.startsWith(
+                "/* eslint-disable import/no-duplicates */\n// " + STANDARD_AUTOGEN_FILE_DISCLAIMER + "\n\nimport",
+            ),
+        ).is.true;
     });
 });
