@@ -402,6 +402,7 @@
     if (obj) {
       const id = {{Name}}TypeDef.id(obj);
       if (id && id.length > 0) {
+        addingObject.value = false; // ensure add form is closed
         editingObject.value = JSON.parse(JSON.stringify(obj)) as {{Name}}Type;
       }
     }
