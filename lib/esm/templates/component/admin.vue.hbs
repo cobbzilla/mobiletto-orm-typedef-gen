@@ -338,7 +338,7 @@
     deepUpdate(addObject.value, update.field, update.value);
   };
   const onAddSubmitted = async (obj: MobilettoOrmObject) => {
-    addObject.value = await {{name}}Store
+    await {{name}}Store
       .create(obj as {{Name}}Type, create{{Name}}ServerErrors);
     addingObject.value = false;
     successSnackbar.value = parseMessage(props.msgAddSuccess, messages.value, {
@@ -347,6 +347,7 @@
     });
     emit("added", obj);{{#if typeDef.singleton}}
     return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{else}}
+    addObject.value = {} as {{Name}}Type;
     return await {{name}}Store.search();{{/if}}
   }
   watch(create{{Name}}ServerErrors, () => {
