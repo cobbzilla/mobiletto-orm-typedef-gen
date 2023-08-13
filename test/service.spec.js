@@ -24,8 +24,7 @@ describe("API client service builder test", async () => {
                 "\n" +
                 "\n" +
                 'import { Ref } from "vue";\n' +
-                'import { MobilettoOrmObject, MobilettoOrmPurgeResults } from "mobiletto-orm-typedef";\n' +
-                'import { MobilettoOrmValidationErrors } from "mobiletto-orm";\n' +
+                'import { MobilettoOrmObject, MobilettoOrmPurgeResults, MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";\n' +
                 `import { ${typeDef.typeName}Type, ${typeDef.typeName}TypeDef } from "mobiletto-orm-typedef-gen";\n` +
                 'import * as a from "~/utils/model/serviceHelper.js";\n' +
                 "\n" +
@@ -100,7 +99,7 @@ describe("API client service builder test", async () => {
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
                 "\n" +
                 "\n" +
-                'import { MobilettoOrmValidationErrors } from "mobiletto-orm";\n' +
+                'import { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";\n' +
                 'import { SESSION_HEADER } from "~/utils/auth";\n' +
                 'import { sessionCookie } from "~/utils/auth";\n' +
                 "\n" +

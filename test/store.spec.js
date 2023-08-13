@@ -25,7 +25,7 @@ describe("Pinia store builder test", async () => {
                 "\n" +
                 'import { Ref } from "vue";\n' +
                 'import { defineStore } from "pinia";\n' +
-                'import { MobilettoOrmValidationErrors } from "mobiletto-orm";\n' +
+                'import { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";\n' +
                 `import { ${typeDef.typeName}Type, ${typeDef.typeName}TypeDef } from "mobiletto-orm-typedef-gen";\n` +
                 `import { ${typeDef.typeName}Service } from "~/utils/services/model/${typeDef.typeName}Service";\n` +
                 'import { MobilettoOrmFindApiOpts, updateOrmList } from "~/utils/model/storeHelper.js";\n' +
