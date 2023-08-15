@@ -1,4 +1,5 @@
 import {
+    isArrayType,
     MobilettoOrmError,
     MobilettoOrmFieldDefConfigs,
     MobilettoOrmTypeDef,
@@ -65,7 +66,7 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
         field.typeIsBoolean = field.type === "boolean";
         field.typeIsString = field.type === "string";
         field.typeIsNumber = field.type === "number";
-        field.typeIsArray = field.type === "array";
+        field.typeIsArray = isArrayType(field.type);
         field.typeIsObject = field.type === "object";
         if (field.typeIsArray) {
             field.valueType =
