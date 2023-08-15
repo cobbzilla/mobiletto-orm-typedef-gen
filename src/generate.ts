@@ -4,8 +4,6 @@ import {
     MobilettoOrmFieldDefConfigs,
     MobilettoOrmTypeDef,
     MobilettoOrmTypeDefConfig,
-    MobilettoOrmValidationError,
-    MobilettoOrmValidationErrors,
 } from "mobiletto-orm-typedef";
 import * as fs from "fs";
 
@@ -69,23 +67,7 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
         field.typeIsArray = isArrayType(field.type);
         field.typeIsObject = field.type === "object";
         if (field.typeIsArray) {
-            field.valueType =
-                field.values && Array.isArray(field.values) && field.values.length > 0
-                    ? typeof field.values[0]
-                    : field.items &&
-                      Array.isArray(field.items) &&
-                      field.items.length > 0 &&
-                      typeof field.items[0] === "object" &&
-                      field.items[0].value
-                    ? typeof field.items[0].value
-                    : field.ref
-                    ? "string"
-                    : null;
-            if (field.valueType == null) {
-                const errors: MobilettoOrmValidationErrors = {};
-                errors[field.name] = ["indeterminateArrayValueType"];
-                throw new MobilettoOrmValidationError(errors);
-            }
+            field.valueType = field.type.substring(0, field.type.indexOf("[]"));
             field.arrayIndent = "    ";
         }
         if (field.default) {
