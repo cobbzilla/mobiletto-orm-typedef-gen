@@ -39,8 +39,8 @@ devDependencies:
     specifier: ^1.0.4
     version: 1.0.4
   mobiletto-orm-typedef:
-    specifier: ^2.4.8
-    version: 2.4.8
+    specifier: ^2.4.9
+    version: 2.4.9
   mocha:
     specifier: ^10.2.0
     version: 10.2.0
@@ -437,7 +437,7 @@ packages:
       normalize-path: 3.0.0
       readdirp: 3.6.0
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: true
 
   /cliui@7.0.4:
@@ -739,8 +739,8 @@ packages:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
     dev: true
 
-  /fsevents@2.3.2:
-    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+  /fsevents@2.3.3:
+    resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
     requiresBuild: true
@@ -1032,8 +1032,8 @@ packages:
     hasBin: true
     dev: true
 
-  /mobiletto-orm-typedef@2.4.8:
-    resolution: {integrity: sha512-UNS1RiIgJ8mmvMWAo8QGCFh7TOxGGT4EvxB/vmb3o2qmJPpvb/nhBQVQOF3nGQPAhXw9F5SyJCLUysigjSUddg==}
+  /mobiletto-orm-typedef@2.4.9:
+    resolution: {integrity: sha512-0jfhxpKnopwsrpihtVcJM5fZfi2G7shZ4xph6ZKlyohc+h5Pykp+Y3pCf5gSYwo35SWZcjQwDRSrdIFm57UH1g==}
     dependencies:
       shasum: 1.0.2
       uuid: 9.0.0
