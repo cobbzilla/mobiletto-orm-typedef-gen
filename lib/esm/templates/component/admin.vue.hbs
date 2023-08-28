@@ -451,8 +451,8 @@
     return true;
   };
   const delConfirmCount = ref(0);
+  const deletingObject = ref(null);
   const delObject = (obj: MobilettoOrmObject) => {
-      if (!props.canDelete()) return;
       if (props.deleteConfirmationMessage && props.deleteConfirmationMessage.length > 0 && delConfirmCount.value < maxDeleteConfirmations) {
           if (confirm(props.deleteConfirmationMessage)) {
               delConfirmCount.value = delConfirmCount.value + 1;
@@ -461,6 +461,7 @@
               return;
           }
       }
+      deletingObject.value = obj;
       const id = {{Name}}TypeDef.id(obj);
       {{name}}Store.delete(id, delete{{Name}}ServerErrors)
           .then(() => {
@@ -476,7 +477,7 @@
     if (delete{{Name}}ServerErrors.value && Object.keys(delete{{Name}}ServerErrors.value).length > 0) {
         errorSnackbar.value = parseMessage(props.msgDeleteError, messages.value, {
             type: messages.value.typename_{{typeDef.typeName}},
-            id: {{Name}}TypeDef.id(obj),
+            id: deletingObject.value ? {{Name}}TypeDef.id(deletingObject.value) : "null",
             error: JSON.stringify(delete{{Name}}ServerErrors),
         });
     }
