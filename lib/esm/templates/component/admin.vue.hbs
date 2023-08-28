@@ -188,7 +188,8 @@
       canAdd: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
       canEdit: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
       canDelete: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
-      deleteConfirmationMessage: string;{{/if}}
+      deleteConfirmationMessage: string;
+      maxDeleteConfirmations: number;{{/if}}
     }>(),{
       labelPrefixes: () => ["label_", ""],
       typeNameMessage: () => "typename_{{name}}",
@@ -202,7 +203,8 @@
       actionConfigs: () => ({}),
       canAdd: () => true,
       canEdit: () => true,
-      canDelete: () => true,{{/if}}
+      canDelete: () => true,
+      maxDeleteConfirmations: () => 3,{{/if}}
     },
   );
 
@@ -448,7 +450,17 @@
     }
     return true;
   };
+  const delConfirmCount = ref(0);
   const delObject = (obj: MobilettoOrmObject) => {
+      if (!props.canDelete()) return;
+      if (props.deleteConfirmationMessage && props.deleteConfirmationMessage.length > 0 && delConfirmCount.value < maxDeleteConfirmations) {
+          if (confirm(props.deleteConfirmationMessage)) {
+              delConfirmCount.value = delConfirmCount.value + 1;
+          } else {
+              delConfirmCount.value = 0;
+              return;
+          }
+      }
       const id = {{Name}}TypeDef.id(obj);
       {{name}}Store.delete(id, delete{{Name}}ServerErrors)
           .then(() => {
