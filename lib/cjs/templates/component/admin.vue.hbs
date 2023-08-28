@@ -130,7 +130,7 @@
                 </table>
               </v-col>
             </v-row>
-            <v-row>
+            <v-row v-if="canAdd()">
               <v-col>
                 <v-btn class="btn btn-primary" :disabled="{{name}}Store.{{name}}Busy" @click.stop="showAddOrm">
                   <Icon name="material-symbols:add" />
@@ -185,7 +185,7 @@
       msgDeleteSuccess: string;
       msgDeleteError: string;
       actionConfigs: Record<string, ActionConfig>;
-      canAdd: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
+      canAdd: () => boolean;
       canEdit: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
       canDelete: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
       deleteConfirmationMessage: string;
