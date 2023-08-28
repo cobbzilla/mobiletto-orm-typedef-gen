@@ -185,6 +185,7 @@
       msgDeleteSuccess: string;
       msgDeleteError: string;
       actionConfigs: Record<string, ActionConfig>;
+      canAdd: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
       canEdit: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
       canDelete: (obj: MobilettoOrmObject, objList: MobilettoOrmObject[]) => boolean;
       deleteConfirmationMessage: string;{{/if}}
@@ -199,6 +200,7 @@
       msgDeleteSuccess: () => "admin_info_deleted",
       msgDeleteError: () => "admin_info_delete_error",
       actionConfigs: () => ({}),
+      canAdd: () => true,
       canEdit: () => true,
       canDelete: () => true,{{/if}}
     },
