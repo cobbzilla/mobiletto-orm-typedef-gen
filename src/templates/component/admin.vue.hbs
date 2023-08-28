@@ -454,7 +454,10 @@
   const deletingObject = ref(null);
   const delObject = (obj: MobilettoOrmObject) => {
       if (props.deleteConfirmationMessage && props.deleteConfirmationMessage.length > 0 && delConfirmCount.value < props.maxDeleteConfirmations) {
-          if (confirm(messages.value[props.deleteConfirmationMessage])) {
+          const confirmationMessage = parseMessage(props.deleteConfirmationMessage, messages.value, {
+              id: {{Name}}TypeDef.id(obj)
+          });
+          if (confirm(confirmationMessage)) {
               delConfirmCount.value = delConfirmCount.value + 1;
           } else {
               delConfirmCount.value = 0;
