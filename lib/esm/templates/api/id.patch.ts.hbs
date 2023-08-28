@@ -12,6 +12,7 @@ export default defineEventHandler(async (event: H3Event) => {
     return await requireAccountObject(event, "{{name}}.update", async (event: H3Event, session, account) => {{{curlyOpen}}}{{else}}{{#if typeDef.apiConfig.update.permission.session}}
     return await requireAccount(event, "{{name}}.update", async (event: H3Event, session) => {{{curlyOpen}}}{{/if}}{{/if}}{{/if}}
       const {{name}}Repo = {{name}}Repository();
+      if ({{name}}Repo.initialize) await {{name}}Repo.initialize();
       const id = event?.context?.params?.id;
       if (!id) throw notFound({{name}}Repo.typeDef.idFieldName());
       const obj: {{Name}}Type = await readBody(event);

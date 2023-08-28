@@ -22,7 +22,8 @@ export default defineEventHandler(async (event: H3Event) => {
           throw validationError({global: ["validation"]});
         }
       }{{/if}}
-      const {{name}}Repo = {{name}}Repository();{{#if typeDef.singleton}}
+      const {{name}}Repo = {{name}}Repository();
+      if ({{name}}Repo.initialize) await {{name}}Repo.initialize();{{#if typeDef.singleton}}
       const singleton = await {{name}}Repo.safeFindById("{{typeDef.singleton}}");
       return singleton ? [ singleton ] : [];{{else}}
       if (opts.field && opts.value) {

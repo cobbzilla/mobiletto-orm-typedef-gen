@@ -30,7 +30,8 @@ describe("Nuxt server API builder test", async () => {
                 `  return await filterErrors(event, "${typeDef.typeName}.lookup", async (event: H3Event) => {\n` +
                 `    return await requireAdminAccountObject(event, "${typeDef.typeName}.lookup", async (event: H3Event, session, account) => {\n` +
                 `      const ${typeDef.typeName}Repo = ${typeDef.typeName}Repository();\n` +
-                "      const id =event?.context?.params?.id;\n" +
+                `      if (${typeDef.typeName}Repo.initialize) await ${typeDef.typeName}Repo.initialize();\n` +
+                "      const id = event?.context?.params?.id;\n" +
                 `      if (!id) throw notFound(${typeDef.typeName}Repo.typeDef.idFieldName());\n` +
                 `      const ${typeDef.typeName}_by_id = await ${typeDef.typeName}Repo.safeFindById(id);\n` +
                 `      if (${typeDef.typeName}_by_id) return ${typeDef.typeName}_by_id;\n` +
