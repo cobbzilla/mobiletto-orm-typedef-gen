@@ -80,6 +80,7 @@ export const generateAdmin = (
     adminHelperPath?: string,
     sessionStoreImport?: string,
     localeMessages?: string,
+    utilsImportPath?: string,
 ): string => {
     adminHelperPath ||= `~/utils/model/adminHelper`;
     sessionStoreImport ||= `~/stores/sessionStore`;
@@ -94,6 +95,7 @@ export const generateAdmin = (
         adminHelperPath,
         sessionStoreImport,
         localeMessages,
+        utilsImportPath,
     });
 };
 
