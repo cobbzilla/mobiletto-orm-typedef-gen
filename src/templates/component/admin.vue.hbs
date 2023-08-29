@@ -79,23 +79,33 @@
                     </v-btn>
                   </div>{{/if}}
                 </v-col>
-              </v-row>{{#if hasRefSearch}}{{#each refSearches}}
-              <v-row>{{#if text}}
+              </v-row>{{#if hasRefSearch}}
+              <v-row>
                 <v-col>
-                  <v-text-field
-                      v-model="searchRef_{{ref}}"
-                      :label="fieldMessages[{{ref}}]"
-                      :disabled="{{name}}Store.{{name}}Busy"
-                      type="text"
-                      name="searchRef_{{ref}}"
-                      class="form-control"
-                      @keyup.enter="searchObjects"
+                  <v-select
+                    v-model="selectedRef"
+                    :v-bind="selectedRef"
+                    :values="refSearchFields"
+                    :full-width="false"
+                    name="selectedRef"
+                    class="form-control"
                   />
-                </v-col>{{/if}}{{#if select}}
-                <v-col>
+                </v-col>{{#each refSearches}}
+                <v-col>{{#if text}}
+                    <v-text-field
+                        v-show="selectedRef === '{{ref}}'"
+                        v-model="searchRef.{{ref}}"
+                        :v-bind="searchRef.{{ref}}"
+                        :label="fieldMessages[{{ref}}]"
+                        :disabled="{{name}}Store.{{name}}Busy"
+                        type="text"
+                        name="searchRef_{{ref}}"
+                        class="form-control"
+                        @keyup.enter="searchObjects"
+                    />{{/if}}{{#if select}}
                     <v-select
-                        v-model="searchRef_{{ref}}"
-                        :v-bind="searchRef_{{ref}}"
+                        v-model="searchRef.{{ref}}"
+                        :v-bind="searchRef.{{ref}}"
                         :label="fieldMessages[{{ref}}]"
                         :items="ref{{RefType}}.items"
                         item-value="value"
@@ -291,10 +301,21 @@
   const {{name}}TypeDef: Ref<MobilettoOrmTypeDef | null> = ref(null);
   const {{name}}TypeDefFields: Ref<MobilettoOrmFieldDefConfig[] | undefined> = ref(undefined);
   {{#if typeDef.singleton}}const findSingleton{{Name}}ServerErrors = ref({} as MobilettoOrmValidationErrors);
-  {{else}}const searchQuery = () => ({ textSearch: searchTerms.value });
+  {{else}}const searchQuery = () => {
+      let q: MobilettoOrmFindApiOpts = {};
+      {{#if hasTextSearch}}if (searchTerms.value && searchTerms.value.trim().length > 0) q.textSearch = searchTerms.value;{{/if}}
+      {{#if hasRefSearch}}const val = searchRef.value[selectedRef];
+      if (val && val.length > 0) {
+        q.field = selectedRef.value;
+        q.value = val;
+      }
+      {{/if}}
+      return Object.keys(q) > 0 ? q : undefined;
+  };
 
   const searchObjects = () => {
     const query = searchQuery();
+    if (!query) return; // something was wrong, don't send the query
     if (lastQuery.value && JSON.stringify(lastQuery.value) === JSON.stringify(query)) {
       // not sending duplicate search
     } else {
@@ -326,7 +347,13 @@
 
   const allRefs: Ref<Boolean>[] = [];
   const allRefsLoaded = () => allRefs.length === {{typeDef.refTypes.length}} && allRefs.filter(r => r.value === true).length === {{typeDef.refTypes.length}};
-
+  {{#if hasRefSearch}}
+  const refSearchFields = ref([]);
+  const selectedRef = ref("{{firstRefSearch.ref}}");
+  const searchRef: Record<string, string> = {};{{#each refSearches}}
+  const searchRef.{{ref}} = "";
+  refSearchFields.value.push("{{ref}}");
+  {{/each}}{{/if}}
   {{#each typeDef.refTypes}}const ref{{RefType}} = ref({} as MobilettoOrmFieldDefConfig);
   const ref{{RefType}}Loaded = ref(false);
   allRefs.push(ref{{RefType}}Loaded);

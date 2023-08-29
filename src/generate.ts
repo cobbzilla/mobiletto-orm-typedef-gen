@@ -128,7 +128,7 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
         const refSearch = typeDef.search.refSearch;
         ctx.hasRefSearch = Object.values(refSearch).filter((rs) => rs !== "disabled").length > 0;
         if (ctx.hasRefSearch) {
-            ctx.refSearches = Object.keys(refSearch)
+            const refSearches: Record<string, string | boolean>[] = Object.keys(refSearch)
                 .filter((rs) => refSearch[rs] !== "disabled")
                 .map((ref) => ({
                     ref,
@@ -136,6 +136,8 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
                     select: refSearch[ref] === "select",
                     disabled: refSearch[ref] === "disabled",
                 }));
+            ctx.refSearches = refSearches;
+            ctx.firstRefSearch = refSearches[0];
         }
     }
     return ctx;
