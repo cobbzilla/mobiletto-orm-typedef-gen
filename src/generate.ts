@@ -132,6 +132,7 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
                 .filter((rs) => refSearch[rs] !== "disabled")
                 .map((ref) => ({
                     ref,
+                    Ref: capitalize(ref),
                     text: refSearch[ref] === "text",
                     select: refSearch[ref] === "select",
                     disabled: refSearch[ref] === "disabled",

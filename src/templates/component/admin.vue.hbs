@@ -96,7 +96,7 @@
                         v-show="selectedRef === '{{ref}}'"
                         v-model="searchRef.{{ref}}"
                         :v-bind="searchRef.{{ref}}"
-                        :label="fieldMessages[{{ref}}]"
+                        :label="fieldMessages.{{ref}}"
                         :disabled="{{name}}Store.{{name}}Busy"
                         type="text"
                         name="searchRef_{{ref}}"
@@ -106,8 +106,8 @@
                     <v-select
                         v-model="searchRef.{{ref}}"
                         :v-bind="searchRef.{{ref}}"
-                        :label="fieldMessages[{{ref}}]"
-                        :items="ref{{RefType}}.items"
+                        :label="fieldMessages.{{ref}}"
+                        :items="ref{{Ref}}.items"
                         item-value="value"
                         item-title="label"
                         :full-width="false"
@@ -304,13 +304,13 @@
   {{else}}const searchQuery = () => {
       let q: MobilettoOrmFindApiOpts = {};
       {{#if hasTextSearch}}if (searchTerms.value && searchTerms.value.trim().length > 0) q.textSearch = searchTerms.value;{{/if}}
-      {{#if hasRefSearch}}const val = searchRef.value[selectedRef];
+      {{#if hasRefSearch}}const val = searchRef.value[selectedRef.value];
       if (val && val.length > 0) {
         q.field = selectedRef.value;
         q.value = val;
       }
       {{/if}}
-      return Object.keys(q) > 0 ? q : undefined;
+      return Object.keys(q).length > 0 ? q : undefined;
   };
 
   const searchObjects = () => {
@@ -348,10 +348,10 @@
   const allRefs: Ref<Boolean>[] = [];
   const allRefsLoaded = () => allRefs.length === {{typeDef.refTypes.length}} && allRefs.filter(r => r.value === true).length === {{typeDef.refTypes.length}};
   {{#if hasRefSearch}}
-  const refSearchFields = ref([]);
+  const refSearchFields = ref([] as string[]);
   const selectedRef = ref("{{firstRefSearch.ref}}");
   const searchRef: Record<string, string> = {};{{#each refSearches}}
-  const searchRef.{{ref}} = "";
+  searchRef.{{ref}} = "";
   refSearchFields.value.push("{{ref}}");
   {{/each}}{{/if}}
   {{#each typeDef.refTypes}}const ref{{RefType}} = ref({} as MobilettoOrmFieldDefConfig);
