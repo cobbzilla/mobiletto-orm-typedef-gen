@@ -356,7 +356,7 @@
   const selectedRef = ref("{{firstRefSearch.ref}}");
   const searchRef: Ref<Record<string, string>> = ref({});{{#each refSearches}}
   searchRef.value.{{ref}} = "";
-  refSearchFields.value.push({ value: "{{ref}}", title: findMessage("{{ref}}", messages.value, ["type_", ""]) });
+  refSearchFields.value.push({ value: "{{ref}}", title: findMessage("{{ref}}", messages.value, ["typename_", ...props.labelPrefixes]) });
   {{/each}}
   const singleRefSearchField = ref(refSearchFields.value.length === 1);{{/if}}
   {{#each typeDef.refTypes}}const ref{{RefType}} = ref({} as MobilettoOrmFieldDefConfig);
