@@ -302,9 +302,9 @@
   const {{name}}TypeDefFields: Ref<MobilettoOrmFieldDefConfig[] | undefined> = ref(undefined);
   {{#if typeDef.singleton}}const findSingleton{{Name}}ServerErrors = ref({} as MobilettoOrmValidationErrors);
   {{else}}const searchQuery = () => {
-      let q: MobilettoOrmFindApiOpts = {};
+      const q: MobilettoOrmFindApiOpts = {};
       {{#if hasTextSearch}}if (searchTerms.value && searchTerms.value.trim().length > 0) q.textSearch = searchTerms.value;{{/if}}
-      {{#if hasRefSearch}}const val = searchRef.value[selectedRef.value];
+      {{#if hasRefSearch}}const val = searchRef.value[selectedRef.value as string];
       if (val && val.length > 0) {
         q.field = selectedRef.value;
         q.value = val;
@@ -350,8 +350,8 @@
   {{#if hasRefSearch}}
   const refSearchFields = ref([] as string[]);
   const selectedRef = ref("{{firstRefSearch.ref}}");
-  const searchRef: Record<string, string> = {};{{#each refSearches}}
-  searchRef.{{ref}} = "";
+  const searchRef: Ref<Record<string, string>> = ref({});{{#each refSearches}}
+  searchRef.value.{{ref}} = "";
   refSearchFields.value.push("{{ref}}");
   {{/each}}{{/if}}
   {{#each typeDef.refTypes}}const ref{{RefType}} = ref({} as MobilettoOrmFieldDefConfig);
