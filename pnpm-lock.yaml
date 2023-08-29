@@ -56,6 +56,9 @@ devDependencies:
   yup:
     specifier: ^1.2.0
     version: 1.2.0
+  zilla-util:
+    specifier: ^1.0.1
+    version: 1.0.1
 
 packages:
 
@@ -1552,4 +1555,8 @@ packages:
       tiny-case: 1.0.3
       toposort: 2.0.2
       type-fest: 2.19.0
+    dev: true
+
+  /zilla-util@1.0.1:
+    resolution: {integrity: sha512-BMCVSUERMZeez+ncDNbvlEMyD/g43+IYmHedxu0TnJTTuhjqLrU+7DW/rmzX9v/pf1ITUjflpvWvStEQC4lp+Q==}
     dev: true

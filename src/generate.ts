@@ -1,3 +1,6 @@
+import * as fs from "fs";
+import Handlebars from "handlebars";
+import { capitalize } from "zilla-util";
 import {
     isArrayType,
     MobilettoOrmError,
@@ -5,9 +8,7 @@ import {
     MobilettoOrmTypeDef,
     MobilettoOrmTypeDefConfig,
 } from "mobiletto-orm-typedef";
-import * as fs from "fs";
 
-import Handlebars from "handlebars";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -49,8 +50,6 @@ const _findDecls = (name: string, fields: MobilettoOrmFieldDefConfigs, decls: Ty
     }
     return decls;
 };
-
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 const onlyUnique = <T>(value: T, index: number, array: T[]) => array.indexOf(value) === index;
 
@@ -133,6 +132,8 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
                 .map((ref) => ({
                     ref,
                     Ref: capitalize(ref),
+                    refType: typeDef.fields[ref].ref?.refType || "?refType?",
+                    RefType: capitalize(typeDef.fields[ref].ref?.refType || "?RefType?"),
                     text: refSearch[ref] === "text",
                     select: refSearch[ref] === "select",
                     disabled: refSearch[ref] === "disabled",
