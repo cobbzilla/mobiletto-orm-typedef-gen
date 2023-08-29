@@ -81,11 +81,14 @@
                 </v-col>
               </v-row>{{#if hasRefSearch}}
               <v-row>
-                <v-col>
+                <v-col v-if="singleRefSearchField">
+                    {{{curlyOpen}}}{{{curlyOpen}}} refSearchFields[0].title {{{curlyClose}}}{{{curlyClose}}}
+                </v-col>
+                <v-col v-else>
                   <v-select
                     v-model="selectedRef"
                     :v-bind="selectedRef"
-                    :values="refSearchFields"
+                    :items="refSearchFields"
                     :full-width="false"
                     name="selectedRef"
                     class="form-control"
@@ -349,12 +352,13 @@
   const allRefs: Ref<Boolean>[] = [];
   const allRefsLoaded = () => allRefs.length === {{typeDef.refTypes.length}} && allRefs.filter(r => r.value === true).length === {{typeDef.refTypes.length}};
   {{#if hasRefSearch}}
-  const refSearchFields = ref([] as string[]);
+  const refSearchFields = ref([] as { value: string, title: string }[]);
   const selectedRef = ref("{{firstRefSearch.ref}}");
   const searchRef: Ref<Record<string, string>> = ref({});{{#each refSearches}}
   searchRef.value.{{ref}} = "";
-  refSearchFields.value.push("{{ref}}");
-  {{/each}}{{/if}}
+  refSearchFields.value.push({ value: "{{ref}}", title: findMessage("{{ref}}", messages.value, ["type_", ""]) });
+  {{/each}}
+  const singleRefSearchField = ref(refSearchFields.length === 1);{{/if}}
   {{#each typeDef.refTypes}}const ref{{RefType}} = ref({} as MobilettoOrmFieldDefConfig);
   const ref{{RefType}}Loaded = ref(false);
   allRefs.push(ref{{RefType}}Loaded);
