@@ -88,7 +88,7 @@
                   class="form-control"
                 />
               </v-col>{{#each refSearches}}
-              <v-col>{{#if text}}
+              <v-col v-show="selectedRef === '{{ref}}'">{{#if text}}
                   <v-text-field
                       v-show="selectedRef === '{{ref}}'"
                       v-model="searchRef.{{ref}}"
