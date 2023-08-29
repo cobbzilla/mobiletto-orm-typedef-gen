@@ -141,6 +141,7 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
             ctx.firstRefSearch = refSearches[0];
         }
     }
+    ctx.hasSearch = ctx.hasTextSearch || ctx.hasRefSearch;
     return ctx;
 };
 
