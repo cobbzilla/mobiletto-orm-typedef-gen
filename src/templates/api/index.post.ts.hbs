@@ -26,12 +26,15 @@ export default defineEventHandler(async (event: H3Event) => {
       if ({{name}}Repo.initialize) await {{name}}Repo.initialize();{{#if typeDef.singleton}}
       const singleton = await {{name}}Repo.safeFindById("{{typeDef.singleton}}");
       return singleton ? [ singleton ] : [];{{else}}
+      const predicate = opts.textSearch && opts.textSearch.trim().length > 0
+        ? (obj) => {{Name}}TypeDef.textMatch(obj, opts.textSearch || "")
+        : undefined;
+      const requestedOpts = opts.opts || {};
+      const searchOpts = predicate ? Object.assign({}, requestedOpts, { predicate }) : requestedOpts;
       if (opts.field && opts.value) {
-        return await {{name}}Repo.safeFindBy(opts.field, opts.value, opts.opts || {});
-      } else if (opts.textSearch && {{Name}}TypeDef.textSearchFields.length > 0) {
-        return await {{name}}Repo.find({ predicate: (obj) => {{Name}}TypeDef.textMatch(obj, opts.textSearch || "") });
+        return await {{name}}Repo.safeFindBy(opts.field, opts.value, searchOpts);
       } else {
-        return await {{name}}Repo.find(opts.opts || {});
+        return await {{name}}Repo.find(searchOpts);
       }{{/if}}{{#if typeDef.apiConfig.search.permission.admin}}
     });{{else}}{{#if typeDef.apiConfig.search.permission.owner}}
     });{{else}}{{#if typeDef.apiConfig.search.permission.session}}

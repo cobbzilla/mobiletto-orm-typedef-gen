@@ -123,6 +123,21 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
     ctx.typeName = typeDef.typeName;
     ctx.curlyOpen = "{";
     ctx.curlyClose = "}";
+    ctx.hasTextSearch = typeDef.search && typeDef.search.textSearchFields && typeDef.search.textSearchFields.length > 0;
+    if (typeDef.search && typeDef.search.refSearch) {
+        const refSearch = typeDef.search.refSearch;
+        ctx.hasRefSearch = Object.values(refSearch).filter((rs) => rs !== "disabled").length > 0;
+        if (ctx.hasRefSearch) {
+            ctx.refSearches = Object.keys(refSearch)
+                .filter((rs) => refSearch[rs] !== "disabled")
+                .map((ref) => ({
+                    ref,
+                    text: refSearch[ref] === "text",
+                    select: refSearch[ref] === "select",
+                    disabled: refSearch[ref] === "disabled",
+                }));
+        }
+    }
     return ctx;
 };
 

@@ -61,82 +61,107 @@
       <v-row v-else-if="allRefsLoaded() && {{name}}TypeDef">
         <v-col>
           <v-container>
-            <v-row v-if="({{name}}List && {{name}}List.length > 0) || searched">
-              <v-col>
-                <div>
-                  <v-form @submit.prevent="searchObjects">
-                    <div class="form-group">
-                      <v-text-field
-                        v-model="searchTerms"
-                        :label="messages.label_search"
-                        :disabled="{{name}}Store.{{name}}Busy"
-                        type="text"
-                        name="searchTerms"
+            <v-form @submit.prevent="searchObjects">
+              <v-row v-if="({{name}}List && {{name}}List.length > 0) || searched">
+                <v-col>{{#if hasTextSearch}}
+                  <div class="form-group">
+                    <v-text-field
+                      v-model="searchTerms"
+                      :label="messages.label_search"
+                      :disabled="{{name}}Store.{{name}}Busy"
+                      type="text"
+                      name="searchTerms"
+                      class="form-control"
+                      @keyup.enter="searchObjects"
+                    />
+                    <v-btn class="btn btn-primary" :disabled="{{name}}Store.{{name}}Busy" @click.stop="searchObjects">
+                      <Icon name="material-symbols:search" />
+                    </v-btn>
+                  </div>{{/if}}
+                </v-col>
+              </v-row>{{#if hasRefSearch}}{{#each refSearches}}
+              <v-row>{{#if text}}
+                <v-col>
+                  <v-text-field
+                      v-model="searchRef_{{ref}}"
+                      :label="fieldMessages[{{ref}}]"
+                      :disabled="{{name}}Store.{{name}}Busy"
+                      type="text"
+                      name="searchRef_{{ref}}"
+                      class="form-control"
+                      @keyup.enter="searchObjects"
+                  />
+                </v-col>{{/if}}{{#if select}}
+                <v-col>
+                    <v-select
+                        v-model="searchRef_{{ref}}"
+                        :v-bind="searchRef_{{ref}}"
+                        :label="fieldMessages[{{ref}}]"
+                        :items="ref{{RefType}}.items"
+                        item-value="value"
+                        item-title="label"
+                        :full-width="false"
+                        name="searchRef_{{ref}}"
                         class="form-control"
-                        @keyup.enter="searchObjects"
-                      />
-                      <v-btn class="btn btn-primary" :disabled="{{name}}Store.{{name}}Busy" @click.stop="searchObjects">
-                        <Icon name="material-symbols:search" />
-                      </v-btn>
-                    </div>
-                  </v-form>
-                </div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <table v-if="{{name}}List && {{name}}List.length > 0">
-                  <thead>
-                  <tr>
-                    <th v-for="(tableField, tableFieldIndex) in tableFields" :key="tableFieldIndex">
-                      {{{curlyOpen}}}{{{curlyOpen}}} tableFieldMessages[tableField] {{{curlyClose}}}{{{curlyClose}}}
-                    </th>
-                    <th v-if="Object.keys(actionConfigs).length > 0">
-                      <Icon name="material-symbols:target" />
-                    </th>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr v-for="(obj, objIndex) in {{name}}List" :key="objIndex">
-                    <td v-for="(fieldName, fieldIndex) in tableFields" :key="fieldIndex">
-                      <OrmFieldDisplay v-if="{{name}}TypeDef.fields[fieldName] || fieldName.startsWith('_meta')" :field="fieldName.startsWith('_meta') ? metaField(fieldName) : {{name}}TypeDef.fields[fieldName]" :value="deepGet(obj, fieldName)" />
-                    </td>
-                    <td v-if="Object.keys(actionConfigs).length > 0">
-                      <div v-for="(action, actionIndex) in Object.keys(actionConfigs)" :key="actionIndex">
-                        <NuxtLink
-                          v-if="actionEnabled(obj, action)"
-                          :to="{ path: `${actionConfig(action).path}/${deepGet(obj, {{name}}TypeDef.idField(obj) as string)}` }"
-                        >
-                          <v-btn>
-                            {{{curlyOpen}}}{{{curlyOpen}}} messages[actionConfig(action).message] {{{curlyClose}}}{{{curlyClose}}}
-                          </v-btn>
-                        </NuxtLink>
-                      </div>
-                    </td>
-                    <td>
-                      <v-btn v-if="canEdit(obj, {{name}}List)" :disabled="{{name}}Store.{{name}}Busy" @click.stop="showEditOrm(obj)">
-                        <Icon name="material-symbols:edit" />
-                      </v-btn>
-                    </td>
-                    <td>
-                      <v-btn v-if="canDelete(obj, {{name}}List)" :disabled="{{name}}Store.{{name}}Busy" @click.stop="delObject(obj)">
-                        <Icon name="material-symbols:delete" />
-                      </v-btn>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </v-col>
-            </v-row>
-            <v-row v-if="canAdd()">
+                        @update:model-value="searchObjects"
+                    />
+                </v-col>{{/if}}
+              </v-row>{{/each}}{{/if}}
+              <v-row>
+                <v-col>
+                  <table v-if="{{name}}List && {{name}}List.length > 0">
+                    <thead>
+                    <tr>
+                      <th v-for="(tableField, tableFieldIndex) in tableFields" :key="tableFieldIndex">
+                        {{{curlyOpen}}}{{{curlyOpen}}} fieldMessages[tableField] {{{curlyClose}}}{{{curlyClose}}}
+                      </th>
+                      <th v-if="Object.keys(actionConfigs).length > 0">
+                        <Icon name="material-symbols:target" />
+                      </th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(obj, objIndex) in {{name}}List" :key="objIndex">
+                      <td v-for="(fieldName, fieldIndex) in tableFields" :key="fieldIndex">
+                        <OrmFieldDisplay v-if="{{name}}TypeDef.fields[fieldName] || fieldName.startsWith('_meta')" :field="fieldName.startsWith('_meta') ? metaField(fieldName) : {{name}}TypeDef.fields[fieldName]" :value="deepGet(obj, fieldName)" />
+                      </td>
+                      <td v-if="Object.keys(actionConfigs).length > 0">
+                        <div v-for="(action, actionIndex) in Object.keys(actionConfigs)" :key="actionIndex">
+                          <NuxtLink
+                            v-if="actionEnabled(obj, action)"
+                            :to="{ path: `${actionConfig(action).path}/${deepGet(obj, {{name}}TypeDef.idField(obj) as string)}` }"
+                          >
+                            <v-btn>
+                              {{{curlyOpen}}}{{{curlyOpen}}} messages[actionConfig(action).message] {{{curlyClose}}}{{{curlyClose}}}
+                            </v-btn>
+                          </NuxtLink>
+                        </div>
+                      </td>
+                      <td>
+                        <v-btn v-if="canEdit(obj, {{name}}List)" :disabled="{{name}}Store.{{name}}Busy" @click.stop="showEditOrm(obj)">
+                          <Icon name="material-symbols:edit" />
+                        </v-btn>
+                      </td>
+                      <td>
+                        <v-btn v-if="canDelete(obj, {{name}}List)" :disabled="{{name}}Store.{{name}}Busy" @click.stop="delObject(obj)">
+                          <Icon name="material-symbols:delete" />
+                        </v-btn>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </v-col>
+              </v-row>
+              <v-row v-if="canAdd()">
               <v-col>
                 <v-btn class="btn btn-primary" :disabled="{{name}}Store.{{name}}Busy" @click.stop="showAddOrm">
                   <Icon name="material-symbols:add" />
                 </v-btn>
               </v-col>
             </v-row>
+            </v-form>
           </v-container>
         </v-col>
       </v-row>{{/unless}}
@@ -247,13 +272,17 @@
 
   const tableFields: Ref<string[]> = ref([]);
 
-  const tableFieldMessages: Ref<Record<string, string>> = ref({});
-  const initTableFieldMessages = (tableFields: string[]) => {
-      const defaultTableFieldMessages: Record<string, string> = {};
+  const fieldMessages: Ref<Record<string, string>> = ref({});
+  const initFieldMessages = (tableFields: string[]) => {
+      const defaultFieldMessages: Record<string, string> = {};
       tableFields.forEach((f: string) => {
-        defaultTableFieldMessages[f] = findMessage(normalizeMsg(f), messages.value, props.labelPrefixes);
-      });
-      tableFieldMessages.value = defaultTableFieldMessages;
+        defaultFieldMessages[f] = findMessage(normalizeMsg(f), messages.value, props.labelPrefixes);
+      });{{#each fieldNamesArray}}
+      if (!tableFields.includes("{{this}}")) {
+        defaultFieldMessages["{{this}}"] = findMessage(normalizeMsg("{{this}}"), messages.value, props.labelPrefixes);
+      }
+      {{/each}}
+      fieldMessages.value = defaultFieldMessages;
   };{{/unless}}
 
   const {{name}}Store = use{{Name}}Store();
@@ -292,7 +321,7 @@
       : {{name}}TypeDef.value.primary
         ? [{{name}}TypeDef.value.primary, "ctime", "mtime"]
         : ["id", "ctime", "mtime"];
-    initTableFieldMessages(tableFields.value);{{/unless}}
+    initFieldMessages(tableFields.value);{{/unless}}
   }
 
   const allRefs: Ref<Boolean>[] = [];
@@ -335,7 +364,7 @@
     : {{name}}TypeDef.value.primary
       ? [{{name}}TypeDef.value.primary, "ctime", "mtime"]
       : ["id", "ctime", "mtime"];
-  initTableFieldMessages(tableFields.value);{{/unless}}
+  initFieldMessages(tableFields.value);{{/unless}}
   {{/if}}
 
   const onAddUpdated = (update: { field: string; value: any }) => {
