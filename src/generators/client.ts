@@ -77,11 +77,12 @@ export const generateAdmin = (
     typeDef: MobilettoOrmTypeDef | MobilettoOrmTypeDefConfig,
     typeDefPackage: string,
     opts?: GenerateOptions,
+    utilsImportPath?: string,
     adminHelperPath?: string,
     sessionStoreImport?: string,
     localeMessages?: string,
-    utilsImportPath?: string,
 ): string => {
+    utilsImportPath ||= `~/utils/model`;
     adminHelperPath ||= `~/utils/model/adminHelper`;
     sessionStoreImport ||= `~/stores/sessionStore`;
     localeMessages ||= "localeMessages";
