@@ -379,7 +379,7 @@
         title: s.name,
         rawLabel: true,
       }));{{#each fieldPaths}}
-      {{name}}TypeDef.fields.{{this}}.items = ref{{../RefType}}.value.items;{{/each}}
+      {{../name}}TypeDef.fields.{{this}}.items = ref{{../RefType}}.value.items;{{/each}}
       ref{{RefType}}Loaded.value = true;
       if (allRefsLoaded()) {
         initTypeDef()
