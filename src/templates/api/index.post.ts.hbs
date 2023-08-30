@@ -14,7 +14,8 @@ export default defineEventHandler(async (event: H3Event) => {
     return await requireAccount(event, "{{name}}.search", async (event: H3Event, session) => {{{curlyOpen}}}{{/if}}{{/if}}{{/if}}
       const opts: MobilettoOrmFindApiOpts = {{#if typeDef.singleton}}{}; // {{name}} is a singleton, options make no sense{{else}}(await readBody(event)) || {};{{#if typeDef.apiConfig.search.hasValidate}}{{/if}}
       if (typeof {{Name}}TypeDef.apiConfig.search?.validate === "function") {
-        const validated = await {{Name}}TypeDef.apiConfig.search.validate(account, null, opts);
+        const caller = (typeof account !== "undefined") ? account : undefined;
+        const validated = await {{Name}}TypeDef.apiConfig.search.validate(caller, null, opts);
         if (validated === true || (typeof validated === "object" && Object.keys(validated).length === 0)) {
           // successfully validated
         } else if (typeof validated === "object" && Object.keys(validated).length > 0) {
