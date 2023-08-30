@@ -361,9 +361,9 @@
   const singleRefSearchField = ref(refSearchFields.value.length === 1);{{/if}}
   {{#each typeDef.refTypes}}const ref{{RefType}} = ref({} as MobilettoOrmFieldDefConfig);
   const ref{{RefType}}Loaded = ref(false);
-  allRefs.push(ref{{RefType}}Loaded);
+  allRefs.push(ref{{RefType}}Loaded);{{#unless recursive}}
   const {{refType}}Store = use{{RefType}}Store();
-  const { {{refType}}List } = storeToRefs({{refType}}Store);
+  const { {{refType}}List } = storeToRefs({{refType}}Store);{{/unless}}
 
   watch({{refType}}List, (newList) => {
     if (newList && newList.length === 0) {
@@ -555,8 +555,8 @@
   });{{/if}}
 
   const initRefs = async () => {
-    {{#if typeDef.refTypes}}const refSearches: Promise<{{RefType}}[]>[] = [];{{#each typeDef.refTypes}}
-    refSearches.push({{refType}}Store.search());{{/each}}
+    {{#if typeDef.refTypes}}const refSearches: Promise<{{RefType}}[]>[] = [];{{#each typeDef.refTypes}}{{#unless recursive}}
+    refSearches.push({{refType}}Store.search());{{/unless}}{{/each}}
     await Promise.all(refSearches);
     {{/if}}{{#if typeDef.singleton}}return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{/if}}
   };{{#if typeDef.singleton}}
