@@ -382,7 +382,7 @@
       {{../../Name}}TypeDef.fields.{{this}}.items = ref{{../RefType}}.value.items;{{/each}}
       ref{{RefType}}Loaded.value = true;
       if (allRefsLoaded()) {
-        initTypeDef()
+        initTypeDef();
       }
     }
   });{{/each}}{{else}}
