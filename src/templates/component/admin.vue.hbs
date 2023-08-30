@@ -148,7 +148,14 @@
                         v-if="actionEnabled(obj, action)"
                         :to="{ path: `${actionConfig(action).path}/${deepGet(obj, {{name}}TypeDef.idField(obj) as string)}` }"
                         >
-                        <v-btn>
+                        <v-btn v-if="actionConfig(action).icon">
+                          <Icon name="{{{curlyOpen}}}{{{curlyOpen}}}actionConfig(action).icon{{{curlyClose}}}{{{curlyClose}}}">
+                            <v-tooltip activator="parent" location="top">
+                              {{{curlyOpen}}}{{{curlyOpen}}} messages[actionConfig(action).message] {{{curlyClose}}}{{{curlyClose}}}
+                            </v-tooltip>
+                          </Icon>
+                        </v-btn>
+                        <v-btn v-else>
                           {{{curlyOpen}}}{{{curlyOpen}}} messages[actionConfig(action).message] {{{curlyClose}}}{{{curlyClose}}}
                         </v-btn>
                       </NuxtLink>
