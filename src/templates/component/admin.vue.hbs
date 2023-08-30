@@ -149,11 +149,7 @@
                         :to="{ path: `${actionConfig(action).path}/${deepGet(obj, {{name}}TypeDef.idField(obj) as string)}` }"
                         >
                         <v-btn v-if="actionConfig(action).icon">
-                          <Icon :name="actionConfig(action).icon">
-                            <v-tooltip activator="parent" location="top">
-                              {{{curlyOpen}}}{{{curlyOpen}}} messages[actionConfig(action).message] {{{curlyClose}}}{{{curlyClose}}}
-                            </v-tooltip>
-                          </Icon>
+                          <Icon :name="actionConfig(action).icon" :tooltip="messages[actionConfig(action).message]" />
                         </v-btn>
                         <v-btn v-else>
                           {{{curlyOpen}}}{{{curlyOpen}}} messages[actionConfig(action).message] {{{curlyClose}}}{{{curlyClose}}}
