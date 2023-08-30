@@ -3,6 +3,7 @@
 {{{header}}}{{/if}}{{/if}}
 
 import { H3Event } from "h3";
+import { MobilettoOrmObject } from "mobiletto-orm-typedef";
 import { {{Name}}TypeDef } from "{{typeDefPackage}}";
 import { MobilettoOrmFindApiOpts } from "{{utilsImportPath}}/storeHelper.ts";
 
@@ -27,7 +28,7 @@ export default defineEventHandler(async (event: H3Event) => {
       const singleton = await {{name}}Repo.safeFindById("{{typeDef.singleton}}");
       return singleton ? [ singleton ] : [];{{else}}
       const predicate = opts.textSearch && opts.textSearch.trim().length > 0
-        ? (obj) => {{Name}}TypeDef.textMatch(obj, opts.textSearch || "")
+        ? (obj: MobilettoOrmObject) => {{Name}}TypeDef.textMatch(obj, opts.textSearch || "")
         : undefined;
       const requestedOpts = opts.opts || {};
       const searchOpts = predicate ? Object.assign({}, requestedOpts, { predicate }) : requestedOpts;

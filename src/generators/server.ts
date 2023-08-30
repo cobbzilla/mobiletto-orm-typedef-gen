@@ -80,6 +80,7 @@ export const generateApi = (
     utilsImportPath?: string,
 ): Record<string, string> => {
     opts ||= {};
+    utilsImportPath ||= "~/utils/model";
     if (opts.outfile) {
         const stat = fs.statSync(opts.outfile, { throwIfNoEntry: false });
         if (stat && !stat.isDirectory()) {
