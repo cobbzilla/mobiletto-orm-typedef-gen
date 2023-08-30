@@ -140,15 +140,15 @@
                 <tbody>
                 <tr v-for="(obj, objIndex) in {{name}}List" :key="objIndex">
                   <td v-for="(fieldName, fieldIndex) in tableFields" :key="fieldIndex">
-                  <OrmFieldDisplay v-if="{{name}}TypeDef.fields[fieldName] || fieldName.startsWith('_meta')" :field="fieldName.startsWith('_meta') ? metaField(fieldName) : {{name}}TypeDef.fields[fieldName]" :value="deepGet(obj, fieldName)" />
+                    <OrmFieldDisplay v-if="{{name}}TypeDef.fields[fieldName] || fieldName.startsWith('_meta')" :field="fieldName.startsWith('_meta') ? metaField(fieldName) : {{name}}TypeDef.fields[fieldName]" :value="deepGet(obj, fieldName)" />
                   </td>
                   <td v-if="Object.keys(actionConfigs).length > 0">
-                  <div v-for="(action, actionIndex) in Object.keys(actionConfigs)" :key="actionIndex">
-                  <NuxtLink
-                    v-if="actionEnabled(obj, action)"
-                    :to="{ path: `${actionConfig(action).path}/${deepGet(obj, {{name}}TypeDef.idField(obj) as string)}` }"
-                    >
-                      <v-btn>
+                    <div v-for="(action, actionIndex) in Object.keys(actionConfigs)" :key="actionIndex">
+                      <NuxtLink
+                        v-if="actionEnabled(obj, action)"
+                        :to="{ path: `${actionConfig(action).path}/${deepGet(obj, {{name}}TypeDef.idField(obj) as string)}` }"
+                        >
+                        <v-btn>
                           {{{curlyOpen}}}{{{curlyOpen}}} messages[actionConfig(action).message] {{{curlyClose}}}{{{curlyClose}}}
                         </v-btn>
                       </NuxtLink>
