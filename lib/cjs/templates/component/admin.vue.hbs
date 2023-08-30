@@ -248,11 +248,11 @@
   );
 
   const emit = defineEmits<{
-    added: [obj: {{Name}}Type];
+    added: [obj: MobilettoOrmObject];
     addCanceled: [];
-    edited: [obj: {{Name}}Type];
-    editCanceled: [obj: {{Name}}Type];{{#unless typeDef.singleton}}
-    deleted: [obj: {{Name}}Type];{{/unless}}
+    edited: [obj: MobilettoOrmObject];
+    editCanceled: [obj: MobilettoOrmObject];{{#unless typeDef.singleton}}
+    deleted: [obj: MobilettoOrmObject];{{/unless}}
   }>();
 
   const labelPfx: Ref<string[]> = ref(["admin_label_{{name}}_", "label_", ""]);
@@ -512,7 +512,7 @@
     return true;
   };
   const delConfirmCount = ref(0);
-  const deletingObject = ref(null);
+  const deletingObject: Ref<MobilettoOrmObject | null> = ref(null);
   const delObject = (obj: MobilettoOrmObject) => {
       if (props.deleteConfirmationMessage && props.deleteConfirmationMessage.length > 0 && delConfirmCount.value < props.maxDeleteConfirmations) {
           const confirmationMessage = parseMessage(props.deleteConfirmationMessage, messages.value, {
@@ -555,7 +555,7 @@
   });{{/if}}
 
   const initRefs = async () => {
-    {{#if typeDef.refTypes}}const refSearches: Promise<{{RefType}}[]>[] = [];{{#each typeDef.refTypes}}{{#unless recursive}}
+    {{#if typeDef.refTypes}}const refSearches: Promise<MobilettoOrmObject[]>[] = [];{{#each typeDef.refTypes}}{{#unless recursive}}
     refSearches.push({{refType}}Store.search());{{/unless}}{{/each}}
     await Promise.all(refSearches);
     {{/if}}{{#if typeDef.singleton}}return await {{name}}Store.lookup(findSingleton{{Name}}ServerErrors);{{/if}}
