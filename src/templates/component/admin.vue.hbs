@@ -202,16 +202,10 @@
   import { useSessionStore } from "{{sessionStoreImport}}";
   import { use{{Name}}Store } from "~/stores/model/{{name}}Store";{{#if typeDef.refTypes}}{{#each typeDef.refTypes}}{{#unless recursive}}
   import { use{{RefType}}Store } from "~/stores/model/{{refType}}Store";{{/unless}}{{/each}}{{/if}}
-  import { deepUpdate } from "{{adminHelperPath}}";
+  import { ActionConfig, deepUpdate } from "{{adminHelperPath}}";
   import { MobilettoOrmFindApiOpts } from "{{utilsImportPath}}/storeHelper";
   const successSnackbar = ref("");
   const errorSnackbar = ref("");
-  {{#unless typeDef.singleton}}
-  type ActionConfig = {
-    path: string;
-    message: string;
-    when: (obj: MobilettoOrmObject) => boolean;
-  };{{/unless}}
   const props = withDefaults(
     defineProps<{
       labelPrefixes: string[];

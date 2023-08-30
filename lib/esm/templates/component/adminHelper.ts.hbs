@@ -1,8 +1,14 @@
 {{#if disclaimer}}// {{{ disclaimer }}}{{#if header}}
 {{{header}}}{{/if}}{{/if}}
 
-import { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
+import { MobilettoOrmObject, MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
 import { errMatch, errMatchStart, normalizeMsg, fieldErrorMessage } from "hokey-runtime";
+
+export type ActionConfig = {
+    path: string;
+    message: string;
+    when: (obj: MobilettoOrmObject) => boolean;
+};
 
 export const typeDefFieldErrorMessage = (
     field: string | string[],
