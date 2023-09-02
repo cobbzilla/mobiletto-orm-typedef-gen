@@ -146,7 +146,7 @@
                     <div v-for="(action, actionIndex) in Object.keys(actionConfigs)" :key="actionIndex">
                       <NuxtLink
                         v-if="actionEnabled(obj, action)"
-                        :to="{ path: `${actionConfig(action).path}/${deepGet(obj, {{name}}TypeDef.idField(obj) as string)}` }"
+                        :to="{ path: `${actionConfig(action).path.replace(/\[id]/g, deepGet(obj, {{name}}TypeDef.idField(obj) as string))}` }"
                         >
                         <v-btn v-if="actionConfig(action).icon">
                           <Icon :name="actionConfig(action).icon" :tooltip="messages[actionConfig(action).message]" />
