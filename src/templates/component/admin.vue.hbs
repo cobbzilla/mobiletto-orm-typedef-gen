@@ -542,7 +542,10 @@
     }
   });
   watch({{name}}List, (newList) => {
-    if (newList && Array.isArray(newList) && newList.length === 0 && searchTerms.value && searchTerms.value.length === 0) {
+    if (newList && Array.isArray(newList) &&
+        (!newList.length || newList.length === 0) &&
+        (!searchTerms.value || !searchTerms.value.length || (searchTerms.value && searchTerms.value.length === 0))
+    ) {
       if (navigating.value) return;
       navigating.value = true;
       navigateTo("/admin/{{name}}/setup");
