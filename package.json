@@ -1,6 +1,6 @@
 {
   "name": "mobiletto-orm-typedef-gen",
-  "version": "2.4.12",
+  "version": "2.4.13",
   "type": "module",
   "description": "generate various files based on mobiletto-orm-typedef definitions",
   "keywords": [
@@ -52,13 +52,13 @@
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "handlebars": "^4.7.7",
-    "hokey-runtime": "^1.0.4",
-    "mobiletto-orm-typedef": "^2.4.16",
+    "hokey-runtime": "^1.0.10",
+    "mobiletto-orm-typedef": "^2.4.19",
     "mocha": "^10.2.0",
     "prettier": "^3.0.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^5.1.6",
     "yup": "^1.2.0",
-    "zilla-util": "^1.0.1"
+    "zilla-util": "^1.0.13"
   }
 }

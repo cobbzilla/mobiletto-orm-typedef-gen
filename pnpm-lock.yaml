@@ -36,11 +36,11 @@ devDependencies:
     specifier: ^4.7.7
     version: 4.7.7
   hokey-runtime:
-    specifier: ^1.0.4
-    version: 1.0.4
+    specifier: ^1.0.10
+    version: 1.0.10
   mobiletto-orm-typedef:
-    specifier: ^2.4.16
-    version: 2.4.16
+    specifier: ^2.4.19
+    version: 2.4.19
   mocha:
     specifier: ^10.2.0
     version: 10.2.0
@@ -57,8 +57,8 @@ devDependencies:
     specifier: ^1.2.0
     version: 1.2.0
   zilla-util:
-    specifier: ^1.0.1
-    version: 1.0.1
+    specifier: ^1.0.13
+    version: 1.0.13
 
 packages:
 
@@ -845,8 +845,8 @@ packages:
     hasBin: true
     dev: true
 
-  /hokey-runtime@1.0.4:
-    resolution: {integrity: sha512-1qc1B1lq17cesMvlE1jMnR3i+Wb3R/IvNLT9bsVLerGRc/uV0XbadN7KBjVQ9Miq2tKLbiVurIvR+Q0iiFczpQ==}
+  /hokey-runtime@1.0.10:
+    resolution: {integrity: sha512-dKvNlyUW9m4/I0qO/zCi/EsqaT14tSfCz+tTM+1uIiVZmVoBqWa6PbLiuLY4czkWEFu1rKBEQisBQslh6ai0ig==}
     dev: true
 
   /ignore@5.2.4:
@@ -1035,11 +1035,11 @@ packages:
     hasBin: true
     dev: true
 
-  /mobiletto-orm-typedef@2.4.16:
-    resolution: {integrity: sha512-yBaYtaQpNCO9aY8t56+QVlTBtcFDaf9L3/4bGTyus2dsLUEe9iv9Ahs3KpOa6saRhDxmo5pOylBTBwqu5YaU+A==}
+  /mobiletto-orm-typedef@2.4.19:
+    resolution: {integrity: sha512-8vDrhRpgtiEeASfebOyY3I9UK814XzMB0cxyHLFayVTbV153kBVrroO56Gp3mEotmZY9B3/Hdktl3pjZN8RBcg==}
     dependencies:
       shasum: 1.0.2
-      uuid: 9.0.0
+      uuid: 9.0.1
     dev: true
 
   /mocha@10.2.0:
@@ -1462,8 +1462,8 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
 
-  /uuid@9.0.0:
-    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+  /uuid@9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
     dev: true
 
@@ -1557,6 +1557,6 @@ packages:
       type-fest: 2.19.0
     dev: true
 
-  /zilla-util@1.0.1:
-    resolution: {integrity: sha512-BMCVSUERMZeez+ncDNbvlEMyD/g43+IYmHedxu0TnJTTuhjqLrU+7DW/rmzX9v/pf1ITUjflpvWvStEQC4lp+Q==}
+  /zilla-util@1.0.13:
+    resolution: {integrity: sha512-hqBUZJSe4sy5fpYD2XVKL+rliEeZnSALbwBQjwyN4JL1U89Vsk/4+5KtAlSHTdSze0cQnFAYvlpl+tpjbXV2bQ==}
     dev: true
