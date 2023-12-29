@@ -39,8 +39,8 @@ devDependencies:
     specifier: ^1.0.10
     version: 1.0.10
   mobiletto-orm-typedef:
-    specifier: ^2.4.19
-    version: 2.4.19
+    specifier: ^2.4.23
+    version: 2.4.23
   mocha:
     specifier: ^10.2.0
     version: 10.2.0
@@ -949,16 +949,6 @@ packages:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
     dev: true
 
-  /json-stable-stringify@0.0.1:
-    resolution: {integrity: sha512-nKtD/Qxm7tWdZqJoldEC7fF0S41v0mWbeaXG3637stOWfyGxTgWTYE2wtfKmjzpvxv2MA2xzxsXOIiwUpkX6Qw==}
-    dependencies:
-      jsonify: 0.0.1
-    dev: true
-
-  /jsonify@0.0.1:
-    resolution: {integrity: sha512-2/Ki0GcmuqSrgFyelQq9M05y7PS0mEwuIzrf3f1fPqkVDVRvZrPZtVSMHxdgo8Aq0sxAOb/cr2aqqA3LeWHVPg==}
-    dev: true
-
   /levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
@@ -1035,11 +1025,11 @@ packages:
     hasBin: true
     dev: true
 
-  /mobiletto-orm-typedef@2.4.19:
-    resolution: {integrity: sha512-8vDrhRpgtiEeASfebOyY3I9UK814XzMB0cxyHLFayVTbV153kBVrroO56Gp3mEotmZY9B3/Hdktl3pjZN8RBcg==}
+  /mobiletto-orm-typedef@2.4.23:
+    resolution: {integrity: sha512-OmttOE1/8bUbezZUUQgMqHNqP3d1VQK0WhnZvrSKM0MXq0YsWVj9rijG/ew8+S+cxeDmytgAcJFFh94ANEFzQw==}
     dependencies:
-      shasum: 1.0.2
       uuid: 9.0.1
+      zilla-util: 1.0.15
     dev: true
 
   /mocha@10.2.0:
@@ -1286,21 +1276,6 @@ packages:
     resolution: {integrity: sha512-Qr3TosvguFt8ePWqsvRfrKyQXIiW+nGbYpy8XK24NQHE83caxWt+mIymTT19DGFbNWNLfEwsrkSmN64lVWB9ag==}
     dependencies:
       randombytes: 2.1.0
-    dev: true
-
-  /sha.js@2.4.11:
-    resolution: {integrity: sha512-QMEp5B7cftE7APOjk5Y6xgrbWu+WkLVQwk8JNjZ8nKRciZaByEW6MubieAiToS7+dwvrjGhH8jRXz3MVd0AYqQ==}
-    hasBin: true
-    dependencies:
-      inherits: 2.0.4
-      safe-buffer: 5.2.1
-    dev: true
-
-  /shasum@1.0.2:
-    resolution: {integrity: sha512-UTzHm/+AzKfO9RgPgRpDIuMSNie1ubXRaljjlhFMNGYoG7z+rm9AHLPMf70R7887xboDH9Q+5YQbWKObFHEAtw==}
-    dependencies:
-      json-stable-stringify: 0.0.1
-      sha.js: 2.4.11
     dev: true
 
   /shebang-command@2.0.0:
@@ -1559,4 +1534,8 @@ packages:
 
   /zilla-util@1.0.13:
     resolution: {integrity: sha512-hqBUZJSe4sy5fpYD2XVKL+rliEeZnSALbwBQjwyN4JL1U89Vsk/4+5KtAlSHTdSze0cQnFAYvlpl+tpjbXV2bQ==}
+    dev: true
+
+  /zilla-util@1.0.15:
+    resolution: {integrity: sha512-007ag3Np+qp1gI4CiFqwYoIiJR9xUhGtGn1AjRUg+VgAY7f+U10qkwAXWckZ0S/F8gnzMRgAK1yiC9I6HBoDkQ==}
     dev: true
