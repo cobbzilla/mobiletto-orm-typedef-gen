@@ -1,10 +1,10 @@
 {{#if disclaimer}}// {{{ disclaimer }}}{{#if header}}
 {{{header}}}{{/if}}{{/if}}
 
-import { Ref } from "vue";
+import { type Ref } from "vue";
 import { defineStore } from "pinia";
-import { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
-import { {{Name}}Type } from "{{typeDefPackage}}";
+import { type MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
+import { type {{Name}}Type } from "{{typeDefPackage}}";
 import { {{name}}Service } from "{{servicesImportPath}}/{{name}}Service";
 
 export const use{{Name}}Store = defineStore("{{name}}", {

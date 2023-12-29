@@ -1,12 +1,12 @@
 {{#if disclaimer}}// {{{ disclaimer }}}{{#if header}}
 {{{header}}}{{/if}}{{/if}}
 
-import { Ref } from "vue";
+import { type Ref } from "vue";
 import { defineStore } from "pinia";
-import { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
-import { {{Name}}Type, {{Name}}TypeDef } from "{{typeDefPackage}}";
+import { type MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
+import { type {{Name}}Type, {{Name}}TypeDef } from "{{typeDefPackage}}";
 import { {{name}}Service } from "{{servicesImportPath}}/{{name}}Service";
-import { MobilettoOrmFindApiOpts, updateOrmList } from "{{utilsImportPath}}/storeHelper.js";
+import { type MobilettoOrmFindApiOpts, updateOrmList } from "{{utilsImportPath}}/storeHelper.js";
 
 const updateList = (list: {{Name}}Type[] | null, id: string, opts?: { object?: {{Name}}Type; remove?: boolean }) => {
   return updateOrmList<{{Name}}Type>({{Name}}TypeDef, list, id, opts);

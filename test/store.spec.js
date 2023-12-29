@@ -23,12 +23,12 @@ describe("Pinia store builder test", async () => {
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
                 "\n" +
                 "\n" +
-                'import { Ref } from "vue";\n' +
+                'import { type Ref } from "vue";\n' +
                 'import { defineStore } from "pinia";\n' +
-                'import { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";\n' +
-                `import { ${typeDef.typeName}Type, ${typeDef.typeName}TypeDef } from "mobiletto-orm-typedef-gen";\n` +
+                'import { type MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";\n' +
+                `import { type ${typeDef.typeName}Type, ${typeDef.typeName}TypeDef } from "mobiletto-orm-typedef-gen";\n` +
                 `import { ${typeDef.typeName}Service } from "~/utils/services/model/${typeDef.typeName}Service";\n` +
-                'import { MobilettoOrmFindApiOpts, updateOrmList } from "~/utils/model/storeHelper.js";\n' +
+                'import { type MobilettoOrmFindApiOpts, updateOrmList } from "~/utils/model/storeHelper.js";\n' +
                 "\n" +
                 `const updateList = (list: ${typeDef.typeName}Type[] | null, id: string, opts?: { object?: ${typeDef.typeName}Type; remove?: boolean }) => {\n` +
                 `  return updateOrmList<${typeDef.typeName}Type>(${typeDef.typeName}TypeDef, list, id, opts);\n` +
@@ -123,7 +123,7 @@ describe("Pinia store builder test", async () => {
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
                 "\n" +
                 "\n" +
-                'import { MobilettoOrmObject, MobilettoOrmTypeDef } from "mobiletto-orm-typedef";\n' +
+                'import { type MobilettoOrmObject, MobilettoOrmTypeDef } from "mobiletto-orm-typedef";\n' +
                 "\n" +
                 "export type MobilettoOrmFindApiOpts = {\n" +
                 "    field?: string;\n" +
