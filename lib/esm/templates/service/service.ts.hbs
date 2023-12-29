@@ -5,7 +5,7 @@ import { type Ref } from "vue";
 import type {
   MobilettoOrmObject,
   MobilettoOrmPurgeResults,
-  MobilettoOrmValidationErrors
+  MobilettoOrmValidationErrors,
 } from "mobiletto-orm-typedef";
 import { type {{ Name }}Type, {{ Name }}TypeDef } from "{{typeDefPackage}}";
 import * as a from "{{utilsPath}}/serviceHelper.js";
@@ -23,7 +23,7 @@ function search{{ Name }}(
   query?: MobilettoOrmFindApiOpts,
 ): Promise<{{ Name }}Type[]> {
   return $fetch("/api/model/{{ name }}", a.authPostJson(query)).then(
-    a.handleJsonResponse<{{ Name }}Type[]>
+    a.handleJsonResponse<{{ Name }}Type[]>,
   );
 }
 
@@ -63,7 +63,7 @@ function delete{{ Name }}(
 ): Promise<MobilettoOrmObject | MobilettoOrmPurgeResults> {
   return $fetch(
     `/api/model/{{ name }}/${id}/${purge ? `?purge=${purge}` : ""}`,
-    a.authDelete()
+    a.authDelete(),
   )
     .then(a.handleJsonResponse<MobilettoOrmObject | MobilettoOrmPurgeResults>)
     .catch(a.handleErrors(serverErrors)) as Promise<{{Name}}Type>;
