@@ -1,7 +1,8 @@
 {{#if disclaimer}}// {{{ disclaimer }}}{{#if header}}
 {{{header}}}{{/if}}{{/if}}
 
-import { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
+import type { H3Error } from "h3";
+import type { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
 import { {{sessionHeader}} } from "{{sessionHeaderImport}}";
 import { {{sessionCookie}} } from "{{sessionCookieImport}}";
 
@@ -81,7 +82,7 @@ export function handleJsonResponse<T>(response: Response): Promise<T> {
   }
 }
 
-export const handleErrors = (serverErrors?: Ref<MobilettoOrmValidationErrors>) => (e) => {
+export const handleErrors = (serverErrors?: Ref<MobilettoOrmValidationErrors>) => (e: H3Error) => {
   if (!e.statusCode || !serverErrors) throw e;
   if (e.statusCode === 403) {
     serverErrors.value.global = ["forbidden"];

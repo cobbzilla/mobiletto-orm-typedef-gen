@@ -23,14 +23,15 @@ describe("API client service builder test", async () => {
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
                 "\n" +
                 "\n" +
-                'import { Ref } from "vue";\n' +
-                "import {\n" +
+                'import { type Ref } from "vue";\n' +
+                "import type {\n" +
                 "  MobilettoOrmObject,\n" +
                 "  MobilettoOrmPurgeResults,\n" +
                 "  MobilettoOrmValidationErrors\n" +
                 '} from "mobiletto-orm-typedef";\n' +
-                `import { ${typeDef.typeName}Type, ${typeDef.typeName}TypeDef } from "mobiletto-orm-typedef-gen";\n` +
+                `import { type ${typeDef.typeName}Type, ${typeDef.typeName}TypeDef } from "mobiletto-orm-typedef-gen";\n` +
                 'import * as a from "~/utils/model/serviceHelper.js";\n' +
+                'import type { MobilettoOrmFindApiOpts } from "~/utils/model/storeHelper.js";\n' +
                 "\n" +
                 `export const ${typeDef.typeName}Service = {\n` +
                 `  search${typeDef.typeName},\n` +
@@ -110,7 +111,8 @@ describe("API client service builder test", async () => {
                 STANDARD_AUTOGEN_FILE_DISCLAIMER +
                 "\n" +
                 "\n" +
-                'import { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";\n' +
+                'import type { H3Error } from "h3";\n' +
+                'import type { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";\n' +
                 'import { SESSION_HEADER } from "~/utils/auth";\n' +
                 'import { sessionCookie } from "~/utils/auth";\n' +
                 "\n" +
@@ -190,7 +192,7 @@ describe("API client service builder test", async () => {
                 "  }\n" +
                 "}\n" +
                 "\n" +
-                "export const handleErrors = (serverErrors?: Ref<MobilettoOrmValidationErrors>) => (e) => {\n" +
+                "export const handleErrors = (serverErrors?: Ref<MobilettoOrmValidationErrors>) => (e: H3Error) => {\n" +
                 "  if (!e.statusCode || !serverErrors) throw e;\n" +
                 "  if (e.statusCode === 403) {\n" +
                 '    serverErrors.value.global = ["forbidden"];\n' +

@@ -1,14 +1,15 @@
 {{#if disclaimer}}// {{{ disclaimer }}}{{#if header}}
 {{{header}}}{{/if}}{{/if}}
 
-import { Ref } from "vue";
-import {
+import { type Ref } from "vue";
+import type {
   MobilettoOrmObject,
   MobilettoOrmPurgeResults,
   MobilettoOrmValidationErrors
 } from "mobiletto-orm-typedef";
-import { {{ Name }}Type, {{ Name }}TypeDef } from "{{typeDefPackage}}";
+import { type {{ Name }}Type, {{ Name }}TypeDef } from "{{typeDefPackage}}";
 import * as a from "{{utilsPath}}/serviceHelper.js";
+import type { MobilettoOrmFindApiOpts } from "{{utilsPath}}/storeHelper.js";
 
 export const {{ name }}Service = {
   search{{ Name }},
