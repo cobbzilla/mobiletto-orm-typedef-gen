@@ -45,7 +45,7 @@ describe("API client service builder test", async () => {
                 "  query?: MobilettoOrmFindApiOpts,\n" +
                 `): Promise<${typeDef.typeName}Type[]> {\n` +
                 `  return $fetch("/api/model/${typeDef.typeName}", a.authPostJson(query)).then(\n` +
-                `    a.handleJsonResponse<${typeDef.typeName}Type[]>,\n` +
+                `    a.handleJsonResponse<${typeDef.typeName}Type[]> as (response: unknown) => Promise<${typeDef.typeName}Type[]>,\n` +
                 "  );\n" +
                 "}\n" +
                 "\n" +
@@ -56,7 +56,7 @@ describe("API client service builder test", async () => {
                 "  return $fetch(`/api/model/" +
                 typeDef.typeName +
                 "/${id}`, a.authGet())\n" +
-                `    .then(a.handleJsonResponse<${typeDef.typeName}Type>)\n` +
+                `    .then(a.handleJsonResponse<${typeDef.typeName}Type> as (response: unknown) => Promise<${typeDef.typeName}Type>)\n` +
                 `    .catch(a.handleErrors(serverErrors)) as Promise<${typeDef.typeName}Type>;\n` +
                 "}\n" +
                 "\n" +
@@ -70,7 +70,7 @@ describe("API client service builder test", async () => {
                 "/${id}`, a.authPutJson(" +
                 typeDef.typeName +
                 "))\n" +
-                `    .then(a.handleJsonResponse<${typeDef.typeName}Type>)\n` +
+                `    .then(a.handleJsonResponse<${typeDef.typeName}Type> as (response: unknown) => Promise<${typeDef.typeName}Type>)\n` +
                 `    .catch(a.handleErrors(serverErrors)) as Promise<${typeDef.typeName}Type>;\n` +
                 "}\n" +
                 "\n" +
@@ -84,7 +84,7 @@ describe("API client service builder test", async () => {
                 "/${id}`, a.authPatchJson(" +
                 typeDef.typeName +
                 "))\n" +
-                `    .then(a.handleJsonResponse<${typeDef.typeName}Type>)\n` +
+                `    .then(a.handleJsonResponse<${typeDef.typeName}Type> as (response: unknown) => Promise<${typeDef.typeName}Type>)\n` +
                 `    .catch(a.handleErrors(serverErrors)) as Promise<${typeDef.typeName}Type>;\n` +
                 "}\n" +
                 "\n" +
@@ -99,7 +99,7 @@ describe("API client service builder test", async () => {
                 '/${id}/${purge ? `?purge=${purge}` : ""}`,\n' +
                 "    a.authDelete(),\n" +
                 "  )\n" +
-                "    .then(a.handleJsonResponse<MobilettoOrmObject | MobilettoOrmPurgeResults>)\n" +
+                `    .then(a.handleJsonResponse<MobilettoOrmObject | MobilettoOrmPurgeResults> as (response: unknown) => Promise<${typeDef.typeName}Type>)\n` +
                 `    .catch(a.handleErrors(serverErrors)) as Promise<${typeDef.typeName}Type>;\n` +
                 "}\n",
         );

@@ -23,7 +23,7 @@ function search{{ Name }}(
   query?: MobilettoOrmFindApiOpts,
 ): Promise<{{ Name }}Type[]> {
   return $fetch("/api/model/{{ name }}", a.authPostJson(query)).then(
-    a.handleJsonResponse<{{ Name }}Type[]>,
+    a.handleJsonResponse<{{ Name }}Type[]> as (response: unknown) => Promise<{{ Name }}Type[]>,
   );
 }
 
@@ -32,7 +32,7 @@ function find{{ Name }}(
   serverErrors: Ref<MobilettoOrmValidationErrors>,
 ): Promise<{{ Name }}Type> {
   return $fetch(`/api/model/{{ name }}/${id}`, a.authGet())
-    .then(a.handleJsonResponse<{{ Name }}Type>)
+    .then(a.handleJsonResponse<{{ Name }}Type> as (response: unknown) => Promise<{{ Name }}Type>)
     .catch(a.handleErrors(serverErrors)) as Promise<{{Name}}Type>;
 }
 
@@ -42,7 +42,7 @@ function create{{ Name }}(
 ): Promise<{{ Name }}Type> {
   const id = {{ Name }}TypeDef.id({{ name }});
   return $fetch(`/api/model/{{ name }}/${{{curlyOpen}}}id{{{curlyClose}}}`, a.authPutJson({{ name }}))
-    .then(a.handleJsonResponse<{{ Name }}Type>)
+    .then(a.handleJsonResponse<{{ Name }}Type> as (response: unknown) => Promise<{{ Name }}Type>)
     .catch(a.handleErrors(serverErrors)) as Promise<{{Name}}Type>;
 }
 
@@ -52,7 +52,7 @@ function update{{ Name }}(
 ): Promise<{{ Name }}Type> {
   const id = {{ Name }}TypeDef.id({{ name }});
   return $fetch(`/api/model/{{ name }}/${{{curlyOpen}}}id{{{curlyClose}}}`, a.authPatchJson({{ name }}))
-    .then(a.handleJsonResponse<{{ Name }}Type>)
+    .then(a.handleJsonResponse<{{ Name }}Type> as (response: unknown) => Promise<{{ Name }}Type>)
     .catch(a.handleErrors(serverErrors)) as Promise<{{Name}}Type>;
 }
 
@@ -65,6 +65,6 @@ function delete{{ Name }}(
     `/api/model/{{ name }}/${id}/${purge ? `?purge=${purge}` : ""}`,
     a.authDelete(),
   )
-    .then(a.handleJsonResponse<MobilettoOrmObject | MobilettoOrmPurgeResults>)
+    .then(a.handleJsonResponse<MobilettoOrmObject | MobilettoOrmPurgeResults> as (response: unknown) => Promise<{{ Name }}Type>)
     .catch(a.handleErrors(serverErrors)) as Promise<{{Name}}Type>;
 }

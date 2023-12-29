@@ -21,7 +21,7 @@ function find{{ Name }}(
   serverErrors?: Ref<MobilettoOrmValidationErrors>,
 ): Promise<{{ Name }}Type> {
   return $fetch(`/api/model/{{ name }}/{{ typeDef.singleton }}`, a.authGet())
-    .then(a.handleJsonResponse<{{ Name }}Type>)
+    .then(a.handleJsonResponse<{{ Name }}Type> as (response: unknown) => Promise<{{ Name }}Type>)
     .catch(a.handleErrors(serverErrors)) as Promise<{{Name}}Type>;
 }
 
@@ -30,7 +30,7 @@ function create{{ Name }}(
   serverErrors: Ref<MobilettoOrmValidationErrors>,
 ): Promise<{{ Name }}Type> {
   return $fetch("/api/model/{{ name }}/{{ typeDef.singleton }}", a.authPutJson({{ name }}))
-    .then(a.handleJsonResponse<{{ Name }}Type>)
+    .then(a.handleJsonResponse<{{ Name }}Type> as (response: unknown) => Promise<{{ Name }}Type>)
     .catch(a.handleErrors(serverErrors)) as Promise<{{Name}}Type>;
 }
 
@@ -39,7 +39,7 @@ function update{{ Name }}(
   serverErrors: Ref<MobilettoOrmValidationErrors>,
 ): Promise<{{ Name }}Type> {
   return $fetch("/api/model/{{ name }}/{{ typeDef.singleton }}", a.authPatchJson({{ name }}))
-    .then(a.handleJsonResponse<{{ Name }}Type>)
+    .then(a.handleJsonResponse<{{ Name }}Type> as (response: unknown) => Promise<{{ Name }}Type>)
     .catch(a.handleErrors(serverErrors)) as Promise<{{Name}}Type>;
 }
 
@@ -51,6 +51,6 @@ function delete{{ Name }}(
     `/api/model/{{ name }}/{{ typeDef.singleton }}/${purge ? `?purge=${purge}` : ""}`,
     a.authDelete(),
   )
-    .then(a.handleJsonResponse<MobilettoOrmObject | MobilettoOrmPurgeResults>)
+    .then(a.handleJsonResponse<MobilettoOrmObject | MobilettoOrmPurgeResults> as (response: unknown) => Promise<{{ Name }}Type>)
     .catch(a.handleErrors(serverErrors)) as Promise<{{Name}}Type>;
 }
