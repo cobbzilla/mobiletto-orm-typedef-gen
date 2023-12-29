@@ -1,7 +1,8 @@
 {{#if disclaimer}}// {{{ disclaimer }}}{{#if header}}
 {{{header}}}{{/if}}{{/if}}
 
-import { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
+import type { H3Error } from "h3";
+import type { MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
 import { {{sessionHeader}} } from "{{sessionHeaderImport}}";
 import { {{sessionCookie}} } from "{{sessionCookieImport}}";
 
@@ -28,7 +29,9 @@ export function authDelete(headers = null) {
 
 export type OptionalHeaders = Record<string, string> | null;
 
-export function authReq(method: string, headers: OptionalHeaders = null) {
+export type HttpMethodType = "GET" | "POST" | "PUT" | "PATCH" | "HEAD" | "DELETE";
+
+export function authReq(method: HttpMethodType, headers: OptionalHeaders = null) {
   return {
     method,
     headers: headers ? Object.assign({}, headers, authHeader()) : authHeader(),
@@ -45,7 +48,7 @@ export function authPatchJson<T>(obj: T, headers: OptionalHeaders = null) {
   return authDataJson<T>(obj, "PATCH", headers);
 }
 
-export function authDataJson<T>(obj: T, method: string, headers: OptionalHeaders = null) {
+export function authDataJson<T>(obj: T, method: HttpMethodType, headers: OptionalHeaders = null) {
   return {
     method,
     headers: headers
@@ -79,7 +82,7 @@ export function handleJsonResponse<T>(response: Response): Promise<T> {
   }
 }
 
-export const handleErrors = (serverErrors?: Ref<MobilettoOrmValidationErrors>) => (e) => {
+export const handleErrors = (serverErrors?: Ref<MobilettoOrmValidationErrors>) => (e: H3Error) => {
   if (!e.statusCode || !serverErrors) throw e;
   if (e.statusCode === 403) {
     serverErrors.value.global = ["forbidden"];
