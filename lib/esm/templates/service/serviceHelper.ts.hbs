@@ -28,7 +28,9 @@ export function authDelete(headers = null) {
 
 export type OptionalHeaders = Record<string, string> | null;
 
-export function authReq(method: string, headers: OptionalHeaders = null) {
+export type HttpMethodType = "GET" | "POST" | "PUT" | "PATCH" | "HEAD" | "DELETE";
+
+export function authReq(method: HttpMethodType, headers: OptionalHeaders = null) {
   return {
     method,
     headers: headers ? Object.assign({}, headers, authHeader()) : authHeader(),
@@ -45,7 +47,7 @@ export function authPatchJson<T>(obj: T, headers: OptionalHeaders = null) {
   return authDataJson<T>(obj, "PATCH", headers);
 }
 
-export function authDataJson<T>(obj: T, method: string, headers: OptionalHeaders = null) {
+export function authDataJson<T>(obj: T, method: HttpMethodType, headers: OptionalHeaders = null) {
   return {
     method,
     headers: headers

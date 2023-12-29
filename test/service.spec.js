@@ -24,7 +24,11 @@ describe("API client service builder test", async () => {
                 "\n" +
                 "\n" +
                 'import { Ref } from "vue";\n' +
-                'import { MobilettoOrmObject, MobilettoOrmPurgeResults, MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";\n' +
+                "import {\n" +
+                "  MobilettoOrmObject,\n" +
+                "  MobilettoOrmPurgeResults,\n" +
+                "  MobilettoOrmValidationErrors\n" +
+                '} from "mobiletto-orm-typedef";\n' +
                 `import { ${typeDef.typeName}Type, ${typeDef.typeName}TypeDef } from "mobiletto-orm-typedef-gen";\n` +
                 'import * as a from "~/utils/model/serviceHelper.js";\n' +
                 "\n" +
@@ -36,8 +40,12 @@ describe("API client service builder test", async () => {
                 `  delete${typeDef.typeName},\n` +
                 "};\n" +
                 "\n" +
-                `function search${typeDef.typeName}(query?: MobilettoOrmFindApiOpts): Promise<${typeDef.typeName}Type[]> {\n` +
-                `  return $fetch("/api/model/${typeDef.typeName}", a.authPostJson(query)).then(a.handleJsonResponse<${typeDef.typeName}Type[]>);\n` +
+                `function search${typeDef.typeName}(\n` +
+                "  query?: MobilettoOrmFindApiOpts,\n" +
+                `): Promise<${typeDef.typeName}Type[]> {\n` +
+                `  return $fetch("/api/model/${typeDef.typeName}", a.authPostJson(query)).then(\n` +
+                `    a.handleJsonResponse<${typeDef.typeName}Type[]>\n` +
+                "  );\n" +
                 "}\n" +
                 "\n" +
                 `function find${typeDef.typeName}(\n` +
@@ -82,11 +90,14 @@ describe("API client service builder test", async () => {
                 `function delete${typeDef.typeName}(\n` +
                 "  id: string,\n" +
                 "  serverErrors: Ref<MobilettoOrmValidationErrors>,\n" +
-                "  purge?: boolean\n" +
+                "  purge?: boolean,\n" +
                 "): Promise<MobilettoOrmObject | MobilettoOrmPurgeResults> {\n" +
-                "  return $fetch(`/api/model/" +
+                "  return $fetch(\n" +
+                "    `/api/model/" +
                 typeDef.typeName +
-                '/${id}/${purge ? `?purge=${purge}` : ""}`, a.authDelete())\n' +
+                '/${id}/${purge ? `?purge=${purge}` : ""}`,\n' +
+                "    a.authDelete()\n" +
+                "  )\n" +
                 "    .then(a.handleJsonResponse<MobilettoOrmObject | MobilettoOrmPurgeResults>)\n" +
                 `    .catch(a.handleErrors(serverErrors)) as Promise<${typeDef.typeName}Type>;\n` +
                 "}\n",
@@ -126,7 +137,9 @@ describe("API client service builder test", async () => {
                 "\n" +
                 "export type OptionalHeaders = Record<string, string> | null;\n" +
                 "\n" +
-                "export function authReq(method: string, headers: OptionalHeaders = null) {\n" +
+                'export type HttpMethodType = "GET" | "POST" | "PUT" | "PATCH" | "HEAD" | "DELETE";\n' +
+                "\n" +
+                "export function authReq(method: HttpMethodType, headers: OptionalHeaders = null) {\n" +
                 "  return {\n" +
                 "    method,\n" +
                 "    headers: headers ? Object.assign({}, headers, authHeader()) : authHeader(),\n" +
@@ -143,7 +156,7 @@ describe("API client service builder test", async () => {
                 '  return authDataJson<T>(obj, "PATCH", headers);\n' +
                 "}\n" +
                 "\n" +
-                "export function authDataJson<T>(obj: T, method: string, headers: OptionalHeaders = null) {\n" +
+                "export function authDataJson<T>(obj: T, method: HttpMethodType, headers: OptionalHeaders = null) {\n" +
                 "  return {\n" +
                 "    method,\n" +
                 "    headers: headers\n" +

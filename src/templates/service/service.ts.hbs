@@ -2,7 +2,11 @@
 {{{header}}}{{/if}}{{/if}}
 
 import { Ref } from "vue";
-import { MobilettoOrmObject, MobilettoOrmPurgeResults, MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
+import {
+  MobilettoOrmObject,
+  MobilettoOrmPurgeResults,
+  MobilettoOrmValidationErrors
+} from "mobiletto-orm-typedef";
 import { {{ Name }}Type, {{ Name }}TypeDef } from "{{typeDefPackage}}";
 import * as a from "{{utilsPath}}/serviceHelper.js";
 
@@ -14,8 +18,12 @@ export const {{ name }}Service = {
   delete{{ Name }},
 };
 
-function search{{ Name }}(query?: MobilettoOrmFindApiOpts): Promise<{{ Name }}Type[]> {
-  return $fetch("/api/model/{{ name }}", a.authPostJson(query)).then(a.handleJsonResponse<{{ Name }}Type[]>);
+function search{{ Name }}(
+  query?: MobilettoOrmFindApiOpts,
+): Promise<{{ Name }}Type[]> {
+  return $fetch("/api/model/{{ name }}", a.authPostJson(query)).then(
+    a.handleJsonResponse<{{ Name }}Type[]>
+  );
 }
 
 function find{{ Name }}(
@@ -50,9 +58,12 @@ function update{{ Name }}(
 function delete{{ Name }}(
   id: string,
   serverErrors: Ref<MobilettoOrmValidationErrors>,
-  purge?: boolean
+  purge?: boolean,
 ): Promise<MobilettoOrmObject | MobilettoOrmPurgeResults> {
-  return $fetch(`/api/model/{{ name }}/${id}/${purge ? `?purge=${purge}` : ""}`, a.authDelete())
+  return $fetch(
+    `/api/model/{{ name }}/${id}/${purge ? `?purge=${purge}` : ""}`,
+    a.authDelete()
+  )
     .then(a.handleJsonResponse<MobilettoOrmObject | MobilettoOrmPurgeResults>)
     .catch(a.handleErrors(serverErrors)) as Promise<{{Name}}Type>;
 }
