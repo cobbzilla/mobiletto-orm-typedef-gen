@@ -25,7 +25,7 @@ export default defineEventHandler(async (event: H3Event) => {
         throw validationError(errs);
       } else {
         {{#if typeDef.apiConfig.update.permission.owner}}
-        if (!account.admin && obj.account && obj.account !== session.account) throw forbidden();
+        if (!account.admin && obj.{{typeDef.apiConfig.ownerField}} && obj.{{typeDef.apiConfig.ownerField}} !== session.account) throw forbidden();
         {{/if}}{{#if typeDef.apiConfig.update.hasValidate}}if (typeof {{Name}}TypeDef.apiConfig.update?.validate === "function") {
           const validated = await {{Name}}TypeDef.apiConfig.update.validate(account, obj);
           if (validated === true || (typeof validated === "object" && Object.keys(validated).length === 0)) {

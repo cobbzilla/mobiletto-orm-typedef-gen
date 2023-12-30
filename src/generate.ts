@@ -143,6 +143,9 @@ const defaultPrepareContext = (typeDef: MobilettoOrmTypeDef, ctx: Record<string,
         }
     }
     ctx.hasSearch = ctx.hasTextSearch || ctx.hasRefSearch;
+    if (typeDef.apiConfig && !typeDef.apiConfig.ownerField) {
+        typeDef.apiConfig.ownerField = "account";
+    }
     return ctx;
 };
 
