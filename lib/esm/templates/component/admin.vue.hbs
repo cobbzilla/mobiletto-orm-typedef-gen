@@ -157,10 +157,10 @@
                         </NuxtLink>
                       </div>
                       <div v-else-if="actionEnabled(obj, action) && actionConfig(action).func">
-                        <v-btn v-if="actionConfig(action).icon" @click.stop="actionConfig(action).func(obj, successSnackbar, errorSnackbar)">
+                        <v-btn v-if="actionConfig(action).icon" @click.stop="invokeActionFunc(action, obj)">
                           <Icon :name="actionConfig(action).icon" :tooltip="messages[actionConfig(action).message]" />
                         </v-btn>
-                        <v-btn v-else @click.stop="actionConfig(action).func(obj, successSnackbar, errorSnackbar)">
+                        <v-btn v-else @click.stop="invokeActionFunc(action, obj)">
                           {{{curlyOpen}}}{{{curlyOpen}}} messages[actionConfig(action).message] {{{curlyClose}}}{{{curlyClose}}}
                         </v-btn>
                       </div>
@@ -501,11 +501,11 @@
       });
     }
   });{{else}}
-  const actionConfig = (action: string) => {
+  const actionConfig = (action: string): ActionConfig => {
     return props.actionConfigs[action];
   };
 
-  const actionEnabled = (obj: MobilettoOrmObject, action: string) => {
+  const actionEnabled = (obj: MobilettoOrmObject, action: string): boolean => {
     const cfg = props.actionConfigs[action];
     if (!cfg.when || typeof cfg.when !== "function") {
       return true;
@@ -514,6 +514,9 @@
       return cfg.when(obj) === true;
     }
     return true;
+  };
+  const invokeActionFunc = (action: string, obj: MobilettoOrmObject): unknown => {
+      return actionConfig(action).func(obj, successSnackbar, errorSnackbar);
   };
   const delConfirmCount = ref(0);
   const deletingObject: Ref<MobilettoOrmObject | null> = ref(null);
