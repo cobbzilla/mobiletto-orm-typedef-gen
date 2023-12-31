@@ -6,7 +6,7 @@ import { errMatch, errMatchStart, normalizeMsg, fieldErrorMessage } from "hokey-
 
 export type ActionConfig = {
     path?: string;
-    func?: (obj: MobilettoOrmObject) => unknown;
+    func?: (obj: MobilettoOrmObject, successSnackbar: Ref<string>, errorSnackbar: Ref<string>) => unknown;
     message: string;
     icon?: string;
     when?: (obj: MobilettoOrmObject) => boolean;
