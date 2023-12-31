@@ -157,10 +157,10 @@
                         </NuxtLink>
                       </div>
                       <div v-else-if="actionEnabled(obj, action) && actionConfig(action).func">
-                        <v-btn v-if="actionConfig(action).icon" @click.stop="actionConfig(action).func(obj)">
+                        <v-btn v-if="actionConfig(action).icon" @click.stop="actionConfig(action).func(obj, successSnackbar, errorSnackbar)">
                           <Icon :name="actionConfig(action).icon" :tooltip="messages[actionConfig(action).message]" />
                         </v-btn>
-                        <v-btn v-else @click.stop="actionConfig(action).func(obj)">
+                        <v-btn v-else @click.stop="actionConfig(action).func(obj, successSnackbar, errorSnackbar)">
                           {{{curlyOpen}}}{{{curlyOpen}}} messages[actionConfig(action).message] {{{curlyClose}}}{{{curlyClose}}}
                         </v-btn>
                       </div>
