@@ -506,7 +506,8 @@
   };
 
   const actionEnabled = (obj: MobilettoOrmObject, action: string): boolean => {
-    const cfg = props.actionConfigs[action];
+    const cfg = actionConfig(action);
+    if (!cfg) return false;
     if (!cfg.when || typeof cfg.when !== "function") {
       return true;
     }
@@ -516,7 +517,8 @@
     return true;
   };
   const invokeActionFunc = (action: string, obj: MobilettoOrmObject): unknown => {
-      return actionConfig(action).func(obj, successSnackbar, errorSnackbar);
+      const cfg: ActionConfig = actionConfig(action);
+      return cfg && cfg.func ? cfg.func(obj, successSnackbar, errorSnackbar) : undefined;
   };
   const delConfirmCount = ref(0);
   const deletingObject: Ref<MobilettoOrmObject | null> = ref(null);
