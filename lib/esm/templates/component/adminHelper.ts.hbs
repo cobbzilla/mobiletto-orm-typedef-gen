@@ -1,7 +1,8 @@
 {{#if disclaimer}}// {{{ disclaimer }}}{{#if header}}
 {{{header}}}{{/if}}{{/if}}
 
-import { MobilettoOrmObject, MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
+import { type Ref } from "vue";
+import type { MobilettoOrmObject, MobilettoOrmValidationErrors } from "mobiletto-orm-typedef";
 import { errMatch, errMatchStart, normalizeMsg, fieldErrorMessage } from "hokey-runtime";
 
 export type ActionConfig = {
