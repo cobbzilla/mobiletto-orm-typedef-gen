@@ -57,8 +57,8 @@ devDependencies:
     specifier: ^1.2.0
     version: 1.2.0
   zilla-util:
-    specifier: ^1.0.13
-    version: 1.0.13
+    specifier: ^1.0.16
+    version: 1.0.16
 
 packages:
 
@@ -1029,7 +1029,7 @@ packages:
     resolution: {integrity: sha512-qwv+eUpIvjQegiWuoOyHVAEGL1H0kVL9dNMx8RGbrae/vKtnudNk6EyLask1AmtXl4RmD4y8hnwYmLU76ESYnA==}
     dependencies:
       uuid: 9.0.1
-      zilla-util: 1.0.15
+      zilla-util: 1.0.16
     dev: true
 
   /mocha@10.2.0:
@@ -1532,10 +1532,6 @@ packages:
       type-fest: 2.19.0
     dev: true
 
-  /zilla-util@1.0.13:
-    resolution: {integrity: sha512-hqBUZJSe4sy5fpYD2XVKL+rliEeZnSALbwBQjwyN4JL1U89Vsk/4+5KtAlSHTdSze0cQnFAYvlpl+tpjbXV2bQ==}
-    dev: true
-
-  /zilla-util@1.0.15:
-    resolution: {integrity: sha512-007ag3Np+qp1gI4CiFqwYoIiJR9xUhGtGn1AjRUg+VgAY7f+U10qkwAXWckZ0S/F8gnzMRgAK1yiC9I6HBoDkQ==}
+  /zilla-util@1.0.16:
+    resolution: {integrity: sha512-xuRdm40x9A0p93Ukmua2yozTSPKkhZPvhlbA3e9ISurnU+t3fjNqxbvJ+Ha/57PEvD97uoHGzTNHiaQVw+a0+w==}
     dev: true
