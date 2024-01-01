@@ -65,7 +65,8 @@ export type ObjectNav = {
     next: string | number;
 }
 
-const deepUpdate = (obj, fieldPath, value) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const deepUpdate = (obj: any, fieldPath: string, value: any) => {
     const parts = fieldPath.split(".");
     const operations = [];
     for (let i = 0; i < parts.length; i++) {
@@ -84,7 +85,7 @@ const deepUpdate = (obj, fieldPath, value) => {
                 const index = part.substring(squareBracketStart + 1, squareBracketEnd);
                 if (index.length === 0) {
                     operations.push({ append: true });
-                    if (part.indexOf("[", squareBracketEnd) !== -1) {
+                    if (part.includes("[", squareBracketEnd)) {
                         throw new Error(
                             `deepUpdate: invalid fieldPath (cannot update after append []): ${fieldPath}`,
                         );
@@ -104,9 +105,7 @@ const deepUpdate = (obj, fieldPath, value) => {
     for (let i = 0; i < operations.length - 1; i++) {
         const op = operations[i];
         const next = op.next;
-        if (typeof next === "string") {
-            thing = thing[next];
-        } else {
+        if (typeof next === "string" || typeof next === "number") {
             thing = thing[next];
         }
     }
@@ -115,6 +114,6 @@ const deepUpdate = (obj, fieldPath, value) => {
     if (lastOp.append) {
         thing.push(value);
     } else {
-        thing[lastOp.next] = value;
+        thing[lastOp.next!] = value;
     }
 };
