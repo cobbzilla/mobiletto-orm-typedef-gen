@@ -342,7 +342,7 @@
     const typeDef = {{Name}}TypeDef.extend({
       fields: {
       {{#each typeDef.refTypes}}{{#each fieldPaths}}
-        {{this}}: { ...ref{{../RefType}}.value },
+        "{{this}}": { ...ref{{../RefType}}.value },
       {{/each}}{{/each}}
       }
     });
