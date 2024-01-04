@@ -39,8 +39,8 @@ devDependencies:
     specifier: ^1.0.10
     version: 1.0.10
   mobiletto-orm-typedef:
-    specifier: ^2.4.30
-    version: 2.4.30
+    specifier: ^2.4.32
+    version: 2.4.32
   mocha:
     specifier: ^10.2.0
     version: 10.2.0
@@ -1025,8 +1025,8 @@ packages:
     hasBin: true
     dev: true
 
-  /mobiletto-orm-typedef@2.4.30:
-    resolution: {integrity: sha512-pB3jgCZZX2xvgHGted/PeeknDVihgZLuZDbw0egUBeFZwlRZJYSh+lZZ2nUlFFswTkQIc7ovk9sqCuN6OMsV7w==}
+  /mobiletto-orm-typedef@2.4.32:
+    resolution: {integrity: sha512-8/DX5MgXVZjLpf5Fc6LriJ0Lo6/r+fm/zxh/+TwBURfs0aO4Kv6ra7FlMhOXgDrGt2s/2mOIsKB6tZcG0ZbKHw==}
     dependencies:
       uuid: 9.0.1
       zilla-util: 1.0.18
