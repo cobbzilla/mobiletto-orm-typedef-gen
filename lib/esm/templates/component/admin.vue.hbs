@@ -205,6 +205,7 @@
   import { deepGet, deepUpdate } from "zilla-util";
   import {
     type MobilettoOrmFieldDefConfig,
+    type MobilettoOrmFieldDefConfigs,
     type MobilettoOrmObject,
     MobilettoOrmTypeDef,
     type MobilettoOrmValidationErrors,
@@ -338,13 +339,12 @@
 
   const navigating = ref(false);{{/unless}}
   {{#if typeDef.refTypes}}
+  const refFields = {} as MobilettoOrmFieldDefConfigs;
+  {{#each typeDef.refTypes}}{{#each fieldPaths}}
+  deepUpdate(refFields, "{{this}}", {...ref{{../RefType}}.value});{{/each}}{{/each}}
   const initTypeDef = () => {
     const typeDef = {{Name}}TypeDef.extend({
-      fields: {
-      {{#each typeDef.refTypes}}{{#each fieldPaths}}
-        "{{this}}": { ...ref{{../RefType}}.value },
-      {{/each}}{{/each}}
-      }
+      fields: refFields
     });
     {{name}}TypeDefFields.value = typeDef.tabIndexedFields();
     {{name}}TypeDef.value = typeDef;{{#unless typeDef.singleton}}
