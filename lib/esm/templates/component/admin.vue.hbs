@@ -339,10 +339,9 @@
 
   const navigating = ref(false);{{/unless}}
   {{#if typeDef.refTypes}}
-  const refFields = {} as MobilettoOrmFieldDefConfigs;
-  {{#each typeDef.refTypes}}{{#each fieldPaths}}
-  deepUpdate(refFields, "{{this}}", {...ref{{../RefType}}.value});{{/each}}{{/each}}
   const initTypeDef = () => {
+    const refFields = {} as MobilettoOrmFieldDefConfigs;{{#each typeDef.refTypes}}{{#each fieldPaths}}
+    deepUpdate(refFields, "{{this}}", {...ref{{../RefType}}.value});{{/each}}{{/each}}
     const typeDef = {{Name}}TypeDef.extend({
       fields: refFields
     });
