@@ -384,7 +384,7 @@
         value: s.name,
         title: s.name,
         rawLabel: true,
-      }));{{#each fieldPaths}}
+      }));{{#each jsonFieldPaths}}
       {{../../Name}}TypeDef.fields.{{this}}.items = ref{{../RefType}}.value.items;{{/each}}
       ref{{RefType}}Loaded.value = true;
       if (allRefsLoaded()) {
