@@ -39,17 +39,6 @@ export const typeDefFieldErrorMessage = (
                 errMsg = errMsg + "_" + serverErrors[errMsg][0];
             }
         }
-        if (!errMsg && objPath && objPath.length > 0) {
-            errMsg = clientErrFields.find(errMatchStart(objPath));
-            if (errMsg) {
-                errMsg = errMsg + "_" + clientErrors[errMsg][0];
-            } else {
-                errMsg = serverErrFields.find(errMatchStart(objPath));
-                if (errMsg) {
-                    errMsg = errMsg + "_" + serverErrors[errMsg][0];
-                }
-            }
-        }
         if (errMsg) {
             errMsg = normalizeMsg(errMsg);
             const labelPfx = labelPrefixes.includes("") ? labelPrefixes : [...labelPrefixes, ""];
