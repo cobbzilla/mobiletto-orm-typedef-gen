@@ -381,12 +381,13 @@
       navigating.value = true;
       navigateTo("/admin/{{refType}}/setup");
     } else if (newList && newList.length > 0) {
-      ref{{RefType}}.value.values = newList.map((s) => {{#if valueAsObject}}s{{else}}{{RefType}}TypeDef.id(s){{/if}});
+      ref{{RefType}}.value.values = newList.map((s) => {{RefType}}TypeDef.id(s));
       ref{{RefType}}.value.labels = newList.map((s) => s.name);
       ref{{RefType}}.value.items = newList.map((s) => ({
         label: s.name,
-        value: {{#if valueAsObject}}s{{else}}{{RefType}}TypeDef.id(s){{/if}},
+        value: {{RefType}}TypeDef.id(s),
         title: s.name,
+        obj: s,
         rawLabel: true,
       }));{{#each jsonFieldPaths}}
       {{../../Name}}TypeDef.fields.{{this}}.items = ref{{../RefType}}.value.items;{{/each}}
