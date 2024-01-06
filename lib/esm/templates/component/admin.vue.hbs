@@ -381,6 +381,8 @@
       navigating.value = true;
       navigateTo("/admin/{{refType}}/setup");
     } else if (newList && newList.length > 0) {
+      {{#if valueAsObject}}
+      ref{{RefType}}.value.items = newList.map((s) => s);{{else}}
       ref{{RefType}}.value.values = newList.map((s) => {{RefType}}TypeDef.id(s));
       ref{{RefType}}.value.labels = newList.map((s) => s.name);
       ref{{RefType}}.value.items = newList.map((s) => ({
@@ -388,7 +390,7 @@
         value: {{RefType}}TypeDef.id(s),
         title: s.name,
         rawLabel: true,
-      }));{{#each jsonFieldPaths}}
+      }));{{/if}}{{#each jsonFieldPaths}}
       {{../../Name}}TypeDef.fields.{{this}}.items = ref{{../RefType}}.value.items;{{/each}}
       ref{{RefType}}Loaded.value = true;
       if (allRefsLoaded()) {
