@@ -387,7 +387,6 @@
         label: s.name,
         value: {{RefType}}TypeDef.id(s),
         title: s.name,
-        obj: s,
         rawLabel: true,
       }));{{#each jsonFieldPaths}}
       {{../../Name}}TypeDef.fields.{{this}}.items = ref{{../RefType}}.value.items;{{/each}}
